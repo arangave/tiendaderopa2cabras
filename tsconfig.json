@@ -18,6 +18,7 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",  // Esta línea es necesaria para que las rutas relativas funcionen correctamente
     "paths": {
       "@/*": ["./*"]
     }

@@ -1,0 +1,376 @@
+
+@import "tailwindcss";
+
+/* ESTILOS GENERALES */
+body {
+    background-color: #f3f3f3;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ENCABEZADO */
+.header {
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 8px 24px; /* antes era 16px */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95);
+    
+  }
+  
+
+.nav-links {
+    
+    list-style: none;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links a {
+    position: relative;
+    display: inline-block;
+    color: #222222;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  /* Subrayado degradado oculto */
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #67b2c1, #ff8eaa, #f6bd6b);
+    transition: width 0.4s ease;
+    border-radius: 2px;
+}
+
+
+
+  
+  /* Hover: color, subrayado y agrandamiento */
+  .nav-links a:hover {
+    color: #000000;
+    transform: scale(1.05); /* Agranda un poco */
+  }
+  @media (max-width: 768px) {
+    .nav-links a:hover {
+      color: #e5e5e5;
+    }
+  }
+  
+  
+  /* Subrayado visible al hacer hover */
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+  
+  .basket-icon {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(90deg, #67b2c1, #ff8eaa, #f6bd6b);
+    -webkit-mask-image: url('/icons/cesta.svg'); /* o el ícono que uses */
+    mask-image: url('/icons/cesta.svg');
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    display: inline-block;
+  }
+  
+/* Evita que la cesta tenga subrayado degradado */
+.no-underline-link a::after {
+    display: none !important;
+    
+  }
+  
+  /* Estilo para el borde animado al pasar el ratón */
+  .icon-wrapper {
+    
+    transition: all 0.3s ease;
+    
+  }
+  /* Aplica letras blancas al menú desplegable móvil */
+.nav-links.mobile-menu a {
+    color: white !important;
+  }
+  
+  /* Opcional: hover agradable para móvil */
+  .nav-links.mobile-menu a:hover {
+    color: #e5e5e5 !important;
+  }
+  
+
+
+
+/* LOGOTIPO */
+.logo {
+    
+    width: 50px;
+    object-fit: cover;
+    margin-top: 8px;
+}
+
+/* SECCIÓN HÉROE (PANTALLA DIVIDIDA) */
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+    min-height: 70vh; /* Reduces la altura total del hero */
+    margin-top: 90px; /* Añade margen superior para compensar la altura del header fijo */
+}
+
+/* HERO CONTENIDO - Pantalla Dividida */
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 1200px;
+    width: 100%;
+    gap: 40px;
+}
+
+/* HERO TEXTO */
+.hero-text {
+    flex: 1;
+    max-width: 500px;
+}
+
+.hero h2 {
+    font-size: 48px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #67b2c1, #ff8eaa, #f6bd6b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+
+.hero p {
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+    margin-top: 8px;
+}
+
+.hero .highlight {
+    font-size: 24px;
+    color: #ffffff;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+/* HERO VIDEO */
+.hero-video {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-video video {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* PANTALLAS GRANDES (PANTALLA DIVIDIDA) */
+@media (min-width: 768px) {
+    
+    .hero-content {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        
+    }
+
+    .hero-text {
+        max-width: 50%;
+    }
+
+    .hero-video {
+        max-width: 50%;
+        height: auto;
+    }
+}
+@media (max-width: 768px) {
+    .hero {
+      padding-top: 100px; /* Ajusta según el alto de tu header en móvil */
+    }
+  
+    .hero-content {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 24px;
+    }
+  
+    .hero-text {
+      max-width: 100%;
+    }
+  
+    .hero-video {
+      max-width: 100%;
+    }
+  }
+  
+  
+
+/* BOTÓN */
+.btn {
+    display: inline-block;
+    background-color: #ffffff;
+    color: rgb(2, 2, 2);
+    padding: 12px 24px;
+    border-radius: 24px;
+   
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 16px;
+    background-size: 200%;
+    background-position: left;
+    transition: background-position 0.6s ease, color 0.3s ease;
+}
+
+.btn:hover {
+    background: linear-gradient(90deg,  #ff8eaa,#67b2c1, #f6bd6b);
+    background-size: 200%;
+    background-position: right;
+    color: black;
+  }
+  
+  
+
+/* PRODUCTOS DESTACADOS */
+.products {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: rgb(0, 0, 0);
+    position: relative;
+  z-index: 1;
+}
+.fixed.inset-0 {
+    z-index: 50; /* Un valor más alto para asegurarse de que se muestre por encima */
+  }
+  
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+
+
+.product-card img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-card h3 {
+    font-size: 24px;
+    margin-top: 10px;
+    color: #1A1A1A;
+}
+
+.product-card p {
+    color: gray;
+}
+
+.product-card {
+    margin-top: 10px;
+    position: relative;
+    overflow: visible;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    z-index: 1;
+  }
+  
+  .product-card:hover {
+    transform: scale(1.02);
+  }
+  
+  
+  /* Glow degradado solo en hover */
+  .product-card::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    padding: 4px;
+    background: linear-gradient(130deg, #67b2c1, #ff8eaa, #f6bd6b);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    filter: blur(15px);
+    opacity: 0; /* 👈 invisible por defecto */
+    transition: opacity 0.4s ease, filter 0.4s ease;
+    z-index: -1;
+  }
+  
+  .product-card:hover::before {
+    opacity: 1;
+    filter: blur(25px);
+  }
+ 
+
+  
+
+/* PIE DE PÁGINA */
+footer {
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+footer .social-links a {
+    color: gray;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+footer .social-links a:hover {
+    color: white;
+}
+
+
+/*sudaderas*/
+
+@media (max-width: 768px) {
+    .carousel-item {
+      min-width: 100% !important;
+    }
+  }
+  
+
