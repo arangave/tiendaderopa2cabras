@@ -4,7 +4,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import "./styles/globals.css";
-import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+
+
+
 
 // Definimos la estructura del producto
 interface Product {
@@ -26,10 +31,30 @@ export default function Inicio() {
   const [sweaterIndex, setSweaterIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false); // 👈 Añadido aquí
   const [selectedSize, setSelectedSize] = useState<string>("");
-
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [likes, setLikes] = useState<Product[]>([]);
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
+  // Al cargar, leer del localStorage si hay preferencia guardada
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedMode = localStorage.getItem("theme");
+      if (savedMode === "dark") setIsDarkMode(true);
+      else if (savedMode === "light") setIsDarkMode(false);
+    }
+  }, []);
 
-
+  // Cambiar clase al <html> según el modo y guardar en localStorage
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (isDarkMode) {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
 
 
   useEffect(() => {
@@ -57,6 +82,32 @@ export default function Inicio() {
     { id: 5, name: "Sudadera Premium", price: "59,99€", image: "/images/Backside T-Shirt Mockup.png" },
     { id: 6, name: "Sudadera Sport", price: "32,99€", image: "/images/Backside T-Shirt Mockup.png" }
   ];
+  const tshirts = [
+    { id: 1, name: "Camiseta Urbana", description: "Camiseta de la colección exclusiva", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 2, name: "Camiseta Casual", description: "Camiseta de la colección exclusiva", price: "24,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 3, name: "Camiseta Oversize", description: "Camiseta de la colección exclusiva", price: "34,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 4, name: "Camiseta Vintage", description: "Camiseta de la colección exclusiva", price: "27,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 5, name: "Camiseta Básica", description: "Camiseta de la colección exclusiva", price: "19,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 6, name: "Camiseta Premium", description: "Camiseta de la colección exclusiva", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 }
+  ];
+
+
+  const [tshirtIndex, setTshirtIndex] = useState(0);
+
+
+  const isProductLiked = (id: number) => likes.some((p) => p.id === id);
+
+  const toggleLike = (product: Product) => {
+    setLikes((prev) => {
+      const exists = prev.find((p) => p.id === product.id);
+      if (exists) {
+        return prev.filter((p) => p.id !== product.id);
+      } else {
+        return [...prev, product];
+      }
+    });
+  };
+
 
   const openModal = (product: Product) => setSelectedProduct(product);
   const closeModal = () => {
@@ -86,12 +137,12 @@ export default function Inicio() {
       closeModal();
     }
   };
-  
+
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuantity = Math.max(1, parseInt(e.target.value, 10)); // Usamos base 10
     setQuantity(newQuantity);
   };
-  
+
 
   const sizes = [
     "XXS", "XS", "S", "M", "L", "XL", "XXL"
@@ -101,6 +152,16 @@ export default function Inicio() {
 
   return (
     <main>
+      <svg width="0" height="0">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#67b2c1" />
+            <stop offset="50%" stopColor="#ff8eaa" />
+            <stop offset="100%" stopColor="#f6bd6b" />
+          </linearGradient>
+        </defs>
+      </svg>
+
       {/* HEADER */}
 
       <header
@@ -117,6 +178,7 @@ export default function Inicio() {
           priority
         />
 
+
         {/* Botón hamburguesa móvil */}
         <div
           className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
@@ -128,8 +190,8 @@ export default function Inicio() {
           <div className="relative w-6 h-6">
             <span
               className={`block h-[3px] w-5 ${menuOpen
-                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                  : "bg-black"
+                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
+                : "bg-black"
                 } rounded transition-transform duration-300 ease-in-out absolute ${menuOpen ? "rotate-45 top-3 left-0" : "top-1"
                 }`}
             />
@@ -139,8 +201,8 @@ export default function Inicio() {
             />
             <span
               className={`block h-[3px] w-5 ${menuOpen
-                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                  : "bg-black"
+                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
+                : "bg-black"
                 } rounded transition-transform duration-300 ease-in-out absolute ${menuOpen ? "-rotate-45 top-3 left-0" : "top-5"
                 }`}
             />
@@ -149,7 +211,7 @@ export default function Inicio() {
 
         {/* Menú de navegación */}
         <ul
-          className={`nav-links flex-col absolute top-28 right-0 bg-black text-black p-6 rounded-lg shadow-md gap-6 z-40 w-[80vw] transition-all duration-300
+          className={`nav-links flex-col absolute top-23 right-0 bg-black/90 white text-black p-6 rounded-lg shadow-md gap-6 z-40 w-[100vw] transition-all duration-300
     ${menuOpen ? "flex mobile-menu" : "hidden"}
     md:static md:flex md:flex-row md:bg-transparent md:text-black md:shadow-none md:p-0 md:gap-6 md:w-auto`}
         >
@@ -160,31 +222,42 @@ export default function Inicio() {
           </li>
           <li className="text-center">
             <a href="#" onClick={() => setMenuOpen(false)} className="ttext-black md:text-black font-semibold hover:text-black">
-              Tienda
+              2Cabras
             </a>
           </li>
           <li className="text-center">
             <a href="#" onClick={() => setMenuOpen(false)} className="text-black md:text-black font-semibold hover:text-black">
-              Nosotros
+              Productos
             </a>
           </li>
+          {/* REGISTRO */}
           <li className="text-center">
-            <a href="#" onClick={() => setMenuOpen(false)} className="text-black md:text-black font-semibold hover:text-white">
-              Contacto
+            <a href="/registro" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
+              <UserIcon className="w-6 h-6 text-white md:text-black" />
+            </a>
+          </li>
+
+          {/* FAVORITOS */}
+          <li className="relative text-center">
+            <a href="/favoritos" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
+              <HeartIcon className="w-6 h-6 text-white md:text-black" />
+              {likes.length > 0 && (
+                <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
+                  {likes.length}
+                </span>
+              )}
             </a>
           </li>
 
 
-          {/* Cesta */}
-          <li className="relative text-center no-underline-link"> {/* ← Añade esto aquí */}
+          {/* CESTA */}
+          <li className="relative text-center no-underline-link">
             <a
               href="/carrito"
-              className="flex items-center justify-center group transition-all duration-300"
               onClick={() => setMenuOpen(false)}
+              className="flex items-center justify-center group transition-all duration-300"
             >
-              <div className="icon-wrapper relative flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 group-hover:ring-2 group-hover:ring-offset-2 group-hover:ring-[#67b2c1]">
-                <ShoppingBagIcon className="w-5 h-5 text-white md:text-black group-hover:text-[#67b2c1] transition-colors" />
-              </div>
+              <ShoppingBagIcon className="w-6 h-6 text-white md:text-black group-hover:text-[#67b2c1]" />
               {cart.length > 0 && (
                 <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
                   {cart.length}
@@ -192,8 +265,6 @@ export default function Inicio() {
               )}
             </a>
           </li>
-
-
         </ul>
       </header>
 
@@ -204,6 +275,48 @@ export default function Inicio() {
 
       {/* HERO SECTION */}
       <section className="hero">
+        {/* BOTON DE NOCHE Y DIA */}
+        <div className="absolute top-30 right-4 z-50">
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="w-10 h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md"
+            aria-label="Cambiar modo"
+          >
+            <span
+              className={`transition-transform duration-500 ease-in-out transform ${isDarkMode ? "rotate-180" : "rotate-0"
+                }`}
+            >
+              {isDarkMode ? (
+                // 🌞 Modo claro → mostrar sol
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-black"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 3v1m0 16v1m8.485-8.485h1M3.515 12H2.5M19.071 4.929l-.707.707M5.636 18.364l-.707.707M19.071 19.071l-.707-.707M5.636 5.636l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
+                  />
+                </svg>
+              ) : (
+                // 🌙 Modo oscuro → mostrar luna
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-6 h-6 text-black transition-transform duration-500 ease-in-out "
+                >
+                  <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 0010.09 9.79z" />
+                </svg>
+              )}
+            </span>
+          </button>
+
+        </div>
 
         <div className="hero-content">
           <div className="hero-text">
@@ -222,41 +335,100 @@ export default function Inicio() {
       </section>
 
       {/* PRODUCTOS DESTACADOS */}
-      <section className="products">
+      <section className="products mt-0">
         <div className="flex flex-col items-center justify-center my-6">
-          <h2 className="text-center text-3xl font-bold text-white mb-2">
-            Nuestros Productos Destacados
+          <h2 className="text-center text-3xl font-bold text-black mb-2">
+            Destacados
           </h2>
           <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
-          {products.map((product) => (
+        <div className="relative max-w-7xl mx-auto px-4">
+          {/* Flecha izquierda */}
+          <button
+            onClick={() =>
+              setFeaturedIndex((prev) =>
+                prev === 0 ? products.length - 3 : prev - 1
+              )
+            }
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+          >
+            ‹
+          </button>
+
+          {/* Carrusel con transición */}
+          <div className="overflow-hidden">
             <div
-              key={product.id}
-              className="product-card group bg-white p-4 rounded-lg shadow-md relative overflow-visible"
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${featuredIndex * (100 / (isMobile ? 1 : 3))}%)`,
+              }}
             >
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className={`carousel-item ${isMobile ? "min-w-full" : "min-w-[calc(100%/3)]"} px-3 flex-shrink-0 mb-6`}
+                >
+                  <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+                    <div className="product-glow"></div>
 
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={300}
+                      height={300}
+                      className="cursor-pointer rounded-md"
+                      onClick={() => openModal(product)}
+                    />
 
-              <Image
-                src={product.image}
-                alt={product.name}
-                width={300}
-                height={300}
-                className="cursor-pointer rounded-md transition-transform"
-                onClick={() => openModal(product)}
-              />
+                    <h3 className="text-lg font-semibold mt-2 text-black">{product.name}</h3>
+                    <p className="text-md text-black">{product.price}</p>
 
-              <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
-              <p className="text-gray-600">{product.price}</p>
-              <button
-                className="btn mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
-                onClick={() => openModal(product)}
-              >
-                Ver Producto
-              </button>
+                    <div className="flex justify-center items-center gap-4 mt-4">
+                      <button
+                        className="btn px-6 py-2 bg-blue-600 text-white border border-black/30 rounded-md hover:bg-blue-700 hover:scale-95 transition"
+                        onClick={() => openModal(product)}
+                      >
+                        Ver Producto
+                      </button>
+                    </div>
+
+                    {/* Corazón abajo a la derecha */}
+                    <button
+                      onClick={() => toggleLike(product)}
+                      aria-label="Me gusta"
+                      className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
+                    >
+                      {isProductLiked(product.id) ? (
+                        <HeartIconSolid
+                          className="w-6 h-6 transition-all duration-300"
+                          style={{
+                            fill: "url(#grad)",
+                            stroke: "none",
+                          }}
+                        />
+                      ) : (
+                        <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+
+          {/* Flecha derecha */}
+          <button
+            onClick={() =>
+              setFeaturedIndex((prev) =>
+                prev >= products.length - 3 ? 0 : prev + 1
+              )
+            }
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+          >
+            ›
+          </button>
         </div>
       </section>
 
@@ -264,7 +436,7 @@ export default function Inicio() {
       {/* CARRUSEL DE SUDADERAS */}
       <section className="products mt-0">
         <div className="flex flex-col items-center justify-center my-6">
-          <h2 className="text-center text-3xl font-bold text-white mb-2">
+          <h2 className="text-center text-3xl font-bold text-black mb-2">
             Sudaderas
           </h2>
           <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
@@ -278,7 +450,7 @@ export default function Inicio() {
                 prev === 0 ? sweaters.length - 3 : prev - 1
               )
             }
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
           >
             ‹
           </button>
@@ -295,7 +467,7 @@ export default function Inicio() {
               {sweaters.map((item) => (
                 <div
                   key={item.id}
-                  className="carousel-item min-w-[calc(100%/3)] px-3 flex-shrink-0 mb-6"
+                  className={`carousel-item ${isMobile ? "min-w-full" : "min-w-[calc(100%/3)]"} px-3 flex-shrink-0 mb-6`}
                 >
                   <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
                     <div className="product-glow"></div>
@@ -307,20 +479,151 @@ export default function Inicio() {
                       height={300}
                       className="cursor-pointer rounded-md"
                     />
-                    <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
+
+                    <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
                     <p className="text-gray-600">{item.price}</p>
+
+                    <div className="flex justify-center items-center gap-4 mt-4">
+                      <button
+                        className="btn px-6 py-2 bg-blue-600 text-white border border-black/30 rounded-md hover:bg-blue-700 hover:scale-95 transition"
+                        onClick={() =>
+                          openModal({
+                            ...item,
+                            description: "Sudadera de la colección exclusiva",
+                            quantity: 1,
+                          })
+                        }
+                      >
+                        Ver Producto
+                      </button>
+                    </div>
+
+                    {/* Botón de me gusta en la esquina inferior derecha */}
                     <button
-                      className="btn mt-3 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
                       onClick={() =>
-                        openModal({
+                        toggleLike({
                           ...item,
                           description: "Sudadera de la colección exclusiva",
                           quantity: 1,
                         })
                       }
+                      aria-label="Me gusta"
+                      className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
                     >
-                      Ver Producto
+                      {isProductLiked(item.id) ? (
+                        <HeartIconSolid
+                          className="w-6 h-6 transition-all duration-300"
+                          style={{
+                            fill: "url(#grad)",
+                            stroke: "none",
+                          }}
+                        />
+                      ) : (
+                        <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
+                      )}
                     </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+
+
+          {/* Flecha derecha */}
+          <button
+            onClick={() =>
+              setSweaterIndex((prev) =>
+                prev >= sweaters.length - 3 ? 0 : prev + 1
+              )
+            }
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+          >
+            ›
+          </button>
+        </div>
+      </section>
+
+      <section className="products mt-0">
+        <div className="flex flex-col items-center justify-center my-6">
+          <h2 className="text-center text-3xl font-bold text-black mb-2">
+            Camisetas
+          </h2>
+          <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4">
+          {/* Flecha izquierda */}
+          <button
+            onClick={() =>
+              setTshirtIndex((prev) =>
+                prev === 0 ? tshirts.length - 3 : prev - 1
+              )
+            }
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+          >
+            ‹
+          </button>
+
+          {/* Carrusel con transición */}
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${tshirtIndex * (100 / (isMobile ? 1 : 3))}%)`,
+              }}
+            >
+              {tshirts.map((item) => (
+                <div
+                  key={item.id}
+                  className={`carousel-item ${isMobile ? "min-w-full" : "min-w-[calc(100%/3)]"} px-3 flex-shrink-0 mb-6`}
+                >
+                  <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={300}
+                      height={300}
+                      className="cursor-pointer rounded-md"
+                    />
+                    <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
+                    <p className="text-gray-600">{item.price}</p>
+
+                    {/* Botones centrados */}
+                    <div className="flex justify-center items-center gap-4 mt-4">
+                      <button
+                        className="btn px-6 py-2 bg-blue-600 text-white border border-black/30 rounded-md hover:bg-blue-700 hover:scale-95 transition"
+                        onClick={() =>
+                          openModal({
+                            ...item,
+                            description: "Camiseta de la colección exclusiva",
+                            quantity: 1,
+                          })
+                        }
+                      >
+                        Ver Producto
+                      </button>
+
+                      <button
+                        onClick={() => toggleLike(item)}
+                        aria-label="Me gusta"
+                        className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
+                      >
+                        {isProductLiked(item.id) ? (
+                          <HeartIconSolid
+                            className="w-6 h-6 transition-all"
+                            style={{
+                              fill: "url(#grad)",
+                              stroke: "none",
+                            }}
+                          />
+                        ) : (
+                          <HeartIconOutline className="w-6 h-6 text-black transition-all" />
+                        )}
+                      </button>
+                    </div>
+
                   </div>
                 </div>
               ))}
@@ -332,18 +635,48 @@ export default function Inicio() {
           {/* Flecha derecha */}
           <button
             onClick={() =>
-              setSweaterIndex((prev) =>
-                prev >= sweaters.length - 3 ? 0 : prev + 1
+              setTshirtIndex((prev) =>
+                prev >= tshirts.length - 3 ? 0 : prev + 1
               )
             }
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
           >
             ›
           </button>
         </div>
       </section>
 
+      <section className="bg-white py-12 px-4 text-center">
+        <h2 className="text-3xl font-bold mb-4 text-black">
+          Únete al mundo de <span className="bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] bg-clip-text text-transparent">2CabrasConTraje</span>
+        </h2>
+        <p className="text-gray-700 max-w-xl mx-auto mb-6">
+          Recibe ideas, filosofía de marca y alguna que otra forma de<br /> &quot;poner los cuernos&quot;... al sistema. ✨
+        </p>
 
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            // Aquí podrías conectar con una API o mostrar un mensaje
+            alert("Gracias por unirte al mundo 2CabrasConTraje 🐐");
+          }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto"
+        >
+          <input
+            type="email"
+            placeholder="Tu correo electrónico"
+            required
+            className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition"
+          />
+          <button
+            type="submit"
+            className="bg-black text-white font-semibold px-6 py-2 rounded-full transition hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-black"
+          >
+            Unirme
+          </button>
+        </form>
+      </section>
 
 
       {/* FOOTER */}
@@ -360,11 +693,21 @@ export default function Inicio() {
       {selectedProduct && (
         <div className="fixed inset-0 flex justify-center items-center" onClick={handleOverlayClick}>
           {/* Contenedor del modal */}
-          <div className="absolute bg-black bg-opacity-200 w-[80%] sm:w-[60%] h-[70%] sm:h-[80%] rounded-lg"></div>
+
 
           {/* Contenedor del modal */}
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative z-10 flex">
-            <button onClick={closeModal} className="absolute top-4 right-4 text-2xl hover:text-red-800 hover:scale-120 transition-all duration-300 rounded-full p-1">✖</button>
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
+              aria-label="Cerrar modal"
+            >
+              <div className="relative w-5 h-5">
+                <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute rotate-45 top-2 left-0" />
+                <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute -rotate-45 top-2 left-0" />
+              </div>
+            </button>
+
 
             {/* Modal Content */}
             <div className="flex items-center space-x-6">
@@ -427,14 +770,19 @@ export default function Inicio() {
 
                 {/* MODAL - Guía de tallas */}
                 {showSizeGuideModal && (
-                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60">
+                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-60">
                     <div className="bg-white max-w-2xl w-full p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
                       <button
                         onClick={() => setShowSizeGuideModal(false)}
-                        className="mt-2 w-max px-4 py-2 bg-blue-100 text-blue-800 text-sm font-medium rounded-md border border-blue-300 hover:bg-blue-200 transition"
+                        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
+                        aria-label="Cerrar guía de tallas"
                       >
-                        ✖
+                        <div className="relative w-5 h-5">
+                          <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute rotate-45 top-2 left-0" />
+                          <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute -rotate-45 top-2 left-0" />
+                        </div>
                       </button>
+
                       <h2 className="text-xl font-bold mb-4">Guía de Tallas</h2>
                       <table className="w-full text-sm border border-gray-200">
                         <thead className="bg-gray-100">
@@ -455,10 +803,7 @@ export default function Inicio() {
                             ["L", "40", "90-93 cm", "72-75 cm", "101-104 cm"],
                             ["XL", "42", "94-97 cm", "76-79 cm", "105-107 cm"],
                             ["XXL/2XL", "44", "98-101 cm", "80-84 cm", "108-112 cm"],
-                            ["XXXL/3XL", "46", "102-106 cm", "85-89 cm", "113-117 cm"],
-                            ["4XL", "48", "107-111 cm", "90-94 cm", "118-122 cm"],
-                            ["5XL", "50", "112-116 cm", "95-99 cm", "123-127 cm"],
-                            ["PLUS SIZE", "52", "117-121 cm", "100-104 cm", "128-132 cm"]
+
                           ].map(([size, eu, chest, waist, hips]) => (
                             <tr key={size}>
                               <td className="p-2 border">{size}</td>
@@ -483,20 +828,33 @@ export default function Inicio() {
                 </button>
 
 
-                <button
-                  onClick={() => addToCart(selectedProduct)}
-                  className="mt-4 w-max px-6 py-2 mx-auto bg-black text-white font-semibold rounded-md transition-all duration-300
-             hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-white"
-                >
-                  Añadir a la cesta
-                </button>
+                <div className="mt-6 flex flex-col sm:flex-row sm:justify-end sm:items-center sm:gap-4 sm:pr-5">
+                  <button
+                    onClick={() => addToCart(selectedProduct!)}
+                    className="px-6 py-2 bg-black text-white font-semibold rounded-md transition-all duration-300
+      hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-white"
+                  >
+                    Añadir a la cesta
+                  </button>
 
-
-
-
-
-
-
+                  <button
+                    onClick={() => toggleLike(selectedProduct!)}
+                    aria-label="Me gusta"
+                    className="p-2 hover:scale-110 transition"
+                  >
+                    {isProductLiked(selectedProduct!.id) ? (
+                      <HeartIconSolid
+                        className="w-6 h-6 transition-all duration-300"
+                        style={{
+                          fill: "url(#grad)",
+                          stroke: "none",
+                        }}
+                      />
+                    ) : (
+                      <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
+                    )}
+                  </button>
+                </div>
 
 
 

@@ -3,7 +3,7 @@
 
 /* ESTILOS GENERALES */
 body {
-    background-color: #f3f3f3;
+    background-color: #ffffff;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -63,20 +63,35 @@ body {
 
   
   /* Hover: color, subrayado y agrandamiento */
-  .nav-links a:hover {
-    color: #000000;
-    transform: scale(1.05); /* Agranda un poco */
-  }
-  @media (max-width: 768px) {
-    .nav-links a:hover {
-      color: #e5e5e5;
-    }
+
+  .nav-links.mobile-menu a,
+  .nav-links.flex.mobile-menu a {
+    color: white;
   }
   
+  .nav-links.mobile-menu a:hover,
+  .nav-links.flex.mobile-menu a:hover {
+    transform: scale(1.05);
+    color: white;
+  }
+  
+  .nav-links.mobile-menu a:hover::after,
+  .nav-links.flex.mobile-menu a:hover::after {
+    width: 100%;
+  }
+  
+
   
   /* Subrayado visible al hacer hover */
   .nav-links a:hover::after {
     width: 100%;
+  }
+
+  .nav-links.flex {
+    display: flex !important;
+  }
+  .no-underline-link a::after {
+    display: none !important;
   }
   
   .basket-icon {
@@ -92,27 +107,7 @@ body {
     display: inline-block;
   }
   
-/* Evita que la cesta tenga subrayado degradado */
-.no-underline-link a::after {
-    display: none !important;
-    
-  }
-  
-  /* Estilo para el borde animado al pasar el ratón */
-  .icon-wrapper {
-    
-    transition: all 0.3s ease;
-    
-  }
-  /* Aplica letras blancas al menú desplegable móvil */
-.nav-links.mobile-menu a {
-    color: white !important;
-  }
-  
-  /* Opcional: hover agradable para móvil */
-  .nav-links.mobile-menu a:hover {
-    color: #e5e5e5 !important;
-  }
+
   
 
 
@@ -131,7 +126,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #000000;
+    background-color: #ffffff;
     min-height: 70vh; /* Reduces la altura total del hero */
     margin-top: 90px; /* Añade margen superior para compensar la altura del header fijo */
 }
@@ -165,13 +160,13 @@ body {
 
 .hero p {
     font-size: 18px;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     margin-top: 8px;
 }
 
 .hero .highlight {
     font-size: 24px;
-    color: #ffffff;
+    color: #000000;
     font-weight: bold;
     margin-top: 12px;
 }
@@ -242,7 +237,8 @@ body {
     background-color: #ffffff;
     color: rgb(2, 2, 2);
     padding: 12px 24px;
-    border-radius: 24px;
+    border-radius: 20px;
+    border-color: #000000;
    
     font-size: 18px;
     font-weight: bold;
@@ -266,7 +262,7 @@ body {
 .products {
     text-align: center;
     padding: 60px 20px;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
     position: relative;
   z-index: 1;
 }
@@ -348,7 +344,7 @@ body {
 
 /* PIE DE PÁGINA */
 footer {
-    background-color: #000000;
+    background-color: #ffffff;
     color: white;
     text-align: center;
     padding: 20px;
@@ -374,3 +370,5 @@ footer .social-links a:hover {
   }
   
 
+ 
+  
