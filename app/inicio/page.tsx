@@ -267,10 +267,10 @@ export default function Inicio() {
       <a href="/inicio" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">Inicio</a>
     </li>
     <li>
-      <a href="#" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">2Cabras</a>
+      <a href="/2cabras" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">2Cabras</a>
     </li>
     <li>
-      <a href="#" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">Productos</a>
+      <a href="productos" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">Productos</a>
     </li>
     <li>
       <a href="/registro" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
@@ -278,7 +278,7 @@ export default function Inicio() {
       </a>
     </li>
     <li className="relative text-center">
-      <a href="/favoritos" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
+      <a href="/likes" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
         <HeartIcon className="w-6 h-6 text-white md:text-black" />
         {likes.length > 0 && (
           <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
