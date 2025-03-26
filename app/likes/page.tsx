@@ -66,7 +66,7 @@ export default function Favoritos() {
   };
 
   return (
-    <main className="px-4 py-8 max-w-6xl mx-auto">
+    <main className="px-4 pt-30 pb-8 max-w-6xl mx-auto">
         <Header cartCount={cart.length} favoritesCount={favorites.length} />
       {toastMessage && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded shadow z-50">
@@ -85,7 +85,7 @@ export default function Favoritos() {
           {favorites.map((product) => (
             <div
               key={product.id}
-              className="bg-white border rounded-lg shadow-md p-4 flex flex-col"
+              className="bg-white border rounded-lg shadow-md p-4 flex flex-col items-center text-center"
             >
               <Image
                 src={product.image}
