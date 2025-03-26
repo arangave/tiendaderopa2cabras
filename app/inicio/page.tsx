@@ -651,37 +651,36 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
 </section>
 
 
-      <section className="bg-white py-12 px-4 text-center">
-        <h2 className="text-3xl font-bold mb-4 text-black">
-          Únete al mundo de <span className="bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] bg-clip-text text-transparent">2CabrasConTraje</span>
-        </h2>
-        <p className="text-gray-700 max-w-xl mx-auto mb-6">
-          Recibe ideas, filosofía de marca y alguna que otra forma de<br /> &quot;poner los cuernos&quot;... al sistema. ✨
-        </p>
+<section className="bg-white py-12 px-4 text-center">
+  <h2 className="text-3xl font-bold mb-4 text-black">
+    Únete al mundo de <span className="bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] bg-clip-text text-transparent">2CabrasConTraje</span>
+  </h2>
+  <p className="text-gray-700 max-w-xl mx-auto mb-6">
+    Recibe ideas, filosofía de marca y alguna que otra forma de<br /> &quot;poner los cuernos&quot;... al sistema. ✨
+  </p>
 
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      alert("Gracias por unirte al mundo 2CabrasConTraje 🐐");
+    }}
+    className="flex flex-col items-center justify-center gap-4 max-w-md mx-auto"
+  >
+    <input
+      type="email"
+      placeholder="Tu correo electrónico"
+      required
+      className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition"
+    />
+    <button
+      type="submit"
+      className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+    >
+      Unirme
+    </button>
+  </form>
+</section>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            // Aquí podrías conectar con una API o mostrar un mensaje
-            alert("Gracias por unirte al mundo 2CabrasConTraje 🐐");
-          }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto"
-        >
-          <input
-            type="email"
-            placeholder="Tu correo electrónico"
-            required
-            className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition"
-          />
-          <button
-            type="submit"
-            className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
-          >
-            Unirme
-          </button>
-        </form>
-      </section>
 
 
       {/* FOOTER */}

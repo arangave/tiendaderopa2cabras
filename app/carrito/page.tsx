@@ -19,7 +19,27 @@ export default function Carrito() {
   const [favorites, setFavorites] = useState<Product[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedSizes, setSelectedSizes] = useState<{ [productId: number]: string }>({});
+  const [favoritesIndex, setFavoritesIndex] = useState(0);
 
+  
+ 
+  const [itemsPerSlide, setItemsPerSlide] = useState(3);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setItemsPerSlide(1);
+      } else {
+        setItemsPerSlide(3);
+      }
+    };
+  
+    handleResize(); // Ejecutar al cargar
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  
+  
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     const storedFavorites = localStorage.getItem("favorites");
@@ -150,87 +170,123 @@ export default function Carrito() {
         )}
       </section>
 
-      {/* Productos favoritos sugeridos */}
-
-      {favoritesNotInCart.length > 0 && (
+{/* Productos favoritos sugeridos con carrusel */}
+{favoritesNotInCart.length > 0 && (
   <section className="sugerencias px-4 py-8 max-w-6xl mx-auto">
     <h3 className="text-xl font-semibold mb-6 text-center">
       ¿Quieres añadir alguno de los productos que te han gustado a la cesta?
     </h3>
 
-    <div className="overflow-x-auto scrollbar-hide">
-      <div className="flex gap-6 px-2 sm:px-4 scroll-snap-x scroll-smooth">
-        {favoritesNotInCart.map((fav) => (
-          <div
-          key={`${fav.id}`}
-          className="min-w-[260px] max-w-[300px] snap-start bg-white border rounded-lg shadow-md p-4 flex-shrink-0 hover:shadow-lg transition-shadow duration-300"
+    <div className="relative overflow-hidden">
+      {/* Flecha izquierda */}
+      {favoritesNotInCart.length > itemsPerSlide && (
+        <button
+          onClick={() => setFavoritesIndex((prev) => Math.max(0, prev - 1))}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
         >
-        
-            <Image
-              src={fav.image}
-              alt={fav.name}
-              width={240}
-              height={240}
-              className="rounded-md object-cover mb-3"
-            />
-            <p className="font-semibold text-lg">{fav.name}</p>
-            <p className="text-sm text-gray-500 mb-2">{fav.price}</p>
+          ‹
+        </button>
+      )}
 
-            {/* Tallas dinámicas */}
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">Selecciona una talla:</label>
-              <div className="flex flex-wrap gap-2">
-                {["XS", "S", "M", "L", "XL"].map((size) => (
+      {/* Carrusel */}
+      <div className="overflow-hidden">
+        <div
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{
+            width: `${favoritesNotInCart.length * (100 / itemsPerSlide)}%`,
+            transform: `translateX(-${(100 / favoritesNotInCart.length) * favoritesIndex}%)`,
+          }}
+        >
+          {favoritesNotInCart.map((fav) => (
+  <div
+    key={fav.id}
+    className="flex justify-center px-2"
+    style={{
+      width: `${100 / favoritesNotInCart.length}%`,
+      flexShrink: 0,
+    }}
+  >
+
+              <div className="bg-white border rounded-lg shadow-md p-4 h-full flex flex-col">
+                <Image
+                  src={fav.image}
+                  alt={fav.name}
+                  width={240}
+                  height={240}
+                  className="rounded-md object-cover mb-3"
+                />
+                <p className="font-semibold text-lg">{fav.name}</p>
+                <p className="text-sm text-gray-500 mb-2">{fav.price}</p>
+
+                <div className="mb-2">
+                  <label className="block text-sm font-medium mb-1">Talla:</label>
+                  <div className="flex flex-wrap gap-2">
+                    {["XS", "S", "M", "L", "XL"].map((size) => (
+                      <button
+                        key={`${fav.id}-${size}`}
+                        className={`px-2 py-1 border rounded-md text-sm ${
+                          selectedSizes[fav.id] === size
+                            ? "bg-black text-white"
+                            : "bg-white text-black border-gray-300 hover:bg-black hover:text-white"
+                        }`}
+                        onClick={() =>
+                          setSelectedSizes((prev) => ({
+                            ...prev,
+                            [fav.id]: size,
+                          }))
+                        }
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 mt-auto">
                   <button
-                    key={`${fav.id}-${size}`}
-                    className={`px-2 py-1 border rounded-md text-sm ${
-                      selectedSizes[fav.id] === size
-                        ? "bg-black text-white"
-                        : "bg-white text-black border-gray-300 hover:bg-black hover:text-white"
-                    }`}
-                    onClick={() =>
-                      setSelectedSizes((prev) => ({
-                        ...prev,
-                        [fav.id]: size,
-                      }))
-                    }
+                    onClick={() => {
+                      const selectedSize = selectedSizes[fav.id];
+                      if (!selectedSize) {
+                        alert("Selecciona una talla antes de añadir a la cesta.");
+                        return;
+                      }
+                      addToCart({ ...fav, quantity: 1, size: selectedSize });
+                    }}
+                    className="w-full bg-black text-white px-3 py-1 rounded hover:bg-green-800"
                   >
-                    {size}
+                    Añadir a la cesta
                   </button>
-                ))}
+                  <button
+                    onClick={() => removeFromFavorites(fav.id)}
+                    className="bg-white border border-black text-black px-3 py-1 rounded hover:bg-red-800 transition"
+                  >
+                    Quitar de favoritos
+                  </button>
+                </div>
               </div>
             </div>
-
-            {/* Botones */}
-            <div className="flex flex-col gap-2 mt-3">
-            <button
-                onClick={() => {
-                  const selectedSize = selectedSizes[fav.id];
-                  if (!selectedSize) {
-                    alert("Selecciona una talla antes de añadir a la cesta.");
-                    return;
-                  }
-                  addToCart({ ...fav, quantity: 1, size: selectedSize });
-                }}
-                className="w-full bg-black text-white px-3 py-1 rounded hover:bg-green-800"
-              >
-                Añadir a la cesta
-              </button>
-
-
-              <button
-                onClick={() => removeFromFavorites(fav.id)}
-                className="bg-white border border-black text-black px-3 py-1 rounded hover:bg-red-800 transition"
-              >
-                Quitar de favoritos
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {/* Flecha derecha */}
+      {favoritesNotInCart.length > itemsPerSlide && (
+        <button
+          onClick={() =>
+            setFavoritesIndex((prev) =>
+              Math.min(prev + 1, favoritesNotInCart.length - itemsPerSlide)
+            )
+          }
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+        >
+          ›
+        </button>
+      )}
     </div>
   </section>
 )}
+
+
 
 
 
