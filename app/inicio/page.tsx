@@ -3,10 +3,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import "./styles/globals.css";
+import "../styles/globals.css";
 import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+
 
 
 
@@ -35,6 +36,16 @@ export default function Inicio() {
   const [likes, setLikes] = useState<Product[]>([]);
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(likes));
+  }, [likes]);
+  
+  
+  
+
   // Al cargar, leer del localStorage si hay preferencia guardada
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -55,7 +66,14 @@ export default function Inicio() {
       localStorage.setItem("theme", "light");
     }
   }, [isDarkMode]);
-
+  
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, []);
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -68,27 +86,27 @@ export default function Inicio() {
   }, []);
 
   const products: Product[] = [
-    { id: 1, name: "Camiseta Premium", description: "Camiseta de algodón orgánico con estampado exclusivo.", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 2, name: "Sudadera de Lujo", description: "Sudadera cómoda y elegante para cualquier ocasión.", price: "49,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 3, name: "Pantalones Clásicos", description: "Pantalones de diseño moderno y versátil.", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 4, name: "Gorra Exclusiva", description: "Gorra de alta calidad con diseño único.", price: "19,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 }
+    { id: 101, name: "Camiseta Premium", description: "Camiseta de algodón orgánico con estampado exclusivo.", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 102, name: "Sudadera de Lujo", description: "Sudadera cómoda y elegante para cualquier ocasión.", price: "49,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 103, name: "Pantalones Clásicos", description: "Pantalones de diseño moderno y versátil.", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 104, name: "Gorra Exclusiva", description: "Gorra de alta calidad con diseño único.", price: "19,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 }
   ];
 
   const sweaters = [
-    { id: 1, name: "Sudadera Urbana", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 2, name: "Sudadera Clásica", price: "35,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 3, name: "Sudadera Casual", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 4, name: "Sudadera Vintage", price: "45,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 5, name: "Sudadera Premium", price: "59,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 6, name: "Sudadera Sport", price: "32,99€", image: "/images/Backside T-Shirt Mockup.png" }
+    { id: 201, name: "Sudadera Urbana", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png" },
+    { id: 202, name: "Sudadera Clásica", price: "35,99€", image: "/images/Backside T-Shirt Mockup.png" },
+    { id: 203, name: "Sudadera Casual", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png" },
+    { id: 204, name: "Sudadera Vintage", price: "45,99€", image: "/images/Backside T-Shirt Mockup.png" },
+    { id: 205, name: "Sudadera Premium", price: "59,99€", image: "/images/Backside T-Shirt Mockup.png" },
+    { id: 206, name: "Sudadera Sport", price: "32,99€", image: "/images/Backside T-Shirt Mockup.png" }
   ];
   const tshirts = [
-    { id: 1, name: "Camiseta Urbana", description: "Camiseta de la colección exclusiva", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 2, name: "Camiseta Casual", description: "Camiseta de la colección exclusiva", price: "24,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 3, name: "Camiseta Oversize", description: "Camiseta de la colección exclusiva", price: "34,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 4, name: "Camiseta Vintage", description: "Camiseta de la colección exclusiva", price: "27,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 5, name: "Camiseta Básica", description: "Camiseta de la colección exclusiva", price: "19,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 6, name: "Camiseta Premium", description: "Camiseta de la colección exclusiva", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 }
+    { id: 301, name: "Camiseta Urbana", description: "Camiseta de la colección exclusiva", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 302, name: "Camiseta Casual", description: "Camiseta de la colección exclusiva", price: "24,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 303, name: "Camiseta Oversize", description: "Camiseta de la colección exclusiva", price: "34,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 304, name: "Camiseta Vintage", description: "Camiseta de la colección exclusiva", price: "27,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 305, name: "Camiseta Básica", description: "Camiseta de la colección exclusiva", price: "19,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
+    { id: 306, name: "Camiseta Premium", description: "Camiseta de la colección exclusiva", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 }
   ];
 
 
@@ -120,10 +138,16 @@ export default function Inicio() {
       alert("Por favor, selecciona una talla.");
       return;
     }
-
+  
     const productWithQuantity = { ...product, quantity, size: selectedSize };
-    setCart((prevCart) => [...prevCart, productWithQuantity]);
+    const updatedCart = [...cart, productWithQuantity];
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  
+    showToast("Producto añadido a la cesta 🛒");
   };
+  
+
 
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -143,15 +167,27 @@ export default function Inicio() {
     setQuantity(newQuantity);
   };
 
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+  
 
   const sizes = [
     "XXS", "XS", "S", "M", "L", "XL", "XXL"
   ];
 
-
-
   return (
-    <main>
+    
+      <>
+        {toastMessage && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded-md shadow-lg z-[9999] transition-all duration-300">
+            {toastMessage}
+          </div>
+        )}
+
+  
+      <main>
       <svg width="0" height="0">
         <defs>
           <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -164,114 +200,102 @@ export default function Inicio() {
 
       {/* HEADER */}
 
-      <header
-        className="header flex justify-between items-center p-4 relative z-50"
-        onClick={(e) => e.stopPropagation()}
+      <header className="header flex justify-between items-center p-4 relative z-50">
+  {/* Logo */}
+  <a href="/inicio">
+    <Image
+      src="/images/Logo_pasteles_1.png"
+      alt="Logo"
+      width={50}
+      height={50}
+      className="logo"
+      priority
+    />
+  </a>
+
+  {/* Botón hamburguesa móvil */}
+  <div
+    className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
+    onClick={(e) => {
+      e.stopPropagation();
+      setMenuOpen((prev) => !prev);
+    }}
+  >
+    <div className="relative w-6 h-6">
+      <span
+        className={`block h-[3px] w-5 ${
+          menuOpen
+            ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
+            : "bg-black"
+        } rounded transition-transform duration-300 ease-in-out absolute ${
+          menuOpen ? "rotate-45 top-3 left-0" : "top-1"
+        }`}
+      />
+      <span
+        className={`block h-[3px] w-5 ${
+          menuOpen ? "bg-black opacity-0" : "bg-black"
+        } rounded transition-opacity duration-300 ease-in-out absolute top-3 left-0`}
+      />
+      <span
+        className={`block h-[3px] w-5 ${
+          menuOpen
+            ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
+            : "bg-black"
+        } rounded transition-transform duration-300 ease-in-out absolute ${
+          menuOpen ? "-rotate-45 top-3 left-0" : "top-5"
+        }`}
+      />
+    </div>
+  </div>
+
+  {/* Menú de navegación */}
+  <ul
+    className={`nav-links flex-col items-center justify-center text-center
+      absolute top-20 right-0 bg-black/90 text-white p-6 rounded-lg shadow-md gap-6 z-40 w-[100vw] transition-all duration-300
+      ${menuOpen ? "flex mobile-menu" : "hidden"}
+      md:static md:flex md:flex-row md:bg-transparent md:text-black md:shadow-none md:p-0 md:gap-6 md:w-auto`}
+  >
+    <li>
+      <a href="/inicio" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">Inicio</a>
+    </li>
+    <li>
+      <a href="#" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">2Cabras</a>
+    </li>
+    <li>
+      <a href="#" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">Productos</a>
+    </li>
+    <li>
+      <a href="/registro" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
+        <UserIcon className="w-6 h-6 text-white md:text-black" />
+      </a>
+    </li>
+    <li className="relative text-center">
+      <a href="/favoritos" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
+        <HeartIcon className="w-6 h-6 text-white md:text-black" />
+        {likes.length > 0 && (
+          <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
+            {likes.length}
+          </span>
+        )}
+      </a>
+    </li>
+    <li className="relative text-center no-underline-link">
+      <a
+        href="/carrito"
+        onClick={() => setMenuOpen(false)}
+        className="flex items-center justify-center group transition-all duration-300"
       >
-        {/* Logo */}
-        <Image
-          src="/images/Logo_pasteles_1.png"
-          alt="Logo"
-          width={50}
-          height={50}
-          className="logo"
-          priority
-        />
+        <ShoppingBagIcon className="w-6 h-6 text-white md:text-black group-hover:text-[#67b2c1]" />
+        {cart.length > 0 && (
+          <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
+            {cart.length}
+          </span>
+        )}
+      </a>
+    </li>
+  </ul>
+</header>
 
-
-        {/* Botón hamburguesa móvil */}
-        <div
-          className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
-          onClick={(e) => {
-            e.stopPropagation();
-            setMenuOpen((prev) => !prev);
-          }}
-        >
-          <div className="relative w-6 h-6">
-            <span
-              className={`block h-[3px] w-5 ${menuOpen
-                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                : "bg-black"
-                } rounded transition-transform duration-300 ease-in-out absolute ${menuOpen ? "rotate-45 top-3 left-0" : "top-1"
-                }`}
-            />
-            <span
-              className={`block h-[3px] w-5 ${menuOpen ? "bg-black opacity-0" : "bg-black opacity-100"
-                } rounded transition-opacity duration-300 ease-in-out absolute top-3 left-0`}
-            />
-            <span
-              className={`block h-[3px] w-5 ${menuOpen
-                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                : "bg-black"
-                } rounded transition-transform duration-300 ease-in-out absolute ${menuOpen ? "-rotate-45 top-3 left-0" : "top-5"
-                }`}
-            />
-          </div>
-        </div>
-
-        {/* Menú de navegación */}
-        <ul
-          className={`nav-links flex-col absolute top-23 right-0 bg-black/90 white text-black p-6 rounded-lg shadow-md gap-6 z-40 w-[100vw] transition-all duration-300
-    ${menuOpen ? "flex mobile-menu" : "hidden"}
-    md:static md:flex md:flex-row md:bg-transparent md:text-black md:shadow-none md:p-0 md:gap-6 md:w-auto`}
-        >
-          <li className="text-center">
-            <a href="/inicio" onClick={() => setMenuOpen(false)} className="text-black md:text-black font-semibold hover:text-black">
-              Inicio
-            </a>
-          </li>
-          <li className="text-center">
-            <a href="#" onClick={() => setMenuOpen(false)} className="ttext-black md:text-black font-semibold hover:text-black">
-              2Cabras
-            </a>
-          </li>
-          <li className="text-center">
-            <a href="#" onClick={() => setMenuOpen(false)} className="text-black md:text-black font-semibold hover:text-black">
-              Productos
-            </a>
-          </li>
-          {/* REGISTRO */}
-          <li className="text-center">
-            <a href="/registro" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
-              <UserIcon className="w-6 h-6 text-white md:text-black" />
-            </a>
-          </li>
-
-          {/* FAVORITOS */}
-          <li className="relative text-center">
-            <a href="/favoritos" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
-              <HeartIcon className="w-6 h-6 text-white md:text-black" />
-              {likes.length > 0 && (
-                <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
-                  {likes.length}
-                </span>
-              )}
-            </a>
-          </li>
-
-
-          {/* CESTA */}
-          <li className="relative text-center no-underline-link">
-            <a
-              href="/carrito"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-center group transition-all duration-300"
-            >
-              <ShoppingBagIcon className="w-6 h-6 text-white md:text-black group-hover:text-[#67b2c1]" />
-              {cart.length > 0 && (
-                <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
-                  {cart.length}
-                </span>
-              )}
-            </a>
-          </li>
-        </ul>
-      </header>
-
-      {/* Cierra el menú si se hace clic fuera */}
-      {typeof window !== "undefined" && menuOpen && (
-        <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
-      )}
 
       {/* HERO SECTION */}
       <section className="hero">
@@ -323,7 +347,15 @@ export default function Inicio() {
             <h2>Descubre el estilo de 2CabrasConTraje</h2>
             <p>Moda exclusiva para quienes buscan algo único.</p>
             <p className="highlight">&quot;Rompe con la norma o ponle los cuernos&quot;</p>
-            <a href="#" className="btn">Ver Colección</a>
+            <a
+              href="#"
+              className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+            >
+              Ver Colección
+            </a>
+
+
+
           </div>
           <div className="hero-video">
             <video autoPlay muted loop playsInline className="w-full h-auto">
@@ -385,12 +417,13 @@ export default function Inicio() {
                     <p className="text-md text-black">{product.price}</p>
 
                     <div className="flex justify-center items-center gap-4 mt-4">
-                      <button
-                        className="btn px-6 py-2 bg-blue-600 text-white border border-black/30 rounded-md hover:bg-blue-700 hover:scale-95 transition"
-                        onClick={() => openModal(product)}
-                      >
-                        Ver Producto
-                      </button>
+                    <button
+                      className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+                      onClick={() => openModal(product)}
+                    >
+                      Ver Producto
+                    </button>
+
                     </div>
 
                     {/* Corazón abajo a la derecha */}
@@ -485,7 +518,7 @@ export default function Inicio() {
 
                     <div className="flex justify-center items-center gap-4 mt-4">
                       <button
-                        className="btn px-6 py-2 bg-blue-600 text-white border border-black/30 rounded-md hover:bg-blue-700 hover:scale-95 transition"
+                        className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
                         onClick={() =>
                           openModal({
                             ...item,
@@ -593,7 +626,7 @@ export default function Inicio() {
                     {/* Botones centrados */}
                     <div className="flex justify-center items-center gap-4 mt-4">
                       <button
-                        className="btn px-6 py-2 bg-blue-600 text-white border border-black/30 rounded-md hover:bg-blue-700 hover:scale-95 transition"
+                        className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
                         onClick={() =>
                           openModal({
                             ...item,
@@ -671,7 +704,7 @@ export default function Inicio() {
           />
           <button
             type="submit"
-            className="bg-black text-white font-semibold px-6 py-2 rounded-full transition hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-black"
+            className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
           >
             Unirme
           </button>
@@ -863,6 +896,8 @@ export default function Inicio() {
           </div>
         </div>
       )}
+      
     </main>
+  </>
   );
 }

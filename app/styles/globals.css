@@ -371,4 +371,14 @@ footer .social-links a:hover {
   
 
  
+  .scroll-snap-x {
+    scroll-snap-type: x mandatory;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
   
