@@ -30,14 +30,13 @@ export default function Inicio() {
   const [quantity, setQuantity] = useState<number>(1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [sweaterIndex, setSweaterIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false); // 👈 Añadido aquí
+  
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [likes, setLikes] = useState<Product[]>([]);
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const visibleCount = isMobile ? 1 : 3;
 
 
   useEffect(() => {
@@ -76,15 +75,7 @@ export default function Inicio() {
   }, []);
   
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
 
-    handleResize(); // Ejecuta al cargar
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const products: Product[] = [
     { id: 101, name: "Camiseta Premium", description: "Camiseta de algodón orgánico con estampado exclusivo.", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
@@ -367,8 +358,7 @@ export default function Inicio() {
         </div>
       </section>
 
-{/* PRODUCTOS DESTACADOS */}
-<section className="products mt-0">
+      <section className="products mt-0">
   <div className="flex flex-col items-center justify-center my-6">
     <h2 className="text-center text-3xl font-bold text-black mb-2">Destacados</h2>
     <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
@@ -379,7 +369,7 @@ export default function Inicio() {
     <button
       onClick={() =>
         setFeaturedIndex((prev) =>
-          prev === 0 ? products.length - visibleCount : prev - 1
+          prev === 0 ? products.length - 1 : prev - 1
         )
       }
       className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
@@ -392,16 +382,11 @@ export default function Inicio() {
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{
-          width: `${products.length * (100 / visibleCount)}%`,
-          transform: `translateX(-${featuredIndex * (100 / products.length)}%)`,
+          transform: `translateX(-${featuredIndex * 100}%)`,
         }}
       >
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="w-full sm:w-1/2 md:w-1/3 px-3 flex-shrink-0 mb-6"
-            style={{ flex: `0 0 ${100 / products.length}%` }}
-          >
+          <div key={product.id} className="w-full flex-shrink-0 px-3 mb-6">
             <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
               <div className="product-glow"></div>
 
@@ -426,6 +411,7 @@ export default function Inicio() {
                 </button>
               </div>
 
+              {/* Corazón */}
               <button
                 onClick={() => toggleLike(product)}
                 aria-label="Me gusta"
@@ -433,11 +419,11 @@ export default function Inicio() {
               >
                 {isProductLiked(product.id) ? (
                   <HeartIconSolid
-                    className="w-6 h-6 transition-all duration-300"
+                    className="w-6 h-6"
                     style={{ fill: "url(#grad)", stroke: "none" }}
                   />
                 ) : (
-                  <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
+                  <HeartIcon className="w-6 h-6 text-black" />
                 )}
               </button>
             </div>
@@ -450,7 +436,7 @@ export default function Inicio() {
     <button
       onClick={() =>
         setFeaturedIndex((prev) =>
-          prev >= products.length - visibleCount ? 0 : prev + 1
+          prev >= products.length - 1 ? 0 : prev + 1
         )
       }
       className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
@@ -464,216 +450,192 @@ export default function Inicio() {
 
       {/* CARRUSEL DE SUDADERAS */}
       <section className="products mt-0">
-        <div className="flex flex-col items-center justify-center my-6">
-          <h2 className="text-center text-3xl font-bold text-black mb-2">
-            Sudaderas
-          </h2>
-          <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
-        </div>
+  <div className="flex flex-col items-center justify-center my-6">
+    <h2 className="text-center text-3xl font-bold text-black mb-2">Sudaderas</h2>
+    <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
+  </div>
 
-        <div className="relative max-w-7xl mx-auto px-4">
-          {/* Flecha izquierda */}
-          <button
-            onClick={() =>
-              setSweaterIndex((prev) =>
-                prev === 0 ? sweaters.length - 3 : prev - 1
-              )
-            }
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-          >
-            ‹
-          </button>
+  <div className="relative max-w-7xl mx-auto px-4">
+    <button
+      onClick={() =>
+        setSweaterIndex((prev) =>
+          prev === 0 ? sweaters.length - 1 : prev - 1
+        )
+      }
+      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+    >
+      ‹
+    </button>
 
+    <div className="overflow-hidden">
+      <div
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{
+          transform: `translateX(-${sweaterIndex * 100}%)`,
+        }}
+      >
+        {sweaters.map((item) => (
+          <div key={item.id} className="w-full flex-shrink-0 px-3 mb-6">
+            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+              <Image
+                src={item.image}
+                alt={item.name}
+                width={300}
+                height={300}
+                className="cursor-pointer rounded-md"
+                onClick={() =>
+                  openModal({
+                    ...item,
+                    description: "Sudadera de la colección exclusiva",
+                    quantity: 1,
+                  })
+                }
+              />
+              <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
+              <p className="text-gray-600">{item.price}</p>
 
-          {/* Carrusel con transición */}
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${sweaterIndex * (100 / (isMobile ? 1 : 3))}%)`,
-              }}
-            >
-              {sweaters.map((item) => (
-                <div
-                  key={item.id}
-                  className={`carousel-item ${isMobile ? "min-w-full" : "min-w-[calc(100%/3)]"} px-3 flex-shrink-0 mb-6`}
+              <div className="flex justify-center items-center gap-4 mt-4">
+                <button
+                  className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+                  onClick={() =>
+                    openModal({
+                      ...item,
+                      description: "Sudadera de la colección exclusiva",
+                      quantity: 1,
+                    })
+                  }
                 >
-                  <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
-                    <div className="product-glow"></div>
+                  Ver Producto
+                </button>
+              </div>
 
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={300}
-                      height={300}
-                      className="cursor-pointer rounded-md"
-                    />
-
-                    <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
-                    <p className="text-gray-600">{item.price}</p>
-
-                    <div className="flex justify-center items-center gap-4 mt-4">
-                      <button
-                        className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
-                        onClick={() =>
-                          openModal({
-                            ...item,
-                            description: "Sudadera de la colección exclusiva",
-                            quantity: 1,
-                          })
-                        }
-                      >
-                        Ver Producto
-                      </button>
-                    </div>
-
-                    {/* Botón de me gusta en la esquina inferior derecha */}
-                    <button
-                      onClick={() =>
-                        toggleLike({
-                          ...item,
-                          description: "Sudadera de la colección exclusiva",
-                          quantity: 1,
-                        })
-                      }
-                      aria-label="Me gusta"
-                      className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
-                    >
-                      {isProductLiked(item.id) ? (
-                        <HeartIconSolid
-                          className="w-6 h-6 transition-all duration-300"
-                          style={{
-                            fill: "url(#grad)",
-                            stroke: "none",
-                          }}
-                        />
-                      ) : (
-                        <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              ))}
+              <button
+                onClick={() =>
+                  toggleLike({
+                    ...item,
+                    description: "Sudadera de la colección exclusiva",
+                    quantity: 1,
+                  })
+                }
+                aria-label="Me gusta"
+                className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
+              >
+                {isProductLiked(item.id) ? (
+                  <HeartIconSolid className="w-6 h-6" style={{ fill: "url(#grad)", stroke: "none" }} />
+                ) : (
+                  <HeartIcon className="w-6 h-6 text-black" />
+                )}
+              </button>
             </div>
           </div>
+        ))}
+      </div>
+    </div>
 
+    <button
+      onClick={() =>
+        setSweaterIndex((prev) =>
+          prev >= sweaters.length - 1 ? 0 : prev + 1
+        )
+      }
+      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+    >
+      ›
+    </button>
+  </div>
+</section>
 
+{/* PRODUCTOS CAMISETAS */}
+<section className="products mt-0">
+  <div className="flex flex-col items-center justify-center my-6">
+    <h2 className="text-center text-3xl font-bold text-black mb-2">Camisetas</h2>
+    <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
+  </div>
 
+  <div className="relative max-w-7xl mx-auto px-4">
+    <button
+      onClick={() =>
+        setTshirtIndex((prev) =>
+          prev === 0 ? tshirts.length - 1 : prev - 1
+        )
+      }
+      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+    >
+      ‹
+    </button>
 
-          {/* Flecha derecha */}
-          <button
-            onClick={() =>
-              setSweaterIndex((prev) =>
-                prev >= sweaters.length - 3 ? 0 : prev + 1
-              )
-            }
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-          >
-            ›
-          </button>
-        </div>
-      </section>
+    <div className="overflow-hidden">
+      <div
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{
+          transform: `translateX(-${tshirtIndex * 100}%)`,
+        }}
+      >
+        {tshirts.map((item) => (
+          <div key={item.id} className="w-full flex-shrink-0 px-3 mb-6">
+            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+              <Image
+                src={item.image}
+                alt={item.name}
+                width={300}
+                height={300}
+                className="cursor-pointer rounded-md"
+                onClick={() =>
+                  openModal({
+                    ...item,
+                    description: "Camiseta de la colección exclusiva",
+                    quantity: 1,
+                  })
+                }
+              />
+              <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
+              <p className="text-gray-600">{item.price}</p>
 
-      <section className="products mt-0">
-        <div className="flex flex-col items-center justify-center my-6">
-          <h2 className="text-center text-3xl font-bold text-black mb-2">
-            Camisetas
-          </h2>
-          <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4">
-          {/* Flecha izquierda */}
-          <button
-            onClick={() =>
-              setTshirtIndex((prev) =>
-                prev === 0 ? tshirts.length - 3 : prev - 1
-              )
-            }
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-          >
-            ‹
-          </button>
-
-          {/* Carrusel con transición */}
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${tshirtIndex * (100 / (isMobile ? 1 : 3))}%)`,
-              }}
-            >
-              {tshirts.map((item) => (
-                <div
-                  key={item.id}
-                  className={`carousel-item ${isMobile ? "min-w-full" : "min-w-[calc(100%/3)]"} px-3 flex-shrink-0 mb-6`}
+              <div className="flex justify-center items-center gap-4 mt-4">
+                <button
+                  className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+                  onClick={() =>
+                    openModal({
+                      ...item,
+                      description: "Camiseta de la colección exclusiva",
+                      quantity: 1,
+                    })
+                  }
                 >
-                  <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={300}
-                      height={300}
-                      className="cursor-pointer rounded-md"
-                    />
-                    <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
-                    <p className="text-gray-600">{item.price}</p>
+                  Ver Producto
+                </button>
+              </div>
 
-                    {/* Botones centrados */}
-                    <div className="flex justify-center items-center gap-4 mt-4">
-                      <button
-                        className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
-                        onClick={() =>
-                          openModal({
-                            ...item,
-                            description: "Camiseta de la colección exclusiva",
-                            quantity: 1,
-                          })
-                        }
-                      >
-                        Ver Producto
-                      </button>
-
-                      <button
-                        onClick={() => toggleLike(item)}
-                        aria-label="Me gusta"
-                        className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
-                      >
-                        {isProductLiked(item.id) ? (
-                          <HeartIconSolid
-                            className="w-6 h-6 transition-all"
-                            style={{
-                              fill: "url(#grad)",
-                              stroke: "none",
-                            }}
-                          />
-                        ) : (
-                          <HeartIconOutline className="w-6 h-6 text-black transition-all" />
-                        )}
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              ))}
+              <button
+                onClick={() => toggleLike(item)}
+                aria-label="Me gusta"
+                className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
+              >
+                {isProductLiked(item.id) ? (
+                  <HeartIconSolid className="w-6 h-6" style={{ fill: "url(#grad)", stroke: "none" }} />
+                ) : (
+                  <HeartIconOutline className="w-6 h-6 text-black" />
+                )}
+              </button>
             </div>
           </div>
+        ))}
+      </div>
+    </div>
 
+    <button
+      onClick={() =>
+        setTshirtIndex((prev) =>
+          prev >= tshirts.length - 1 ? 0 : prev + 1
+        )
+      }
+      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+    >
+      ›
+    </button>
+  </div>
+</section>
 
-
-          {/* Flecha derecha */}
-          <button
-            onClick={() =>
-              setTshirtIndex((prev) =>
-                prev >= tshirts.length - 3 ? 0 : prev + 1
-              )
-            }
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-          >
-            ›
-          </button>
-        </div>
-      </section>
 
       <section className="bg-white py-12 px-4 text-center">
         <h2 className="text-3xl font-bold mb-4 text-black">
