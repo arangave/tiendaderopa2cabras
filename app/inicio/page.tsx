@@ -37,6 +37,7 @@ export default function Inicio() {
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const visibleCount = isMobile ? 1 : 3;
 
 
   useEffect(() => {
@@ -366,104 +367,99 @@ export default function Inicio() {
         </div>
       </section>
 
-      {/* PRODUCTOS DESTACADOS */}
-      <section className="products mt-0">
-        <div className="flex flex-col items-center justify-center my-6">
-          <h2 className="text-center text-3xl font-bold text-black mb-2">
-            Destacados
-          </h2>
-          <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
-        </div>
+{/* PRODUCTOS DESTACADOS */}
+<section className="products mt-0">
+  <div className="flex flex-col items-center justify-center my-6">
+    <h2 className="text-center text-3xl font-bold text-black mb-2">Destacados</h2>
+    <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded"></div>
+  </div>
 
-        <div className="relative max-w-7xl mx-auto px-4">
-          {/* Flecha izquierda */}
-          <button
-            onClick={() =>
-              setFeaturedIndex((prev) =>
-                prev === 0 ? products.length - 3 : prev - 1
-              )
-            }
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+  <div className="relative max-w-7xl mx-auto px-4">
+    {/* Flecha izquierda */}
+    <button
+      onClick={() =>
+        setFeaturedIndex((prev) =>
+          prev === 0 ? products.length - visibleCount : prev - 1
+        )
+      }
+      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+    >
+      ‹
+    </button>
+
+    {/* Carrusel */}
+    <div className="overflow-hidden">
+      <div
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{
+          width: `${products.length * (100 / visibleCount)}%`,
+          transform: `translateX(-${featuredIndex * (100 / products.length)}%)`,
+        }}
+      >
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="w-full sm:w-1/2 md:w-1/3 px-3 flex-shrink-0 mb-6"
+            style={{ flex: `0 0 ${100 / products.length}%` }}
           >
-            ‹
-          </button>
+            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+              <div className="product-glow"></div>
 
-          {/* Carrusel con transición */}
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${featuredIndex * (100 / (isMobile ? 1 : 3))}%)`,
-              }}
-            >
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className={`carousel-item ${isMobile ? "min-w-full" : "min-w-[calc(100%/3)]"} px-3 flex-shrink-0 mb-6`}
+              <Image
+                src={product.image}
+                alt={product.name}
+                width={300}
+                height={300}
+                className="cursor-pointer rounded-md"
+                onClick={() => openModal(product)}
+              />
+
+              <h3 className="text-lg font-semibold mt-2 text-black">{product.name}</h3>
+              <p className="text-md text-black">{product.price}</p>
+
+              <div className="flex justify-center items-center gap-4 mt-4">
+                <button
+                  className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+                  onClick={() => openModal(product)}
                 >
-                  <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
-                    <div className="product-glow"></div>
+                  Ver Producto
+                </button>
+              </div>
 
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={300}
-                      height={300}
-                      className="cursor-pointer rounded-md"
-                      onClick={() => openModal(product)}
-                    />
-
-                    <h3 className="text-lg font-semibold mt-2 text-black">{product.name}</h3>
-                    <p className="text-md text-black">{product.price}</p>
-
-                    <div className="flex justify-center items-center gap-4 mt-4">
-                    <button
-                      className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
-                      onClick={() => openModal(product)}
-                    >
-                      Ver Producto
-                    </button>
-
-                    </div>
-
-                    {/* Corazón abajo a la derecha */}
-                    <button
-                      onClick={() => toggleLike(product)}
-                      aria-label="Me gusta"
-                      className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
-                    >
-                      {isProductLiked(product.id) ? (
-                        <HeartIconSolid
-                          className="w-6 h-6 transition-all duration-300"
-                          style={{
-                            fill: "url(#grad)",
-                            stroke: "none",
-                          }}
-                        />
-                      ) : (
-                        <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              ))}
+              <button
+                onClick={() => toggleLike(product)}
+                aria-label="Me gusta"
+                className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
+              >
+                {isProductLiked(product.id) ? (
+                  <HeartIconSolid
+                    className="w-6 h-6 transition-all duration-300"
+                    style={{ fill: "url(#grad)", stroke: "none" }}
+                  />
+                ) : (
+                  <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
+                )}
+              </button>
             </div>
           </div>
+        ))}
+      </div>
+    </div>
 
+    {/* Flecha derecha */}
+    <button
+      onClick={() =>
+        setFeaturedIndex((prev) =>
+          prev >= products.length - visibleCount ? 0 : prev + 1
+        )
+      }
+      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+    >
+      ›
+    </button>
+  </div>
+</section>
 
-          {/* Flecha derecha */}
-          <button
-            onClick={() =>
-              setFeaturedIndex((prev) =>
-                prev >= products.length - 3 ? 0 : prev + 1
-              )
-            }
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-          >
-            ›
-          </button>
-        </div>
-      </section>
 
 
       {/* CARRUSEL DE SUDADERAS */}
