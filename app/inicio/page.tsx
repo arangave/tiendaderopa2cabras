@@ -4,9 +4,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import "../styles/globals.css";
+
 import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
-import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
+
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+
 
 
 
@@ -38,23 +40,26 @@ export default function Inicio() {
   const [isDarkMode, setIsDarkMode] = useState(true); // Empieza en modo oscuro
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [windowWidth, setWindowWidth] = useState(0);
+  
+  
+
+
+  useEffect(() => {
+    
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  
+  const itemsPerPage = windowWidth < 768 ? 1 : 3;
+
 
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(likes));
   }, [likes]);
   
   
-
-
-
-useEffect(() => {
-  const handleResize = () => setWindowWidth(window.innerWidth);
-  handleResize(); // Ejecuta al cargar
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-
-const itemsPerPage = windowWidth < 768 ? 1 : 3;
 
 
   // Al cargar, leer del localStorage si hay preferencia guardada
@@ -371,7 +376,6 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
 
 
 {/* DESTACADOS */}
-  {/* PRODUCTOS DESTACADOS */}
 <section className="products mt-0">
   <div className="flex flex-col items-center justify-center my-6">
     <h2 className="text-center text-3xl font-bold text-black mb-2">Destacados</h2>
@@ -380,32 +384,35 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
 
   <div className="relative max-w-7xl mx-auto px-4">
     {/* Flecha izquierda */}
-    <button
-      onClick={() =>
-        setFeaturedIndex((prev) =>
-          prev === 0 ? products.length - itemsPerPage : prev - 1
-        )
-      }
-      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-    >
-      ‹
-    </button>
+    {products.length > itemsPerPage && (
+      <button
+        onClick={() =>
+          setFeaturedIndex((prev) =>
+            prev === 0 ? products.length - itemsPerPage : prev - 1
+          )
+        }
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+      >
+        ‹
+      </button>
+    )}
 
     {/* Carrusel */}
     <div className="overflow-hidden">
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{
-          transform: `translateX(-${featuredIndex * (100 / itemsPerPage)}%)`,
+          width: `${(products.length * 100) / itemsPerPage}%`,
+          transform: `translateX(-${featuredIndex * (100 / products.length)}%)`,
         }}
       >
         {products.map((product) => (
           <div
             key={product.id}
-            className="min-w-full sm:min-w-[50%] md:min-w-[33.3333%] px-3 flex-shrink-0 mb-6"
+            className="flex justify-center px-3 flex-shrink-0 mb-6"
+            style={{ width: `${100 / products.length}%` }}
           >
-            {/* Tarjeta */}
-            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative max-w-xs w-full">
               <Image
                 src={product.image}
                 alt={product.name}
@@ -446,53 +453,59 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
     </div>
 
     {/* Flecha derecha */}
-    <button
-      onClick={() =>
-        setFeaturedIndex((prev) =>
-          prev >= products.length - itemsPerPage ? 0 : prev + 1
-        )
-      }
-      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-    >
-      ›
-    </button>
+    {products.length > itemsPerPage && (
+      <button
+        onClick={() =>
+          setFeaturedIndex((prev) =>
+            prev >= products.length - itemsPerPage ? 0 : prev + 1
+          )
+        }
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+      >
+        ›
+      </button>
+    )}
   </div>
 </section>
 
 
+
       {/* CARRUSEL DE SUDADERAS */}
- {/* SUDADERAS */}
-<section className="products mt-0">
+      <section className="products mt-0">
   <div className="flex flex-col items-center justify-center my-6">
     <h2 className="text-center text-3xl font-bold text-black mb-2">Sudaderas</h2>
     <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded" />
   </div>
 
   <div className="relative max-w-7xl mx-auto px-4">
-    <button
-      onClick={() =>
-        setSweaterIndex((prev) =>
-          prev === 0 ? sweaters.length - itemsPerPage : prev - 1
-        )
-      }
-      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
-    >
-      ‹
-    </button>
+    {sweaters.length > itemsPerPage && (
+      <button
+        onClick={() =>
+          setSweaterIndex((prev) =>
+            prev === 0 ? sweaters.length - itemsPerPage : prev - 1
+          )
+        }
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+      >
+        ‹
+      </button>
+    )}
 
     <div className="overflow-hidden">
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{
-          transform: `translateX(-${sweaterIndex * (100 / itemsPerPage)}%)`,
+          width: `${(sweaters.length * 100) / itemsPerPage}%`,
+          transform: `translateX(-${sweaterIndex * (100 / sweaters.length)}%)`,
         }}
       >
         {sweaters.map((item) => (
           <div
             key={item.id}
-            className="min-w-full sm:min-w-[50%] md:min-w-[33.3333%] px-3 flex-shrink-0 mb-6"
+            className="flex justify-center px-3 flex-shrink-0 mb-6"
+            style={{ width: `${100 / sweaters.length}%` }}
           >
-            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative max-w-xs w-full">
               <Image
                 src={item.image}
                 alt={item.name}
@@ -509,7 +522,7 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
                   onClick={() =>
                     openModal({
                       ...item,
-                      description: "Sudadera de la colección exclusiva",
+                      description: "Sudadera exclusiva",
                       quantity: 1,
                     })
                   }
@@ -522,7 +535,7 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
                 onClick={() =>
                   toggleLike({
                     ...item,
-                    description: "Sudadera de la colección exclusiva",
+                    description: "Sudadera exclusiva",
                     quantity: 1,
                   })
                 }
@@ -540,22 +553,25 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
       </div>
     </div>
 
-    <button
-      onClick={() =>
-        setSweaterIndex((prev) =>
-          prev >= sweaters.length - itemsPerPage ? 0 : prev + 1
-        )
-      }
-      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
-    >
-      ›
-    </button>
+    {sweaters.length > itemsPerPage && (
+      <button
+        onClick={() =>
+          setSweaterIndex((prev) =>
+            prev >= sweaters.length - itemsPerPage ? 0 : prev + 1
+          )
+        }
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+      >
+        ›
+      </button>
+    )}
   </div>
 </section>
 
 
+
+
 {/* PRODUCTOS CAMISETAS */}
-{/* CAMISETAS */}
 <section className="products mt-0">
   <div className="flex flex-col items-center justify-center my-6">
     <h2 className="text-center text-3xl font-bold text-black mb-2">Camisetas</h2>
@@ -563,32 +579,34 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
   </div>
 
   <div className="relative max-w-7xl mx-auto px-4">
-    {/* Flecha izquierda */}
-    <button
-      onClick={() =>
-        setTshirtIndex((prev) =>
-          prev === 0 ? tshirts.length - itemsPerPage : prev - 1
-        )
-      }
-      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-    >
-      ‹
-    </button>
+    {tshirts.length > itemsPerPage && (
+      <button
+        onClick={() =>
+          setTshirtIndex((prev) =>
+            prev === 0 ? tshirts.length - itemsPerPage : prev - 1
+          )
+        }
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+      >
+        ‹
+      </button>
+    )}
 
-    {/* Carrusel con transición */}
     <div className="overflow-hidden">
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{
-          transform: `translateX(-${tshirtIndex * (100 / itemsPerPage)}%)`,
+          width: `${(tshirts.length * 100) / itemsPerPage}%`,
+          transform: `translateX(-${tshirtIndex * (100 / tshirts.length)}%)`,
         }}
       >
         {tshirts.map((item) => (
           <div
             key={item.id}
-            className="min-w-full sm:min-w-[50%] md:min-w-[33.3333%] px-3 flex-shrink-0 mb-6"
+            className="flex justify-center px-3 flex-shrink-0 mb-6"
+            style={{ width: `${100 / tshirts.length}%` }}
           >
-            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative">
+            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative max-w-xs w-full">
               <Image
                 src={item.image}
                 alt={item.name}
@@ -599,14 +617,13 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
               <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
               <p className="text-gray-600">{item.price}</p>
 
-              {/* Botones centrados */}
               <div className="flex justify-center items-center gap-4 mt-4">
                 <button
                   className="btn shadow-md shadow-black/40 hover:shadow-lg transition duration-300"
                   onClick={() =>
                     openModal({
                       ...item,
-                      description: "Camiseta de la colección exclusiva",
+                      description: "Camiseta exclusiva",
                       quantity: 1,
                     })
                   }
@@ -615,19 +632,14 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
                 </button>
               </div>
 
-              {/* Corazón abajo a la derecha */}
               <button
                 onClick={() => toggleLike(item)}
-                aria-label="Me gusta"
                 className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
               >
                 {isProductLiked(item.id) ? (
-                  <HeartIconSolid
-                    className="w-6 h-6"
-                    style={{ fill: "url(#grad)", stroke: "none" }}
-                  />
+                  <HeartIconSolid className="w-6 h-6" style={{ fill: "url(#grad)" }} />
                 ) : (
-                  <HeartIconOutline className="w-6 h-6 text-black transition-all" />
+                  <HeartIcon className="w-6 h-6 text-black" />
                 )}
               </button>
             </div>
@@ -636,19 +648,22 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
       </div>
     </div>
 
-    {/* Flecha derecha */}
-    <button
-      onClick={() =>
-        setTshirtIndex((prev) =>
-          prev >= tshirts.length - itemsPerPage ? 0 : prev + 1
-        )
-      }
-      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
-    >
-      ›
-    </button>
+    {tshirts.length > itemsPerPage && (
+      <button
+        onClick={() =>
+          setTshirtIndex((prev) =>
+            prev >= tshirts.length - itemsPerPage ? 0 : prev + 1
+          )
+        }
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+      >
+        ›
+      </button>
+    )}
   </div>
 </section>
+
+
 
 
 <section className="bg-white py-12 px-4 text-center">
@@ -696,9 +711,7 @@ const itemsPerPage = windowWidth < 768 ? 1 : 3;
       {/* MODAL - Detalles del producto */}
       {selectedProduct && (
         <div className="fixed inset-0 flex justify-center items-center" onClick={handleOverlayClick}>
-          {/* Contenedor del modal */}
-
-
+          
           {/* Contenedor del modal */}
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative z-10 flex">
             <button
