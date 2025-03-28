@@ -155,6 +155,22 @@ export default function Inicio() {
     showToast("Producto añadido a la cesta 🛒");
   };
   
+// Efecto de tachado en palabras "norma" al hacer clic (móviles) o hover (escritorio)
+useEffect(() => {
+  const handleClick = (event: Event) => {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains("norma-hover")) {
+      target.classList.toggle("active");
+    }
+  };
+
+  document.addEventListener("click", handleClick);
+
+  return () => {
+    document.removeEventListener("click", handleClick);
+  };
+}, []);
+
 
 
 
@@ -184,6 +200,9 @@ export default function Inicio() {
   const sizes = [
     "XXS", "XS", "S", "M", "L", "XL", "XXL"
   ];
+
+
+  
 
   return (
     
@@ -353,7 +372,10 @@ export default function Inicio() {
     <div className="hero-text text-center sm:text-left">
       <h2 className="text-base sm:text-xl font-bold mb-1 sm:mb-3">Descubre el estilo de 2CabrasConTraje</h2>
       <p className="text-xs sm:text-sm mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
-      <p className="highlight text-xs sm:text-sm mb-3">&quot;Rompe con la norma o ponle los cuernos&quot;</p>
+      <p className="highlight text-xs sm:text-sm mb-3">
+        &quot;Rompe con la <span className="norma-hover">norma</span> o ponle los cuernos&quot;
+      </p>
+
       <a
         href="#"
         className="btn px-3 py-1 sm:px-5 sm:py-2 text-xs sm:text-sm shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"

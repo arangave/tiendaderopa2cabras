@@ -381,4 +381,61 @@ footer .social-links a:hover {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .bg-pastel-blue {
+    background-color: #cce7ff;
+  }
+  .bg-pastel-pink {
+    background-color: #ffcce7;
+  }
+  .bg-pastel-yellow {
+    background-color: #fff0cc;
+  }
+  .text-pastel-pink {
+    color: #ff99cc;
+  }
+  .text-pastel-yellow {
+    color: #ffdd99;
+  }
+  .text-pastel-blue {
+    color: #99ccff;
+  }
+  .norma-hover {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .norma-hover.active::after,
+  .norma-hover:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(130deg, #67b2c1, #ff8eaa, #f6bd6b);
+    animation: slideInGradient 0.4s forwards;
+  }
+  
+  @keyframes slideInGradient {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  
+  .hover-effect {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .hover-effect:hover,
+  .hover-effect:active {
+    transform: scale(1.03);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
   
