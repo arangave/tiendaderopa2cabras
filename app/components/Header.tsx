@@ -68,7 +68,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
         md:static md:flex md:flex-row md:bg-transparent md:text-black md:shadow-none md:p-0 md:gap-6 md:w-auto`}
       >
         <li><Link href="/inicio">Inicio</Link></li>
-        <li><Link href="#">2Cabras</Link></li>
+        <li><Link href="/2cabras">2Cabras</Link></li>
         <li><Link href="#">Productos</Link></li>
         <li>
           <Link href="/registro">
@@ -76,7 +76,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
           </Link>
         </li>
         <li className="relative">
-          <Link href="/favoritos" className="flex items-center justify-center">
+          <Link href="/likes" className="flex items-center justify-center">
             <HeartIcon className="w-6 h-6 text-white md:text-black" />
             {favoritesCount > 0 && (
               <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full border">
