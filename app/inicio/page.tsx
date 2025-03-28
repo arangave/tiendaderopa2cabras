@@ -305,10 +305,10 @@ export default function Inicio() {
 </header>
 
 
-     {/* HERO SECTION */}
+   {/* HERO SECTION */}
 <section className="hero py-8 sm:py-12">
   {/* BOTON DE NOCHE Y DIA */}
-  <div className="absolute top-6 right-4 sm:top-10 z-50">
+  <div className="absolute top-20 sm:top-28 right-4 z-50">
     <button
       onClick={() => setIsDarkMode(!isDarkMode)}
       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md"
