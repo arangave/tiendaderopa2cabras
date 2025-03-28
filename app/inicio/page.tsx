@@ -306,9 +306,9 @@ export default function Inicio() {
 
 
 {/* HERO SECTION */}
-<section className="hero py-8 sm:py-12">
+<section className="hero py-4 sm:py-8">
   {/* BOTON DE NOCHE Y DIA */}
-  <div className="absolute top-20 sm:top-28 right-4 z-50">
+  <div className="absolute top-28 sm:top-36 right-4 z-50">
     <button
       onClick={() => setIsDarkMode(!isDarkMode)}
       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md"
@@ -352,7 +352,7 @@ export default function Inicio() {
 
   <div className="hero-content px-4 sm:px-8 max-w-7xl mx-auto">
     <div className="hero-text text-center sm:text-left">
-      <h2 className="text-xl sm:text-3xl font-bold mb-2 sm:mb-4">Descubre el estilo de 2CabrasConTraje</h2>
+      <h2 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-4">Descubre el estilo de 2CabrasConTraje</h2>
       <p className="text-xs sm:text-md mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
       <p className="highlight text-xs sm:text-sm mb-4">&quot;Rompe con la norma o ponle los cuernos&quot;</p>
       <a
@@ -370,6 +370,7 @@ export default function Inicio() {
     </div>
   </div>
 </section>
+
 
 
 {/* DESTACADOS */}
