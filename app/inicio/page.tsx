@@ -305,7 +305,7 @@ export default function Inicio() {
 </header>
 
 {/* HERO SECTION */}
-<section className="hero py-4 sm:py-8">
+<section className="hero pt-4 sm:pt-17 pb-4 sm:pb-8">
   {/* BOTON DE NOCHE Y DIA */}
   <div className="absolute top-28 sm:top-36 right-4 z-50">
     <button
@@ -349,7 +349,7 @@ export default function Inicio() {
     </button>
   </div>
 
-  <div className="hero-content px-2 sm:px-8 max-w-7xl mx-auto">
+  <div className="hero-content px-2 sm:px-8 max-w-7xl mx-auto mt-[-50px] sm:mt-0">
     <div className="hero-text text-center sm:text-left">
       <h2 className="text-base sm:text-xl font-bold mb-1 sm:mb-3">Descubre el estilo de 2CabrasConTraje</h2>
       <p className="text-xs sm:text-sm mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
