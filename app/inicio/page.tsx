@@ -369,27 +369,29 @@ useEffect(() => {
   </div>
 
   <div className="hero-content px-2 sm:px-8 max-w-7xl mx-auto mt-[-50px] sm:mt-0">
-    <div className="hero-text text-center sm:text-left">
-      <h2 className="text-base sm:text-xl font-bold mb-1 sm:mb-3">Descubre el estilo de 2CabrasConTraje</h2>
-      <p className="text-xs sm:text-sm mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
-      <p className="highlight text-xs sm:text-sm mb-3">
-        &quot;Rompe con la <span className="norma-hover">norma</span> o ponle los cuernos&quot;
-      </p>
+  <div className="hero-text text-center sm:text-left">
+    <h2 className="text-xs sm:text-sm font-bold mb-1 sm:mb-3">Descubre el estilo de 2CabrasConTraje</h2>
+    <p className="text-[8px] sm:text-[10px] mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
+    <p className="highlight text-[8px] sm:text-[10px] mb-3">
+      &quot;Rompe con la <span className="norma-hover">norma</span> o ponle los cuernos&quot;
+    </p>
 
-      <a
-        href="#"
-        className="btn px-3 py-1 sm:px-5 sm:py-2 text-xs sm:text-sm shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
-      >
-        Ver Colección
-      </a>
-    </div>
-    <div className="hero-video mt-2 sm:mt-4">
-      <video autoPlay muted loop playsInline className="w-full h-auto rounded-lg shadow-md">
-        <source src="/videos/Proyecto de vídeo 7.mp4" type="video/mp4" />
-        Tu navegador no soporta video HTML5
-      </video>
-    </div>
+    <a
+      href="#"
+      className="btn px-3 py-1 sm:px-5 sm:py-2 text-[8px] sm:text-[10px] shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+    >
+      Ver Colección
+    </a>
   </div>
+  <div className="hero-video mt-2 sm:mt-4">
+    <video autoPlay muted loop playsInline className="w-full h-auto rounded-lg shadow-md">
+      <source src="/videos/Proyecto de vídeo 7.mp4" type="video/mp4" />
+      Tu navegador no soporta video HTML5
+    </video>
+  </div>
+</div>
+
+
 </section>
 
 
