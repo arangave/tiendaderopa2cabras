@@ -304,7 +304,6 @@ export default function Inicio() {
   </ul>
 </header>
 
-
 {/* HERO SECTION */}
 <section className="hero py-4 sm:py-8">
   {/* BOTON DE NOCHE Y DIA */}
@@ -350,19 +349,19 @@ export default function Inicio() {
     </button>
   </div>
 
-  <div className="hero-content px-4 sm:px-8 max-w-7xl mx-auto">
+  <div className="hero-content px-2 sm:px-8 max-w-7xl mx-auto">
     <div className="hero-text text-center sm:text-left">
-      <h2 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-4">Descubre el estilo de 2CabrasConTraje</h2>
-      <p className="text-xs sm:text-md mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
-      <p className="highlight text-xs sm:text-sm mb-4">&quot;Rompe con la norma o ponle los cuernos&quot;</p>
+      <h2 className="text-base sm:text-xl font-bold mb-1 sm:mb-3">Descubre el estilo de 2CabrasConTraje</h2>
+      <p className="text-xs sm:text-sm mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
+      <p className="highlight text-xs sm:text-sm mb-3">&quot;Rompe con la norma o ponle los cuernos&quot;</p>
       <a
         href="#"
-        className="btn px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+        className="btn px-3 py-1 sm:px-5 sm:py-2 text-xs sm:text-sm shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
       >
         Ver Colección
       </a>
     </div>
-    <div className="hero-video mt-4 sm:mt-8">
+    <div className="hero-video mt-2 sm:mt-4">
       <video autoPlay muted loop playsInline className="w-full h-auto rounded-lg shadow-md">
         <source src="/videos/Proyecto de vídeo 7.mp4" type="video/mp4" />
         Tu navegador no soporta video HTML5
