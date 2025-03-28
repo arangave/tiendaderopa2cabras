@@ -305,75 +305,71 @@ export default function Inicio() {
 </header>
 
 
-      {/* HERO SECTION */}
-      <section className="hero">
-        {/* BOTON DE NOCHE Y DIA */}
-        <div className="absolute top-30 right-4 z-50">
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="w-10 h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md"
-            aria-label="Cambiar modo"
+     {/* HERO SECTION */}
+<section className="hero py-8 sm:py-12">
+  {/* BOTON DE NOCHE Y DIA */}
+  <div className="absolute top-6 right-4 sm:top-10 z-50">
+    <button
+      onClick={() => setIsDarkMode(!isDarkMode)}
+      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md"
+      aria-label="Cambiar modo"
+    >
+      <span
+        className={`transition-transform duration-500 ease-in-out transform ${
+          isDarkMode ? "rotate-180" : "rotate-0"
+        }`}
+      >
+        {isDarkMode ? (
+          // 🌞 Modo claro → mostrar sol
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-4 h-4 sm:w-6 sm:h-6 text-black"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            <span
-              className={`transition-transform duration-500 ease-in-out transform ${isDarkMode ? "rotate-180" : "rotate-0"
-                }`}
-            >
-              {isDarkMode ? (
-                // 🌞 Modo claro → mostrar sol
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 text-black"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 3v1m0 16v1m8.485-8.485h1M3.515 12H2.5M19.071 4.929l-.707.707M5.636 18.364l-.707.707M19.071 19.071l-.707-.707M5.636 5.636l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
-                  />
-                </svg>
-              ) : (
-                // 🌙 Modo oscuro → mostrar luna
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6 text-black transition-transform duration-500 ease-in-out "
-                >
-                  <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 0010.09 9.79z" />
-                </svg>
-              )}
-            </span>
-          </button>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 3v1m0 16v1m8.485-8.485h1M3.515 12H2.5M19.071 4.929l-.707.707M5.636 18.364l-.707.707M19.071 19.071l-.707-.707M5.636 5.636l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
+            />
+          </svg>
+        ) : (
+          // 🌙 Modo oscuro → mostrar luna
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            className="w-4 h-4 sm:w-6 sm:h-6 text-black transition-transform duration-500 ease-in-out"
+          >
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 0010.09 9.79z" />
+          </svg>
+        )}
+      </span>
+    </button>
+  </div>
 
-        </div>
-
-        <div className="hero-content">
-          <div className="hero-text">
-            <h2>Descubre el estilo de 2CabrasConTraje</h2>
-            <p>Moda exclusiva para quienes buscan algo único.</p>
-            <p className="highlight">&quot;Rompe con la norma o ponle los cuernos&quot;</p>
-            <a
-              href="#"
-              className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
-            >
-              Ver Colección
-            </a>
-
-
-
-          </div>
-          <div className="hero-video">
-            <video autoPlay muted loop playsInline className="w-full h-auto">
-              <source src="/videos/Proyecto de vídeo 7.mp4" type="video/mp4" />
-              Tu navegador no soporta video HTML5
-            </video>
-          </div>
-        </div>
-      </section>
-
+  <div className="hero-content px-4 sm:px-8 max-w-7xl mx-auto">
+    <div className="hero-text text-center sm:text-left">
+      <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4">Descubre el estilo de 2CabrasConTraje</h2>
+      <p className="text-sm sm:text-lg mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
+      <p className="highlight text-xs sm:text-base mb-4">&quot;Rompe con la norma o ponle los cuernos&quot;</p>
+      <a
+        href="#"
+        className="btn px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+      >
+        Ver Colección
+      </a>
+    </div>
+    <div className="hero-video mt-4 sm:mt-8">
+      <video autoPlay muted loop playsInline className="w-full h-auto rounded-lg shadow-md">
+        <source src="/videos/Proyecto de vídeo 7.mp4" type="video/mp4" />
+        Tu navegador no soporta video HTML5
+      </video>
+    </div>
+  </div>
+</section>
 
 {/* DESTACADOS */}
 <section className="products mt-0">
