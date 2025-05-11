@@ -8,21 +8,28 @@ import "../styles/globals.css";
 import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+import Modal from "../components/Modal";
+import SizeGuideModal from "../components/SizeGuideModal";
+
+import ProductoCard, { Product } from "../components/ProductoCard";
+import {
+  destacados,
+  rebelTshirts,
+  rebelSweaters,
+  naughtyTshirts,
+  naughtySweaters,
+} from "../data/products";
+
+
+const products: Product[] = destacados;
+const sweaters = [...rebelSweaters, ...naughtySweaters].slice(0, 6);
+const tshirts = [...rebelTshirts, ...naughtyTshirts].slice(0, 6);
 
 
 
 
 
 
-// Definimos la estructura del producto
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  image: string;
-  quantity: number;
-}
 
 export default function Inicio() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -89,37 +96,8 @@ export default function Inicio() {
       setCart(JSON.parse(storedCart));
     }
   }, []);
-  
-
-
-
-  const products: Product[] = [
-    { id: 101, name: "Camiseta Premium", description: "Camiseta de algodón orgánico con estampado exclusivo.", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 102, name: "Sudadera de Lujo", description: "Sudadera cómoda y elegante para cualquier ocasión.", price: "49,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 103, name: "Pantalones Clásicos", description: "Pantalones de diseño moderno y versátil.", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 104, name: "Gorra Exclusiva", description: "Gorra de alta calidad con diseño único.", price: "19,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 }
-  ];
-
-  const sweaters = [
-    { id: 201, name: "Sudadera Urbana", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 202, name: "Sudadera Clásica", price: "35,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 203, name: "Sudadera Casual", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 204, name: "Sudadera Vintage", price: "45,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 205, name: "Sudadera Premium", price: "59,99€", image: "/images/Backside T-Shirt Mockup.png" },
-    { id: 206, name: "Sudadera Sport", price: "32,99€", image: "/images/Backside T-Shirt Mockup.png" }
-  ];
-  const tshirts = [
-    { id: 301, name: "Camiseta Urbana", description: "Camiseta de la colección exclusiva", price: "29,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 302, name: "Camiseta Casual", description: "Camiseta de la colección exclusiva", price: "24,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 303, name: "Camiseta Oversize", description: "Camiseta de la colección exclusiva", price: "34,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 304, name: "Camiseta Vintage", description: "Camiseta de la colección exclusiva", price: "27,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 305, name: "Camiseta Básica", description: "Camiseta de la colección exclusiva", price: "19,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 },
-    { id: 306, name: "Camiseta Premium", description: "Camiseta de la colección exclusiva", price: "39,99€", image: "/images/Backside T-Shirt Mockup.png", quantity: 1 }
-  ];
-
 
   const [tshirtIndex, setTshirtIndex] = useState(0);
-
 
   const isProductLiked = (id: number) => likes.some((p) => p.id === id);
 
@@ -133,7 +111,6 @@ export default function Inicio() {
       }
     });
   };
-
 
   const openModal = (product: Product) => setSelectedProduct(product);
   const closeModal = () => {
@@ -171,9 +148,6 @@ useEffect(() => {
   };
 }, []);
 
-
-
-
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
@@ -200,9 +174,6 @@ useEffect(() => {
   const sizes = [
     "XXS", "XS", "S", "M", "L", "XL", "XXL"
   ];
-
-
-  
 
   return (
     
@@ -428,48 +399,20 @@ useEffect(() => {
         }}
       >
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="flex justify-center px-3 flex-shrink-0 mb-6"
-            style={{ width: `${100 / products.length}%` }}
-          >
-            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative max-w-xs w-full">
-              <Image
-                src={product.image}
-                alt={product.name}
-                width={300}
-                height={300}
-                className="cursor-pointer rounded-md"
-                onClick={() => openModal(product)}
-              />
-              <h3 className="text-lg font-semibold mt-2 text-black">{product.name}</h3>
-              <p className="text-md text-black">{product.price}</p>
+  <div
+    key={product.id}
+    className="flex justify-center px-3 flex-shrink-0 mb-6"
+    style={{ width: `${100 / products.length}%` }}
+  >
+    <ProductoCard
+      product={product}
+      onOpenModal={openModal}
+      onToggleLike={toggleLike}
+      isLiked={isProductLiked(product.id)}
+    />
+  </div>
+))}
 
-              <div className="flex justify-center items-center gap-4 mt-4">
-                <button
-                  className="btn shadow-md shadow-black/40 hover:shadow-lg transition duration-300"
-                  onClick={() => openModal(product)}
-                >
-                  Ver Producto
-                </button>
-              </div>
-
-              <button
-                onClick={() => toggleLike(product)}
-                className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
-              >
-                {isProductLiked(product.id) ? (
-                  <HeartIconSolid
-                    className="w-6 h-6"
-                    style={{ fill: "url(#grad)", stroke: "none" }}
-                  />
-                ) : (
-                  <HeartIcon className="w-6 h-6 text-black" />
-                )}
-              </button>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
 
@@ -719,188 +662,32 @@ useEffect(() => {
 
 
 
-      {/* FOOTER */}
-      <footer>
-        <div className="social-links">
-          <a href="#">Facebook</a>
-          <a href="#">Instagram</a>
-          <a href="#">Twitter</a>
-        </div>
-        <p>© 2025 2CabrasConTraje. Todos los derechos reservados.</p>
-      </footer>
-
-      {/* MODAL - Detalles del producto */}
+      
       {selectedProduct && (
-        <div className="fixed inset-0 flex justify-center items-center" onClick={handleOverlayClick}>
-          
-          {/* Contenedor del modal */}
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full relative z-10 flex">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
-              aria-label="Cerrar modal"
-            >
-              <div className="relative w-5 h-5">
-                <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute rotate-45 top-2 left-0" />
-                <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute -rotate-45 top-2 left-0" />
-              </div>
-            </button>
-
-
-            {/* Modal Content */}
-            <div className="flex items-center space-x-6">
-              {/* Imagen */}
-              <div className="relative overflow-hidden group">
-                <Image
-                  src={selectedProduct.image}
-                  alt={selectedProduct.name}
-                  width={400}
-                  height={400}
-                  className={`rounded-md transition-transform duration-300 cursor-crosshair ${zoom ? "scale-[2]" : "scale-100"}`}
-                  onMouseEnter={() => setZoom(true)}
-                  onMouseLeave={() => setZoom(false)}
-                  onMouseMove={handleMouseMove}
-                  style={{
-                    transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                  }}
-                />
-              </div>
-
-              {/* Texto de producto */}
-              <div className="flex flex-col space-y-4 w-1/2">
-                <h2 className="text-2xl font-bold">{selectedProduct.name}</h2>
-                <p className="text-gray-600">{selectedProduct.description}</p>
-                <p className="text-xl font-bold">{selectedProduct.price}</p>
-
-                {/* Campo de cantidad */}
-                <div className="flex items-center space-x-4">
-                  <label htmlFor="quantity" className="text-lg">Cantidad:</label>
-                  <input
-                    type="number"
-                    id="quantity"
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                    min="1"
-                    className="w-16 p-2 border rounded-md text-center"
-                  />
-                </div>
-                {/* Selector de talla con botones */}
-                <div className="flex flex-col space-y-2">
-                  <label className="text-lg">Talla:</label>
-                  <div className="flex flex-wrap gap-2">
-                    {sizes.map((size) => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-3 py-1 border rounded-md text-sm font-medium transition 
-          ${selectedSize === size
-                            ? "bg-black text-white border-black"
-                            : "bg-white text-black border-gray-300 hover:bg-black hover:text-white"
-                          }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-
-
-                {/* MODAL - Guía de tallas */}
-                {showSizeGuideModal && (
-                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-60">
-                    <div className="bg-white max-w-2xl w-full p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
-                      <button
-                        onClick={() => setShowSizeGuideModal(false)}
-                        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
-                        aria-label="Cerrar guía de tallas"
-                      >
-                        <div className="relative w-5 h-5">
-                          <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute rotate-45 top-2 left-0" />
-                          <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute -rotate-45 top-2 left-0" />
-                        </div>
-                      </button>
-
-                      <h2 className="text-xl font-bold mb-4">Guía de Tallas</h2>
-                      <table className="w-full text-sm border border-gray-200">
-                        <thead className="bg-gray-100">
-                          <tr>
-                            <th className="p-2 border">Talla</th>
-                            <th className="p-2 border">UE</th>
-                            <th className="p-2 border">Pecho</th>
-                            <th className="p-2 border">Cintura</th>
-                            <th className="p-2 border">Cadera</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {[
-                            ["XXS", "32", "74-77 cm", "61-63 cm", "83-85 cm"],
-                            ["XS", "34", "78-81 cm", "62-64 cm", "86-89 cm"],
-                            ["S", "36", "82-85 cm", "65-67 cm", "93-96 cm"],
-                            ["M", "38", "86-89 cm", "68-71 cm", "97-100 cm"],
-                            ["L", "40", "90-93 cm", "72-75 cm", "101-104 cm"],
-                            ["XL", "42", "94-97 cm", "76-79 cm", "105-107 cm"],
-                            ["XXL/2XL", "44", "98-101 cm", "80-84 cm", "108-112 cm"],
-
-                          ].map(([size, eu, chest, waist, hips]) => (
-                            <tr key={size}>
-                              <td className="p-2 border">{size}</td>
-                              <td className="p-2 border">{eu}</td>
-                              <td className="p-2 border">{chest}</td>
-                              <td className="p-2 border">{waist}</td>
-                              <td className="p-2 border">{hips}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-
-                {/* Botón para mostrar la guía de tallas */}
-                <button
-                  onClick={() => setShowSizeGuideModal(true)}
-                  className="relative text-black text-sm font-semibold transition duration-300 hover:after:w-full after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#67b2c1] after:via-[#ff8eaa] after:to-[#f6bd6b] after:rounded after:transition-all"
-                >
-                  Guía de Tallas
-                </button>
-
-
-                <div className="mt-6 flex flex-col sm:flex-row sm:justify-end sm:items-center sm:gap-4 sm:pr-5">
-                  <button
-                    onClick={() => addToCart(selectedProduct!)}
-                    className="px-6 py-2 bg-black text-white font-semibold rounded-md transition-all duration-300
-      hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-white"
-                  >
-                    Añadir a la cesta
-                  </button>
-
-                  <button
-                    onClick={() => toggleLike(selectedProduct!)}
-                    aria-label="Me gusta"
-                    className="p-2 hover:scale-110 transition"
-                  >
-                    {isProductLiked(selectedProduct!.id) ? (
-                      <HeartIconSolid
-                        className="w-6 h-6 transition-all duration-300"
-                        style={{
-                          fill: "url(#grad)",
-                          stroke: "none",
-                        }}
-                      />
-                    ) : (
-                      <HeartIcon className="w-6 h-6 text-black transition-all duration-300" />
-                    )}
-                  </button>
-                </div>
-
-
-
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal
+          product={selectedProduct}
+          selectedSize={selectedSize}
+          quantity={quantity}
+          zoom={zoom}
+          zoomPosition={zoomPosition}
+          isDarkMode={isDarkMode}
+          isLiked={isProductLiked(selectedProduct.id)}
+          onClose={closeModal}
+          onAddToCart={() => addToCart(selectedProduct)}
+          onSelectSize={setSelectedSize}
+          onZoomMove={handleMouseMove}
+          onToggleLike={() => toggleLike(selectedProduct)}
+          onShowSizeGuide={() => setShowSizeGuideModal(true)}
+          onQuantityChange={handleQuantityChange}
+        />
       )}
+
+      {showSizeGuideModal && (
+        <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />
+      )}
+
+
+  
       
     </main>
   </>
