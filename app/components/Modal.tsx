@@ -31,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({
   quantity,
   zoom,
   zoomPosition,
-  isDarkMode,
+  //isDarkMode,
   isLiked,
   onClose,
   onAddToCart,

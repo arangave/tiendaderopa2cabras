@@ -154,11 +154,11 @@ useEffect(() => {
     const y = ((e.clientY - top) / height) * 100;
     setZoomPosition({ x, y });
   };
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  /*const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
       closeModal();
     }
-  };
+  };*/
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuantity = Math.max(1, parseInt(e.target.value, 10)); // Usamos base 10
@@ -171,9 +171,9 @@ useEffect(() => {
   };
   
 
-  const sizes = [
+  /*const sizes = [
     "XXS", "XS", "S", "M", "L", "XL", "XXL"
-  ];
+  ];*/
 
   return (
     

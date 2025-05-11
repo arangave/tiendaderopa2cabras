@@ -23,7 +23,7 @@ export default function ProductosPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [zoom, setZoom] = useState(false);
+  const [zoom] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
   const [likes, setLikes] = useState<Product[]>([]);
