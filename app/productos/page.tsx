@@ -1,9 +1,12 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard, { Product } from "../components/ProductoCard";
+import Sidebar from "../components/Sidebar";
+
+
 import {
   rebelTshirts,
   rebelSweaters,
@@ -33,7 +36,6 @@ export default function ProductosPage() {
   const [isDarkMode] = useState(true);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
     const body = document.body;
     if (sidebarOpen && window.innerWidth < 768) {
       body.classList.add("overflow-hidden");
@@ -43,20 +45,14 @@ export default function ProductosPage() {
     return () => body.classList.remove("overflow-hidden");
   }, [sidebarOpen]);
 
-  const handleZoomMove = (e: React.MouseEvent<HTMLImageElement>) => {
-    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - left) / width) * 100;
-    const y = ((e.clientY - top) / height) * 100;
-    setZoomPosition({ x, y });
-  };
-
   const isLiked = (id: number) => likes.some((p) => p.id === id);
 
   const toggleLike = (product: Product) => {
-    setLikes((prev) => {
-      const exists = prev.find((p) => p.id === product.id);
-      return exists ? prev.filter((p) => p.id !== product.id) : [...prev, product];
-    });
+    setLikes((prev) =>
+      prev.find((p) => p.id === product.id)
+        ? prev.filter((p) => p.id !== product.id)
+        : [...prev, product]
+    );
   };
 
   const addToCart = (product: Product) => {
@@ -67,149 +63,38 @@ export default function ProductosPage() {
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
-  const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
-
-  const handleCategoryClick = (key: string) => {
-    setCategoriaActiva(key);
-    if (window.innerWidth < 768) {
-      setSidebarOpen(false);
-    }
-  };
-
-  const underlineClass =
-    "relative text-left w-fit transition-all duration-100 hover:after:w-full after:content-[''] after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#67b2c1] after:via-[#ff8eaa] after:to-[#f6bd6b] after:rounded after:transition-all after:duration-700";
-
   return (
-    <div className="relative">
-      {!sidebarOpen && (
-        <div className="md:hidden fixed top-28 left-4 z-40">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-full bg-black text-white"
-            aria-label="Abrir menú"
-          >
-            ☰
-          </button>
-        </div>
-      )}
-
-      {!sidebarOpen && (
-        <div className="hidden md:block fixed top-32 left-2 z-50">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-full hover:ring-2 hover:ring-black/20 transition bg-white shadow-md"
-            aria-label="Mostrar menú"
-          >
-            <Image
-              src="/images/icons8-izquierda-24.png"
-              alt="Mostrar"
-              width={16}
-              height={16}
-              className="rotate-180"
-            />
-          </button>
-        </div>
-      )}
-
-      <div className="flex pt-28 min-h-screen w-full">
-      <aside
-        className={`z-50 bg-white text-black transition-transform duration-300 ease-in-out
-        md:sticky md:top-28 md:h-[calc(100vh-7rem)] md:w-64 md:shadow-[2px_0_1px_-1px_rgba(0,0,0,0.2)] md:overflow-y-auto
-        fixed md:static top-28 left-0 w-full max-h-[calc(100vh-7rem)] p-6 overflow-y-auto
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
-      >
-
-          <h2 className="text-lg font-bold mb-6">Categorías</h2>
-          <ul className="space-y-4">
-            {[
-              { label: "Cabras Rebeldes", sub: ["Camisetas", "Sudaderas"] },
-              { label: "Cabras Traviesas", sub: ["Camisetas", "Sudaderas"] },
-            ].map((section) => (
-              <li key={section.label}>
-                <button
-                  onClick={() => {
-                    toggleSection(section.label);
-                    setSelectedMain(section.label);
-                  }}
-                  className={`${underlineClass} font-bold ${selectedMain === section.label ? "after:w-full" : ""}`}
-                >
-                  {section.label}
-                </button>
-                {openSections[section.label] && (
-                  <ul className="ml-4 mt-2 space-y-2">
-                    {section.sub.map((item) => {
-                      const key = `${section.label}-${item}`;
-                      return (
-                        <li key={key}>
-                          <button
-                            onClick={() => handleCategoryClick(key)}
-                            className={`${underlineClass} text-sm ${
-                              categoriaActiva === key
-                                ? "after:w-full font-semibold text-black"
-                                : "text-gray-600"
-                            }`}
-                          >
-                            {item}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="md:hidden absolute top-4 right-4 p-2 rounded-full bg-black text-white"
-            aria-label="Cerrar menú"
-          >
-            ✕
-          </button>
-
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="hidden md:flex absolute top-4 right-1 w-8 h-8 items-center justify-center group transition"
-            aria-label="Ocultar menú"
-          >
-            <span className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-[2px] group-hover:border-gradient-to-r group-hover:from-[#67b2c1] group-hover:via-[#ff8eaa] group-hover:to-[#f6bd6b] transition-all duration-500"></span>
-            <Image
-              src="/images/icons8-izquierda-24.png"
-              alt="Ocultar"
-              width={16}
-              height={16}
-              className="relative z-10"
-            />
-          </button>
-        </aside>
+    <div className="flex pt-28 flex-1 w-full">
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        categoriaActiva={categoriaActiva}
+        setCategoriaActiva={setCategoriaActiva}
+        openSections={openSections}
+        toggleSection={(s) => setOpenSections((prev) => ({ ...prev, [s]: !prev[s] }))}
+        selectedMain={selectedMain}
+        setSelectedMain={setSelectedMain}
+      />
 
         <main
-          className={`transition-all duration-300 px-4 py-6 grid gap-6 w-full
-            ${sidebarOpen 
-              ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3" 
-              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-4"
-            }
-            ${sidebarOpen ? "md:grid" : "grid"} 
-            ${sidebarOpen ? "hidden md:grid" : "grid"}
+          className={`transition-all duration-300 px-4 py-2 grid gap-6 pl-10 w-full
+            grid-cols-1 sm:grid-cols-2
+            ${sidebarOpen ? "md:grid-cols-3 lg:grid-cols-4 md:ml-64" : "md:grid-cols-3 lg:grid-cols-4"}
+            ${sidebarOpen && typeof window !== "undefined" && window.innerWidth < 768 ? "hidden" : ""}
           `}
         >
-          {productosData[categoriaActiva]?.map((product) => (
-            <ProductoCard
-              key={product.id}
-              product={product}
-              isLiked={isLiked(product.id)}
-              onToggleLike={() => toggleLike(product)}
-              onOpenModal={() => setSelectedProduct(product)}
-            />
-          ))}
-        </main>
-      </div>
+
+
+        {productosData[categoriaActiva]?.map((product) => (
+          <ProductoCard
+            key={product.id}
+            product={product}
+            isLiked={isLiked(product.id)}
+            onToggleLike={() => toggleLike(product)}
+            onOpenModal={() => setSelectedProduct(product)}
+          />
+        ))}
+      </main>
 
       {selectedProduct && (
         <Modal
@@ -223,14 +108,21 @@ export default function ProductosPage() {
           onClose={() => setSelectedProduct(null)}
           onAddToCart={() => addToCart(selectedProduct)}
           onSelectSize={setSelectedSize}
-          onZoomMove={handleZoomMove}
+          onZoomMove={(e) => {
+            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - left) / width) * 100;
+            const y = ((e.clientY - top) / height) * 100;
+            setZoomPosition({ x, y });
+          }}
           onToggleLike={() => toggleLike(selectedProduct)}
           onShowSizeGuide={() => setShowSizeGuideModal(true)}
           onQuantityChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
         />
       )}
 
-      {showSizeGuideModal && <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />}
+      {showSizeGuideModal && (
+        <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />
+      )}
     </div>
   );
 }
