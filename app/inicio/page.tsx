@@ -649,7 +649,7 @@ useEffect(() => {
       type="email"
       placeholder="Tu correo electrónico"
       required
-      className="w-full px-4 py-2 border border-gray-300 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition"
+      className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition"
     />
     <button
       type="submit"

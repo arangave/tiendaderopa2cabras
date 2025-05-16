@@ -12,7 +12,14 @@ export interface Product {
   image: string;
   quantity: number;
   size?: string;
+  colors?: {
+    name: string;
+    hex: string;
+    image: string;
+  }[];
 }
+
+
 
 export interface ProductoCardProps {
   product: Product;
