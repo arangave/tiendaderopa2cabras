@@ -41,7 +41,7 @@ export default function Page() {
       <Header />
 
       <section className="mission-vision-values py-12 px-4 sm:px-8 max-w-7xl mx-auto">
-        <h3 className="text-center text-3xl font-medium mb-10">
+        <h3 className="text-center text-3xl font-medium mb-10 text-black">
           2CabrasConTraje: Rompe con la <span className="norma-hover">norma</span> o ponle los cuernos
         </h3>
         <p className="text-gray-700 text-center mb-8">
@@ -72,8 +72,8 @@ export default function Page() {
         </div>
 
         <div className="mt-12 bg-gray-100 p-6 rounded-lg shadow-md">
-          <h3 className="text-2xl font-medium text-center mb-4">¿Qué te quita el sueño?</h3>
-          <p className="text-center text-gray-600 mb-4">
+          <h3 className="text-2xl font-medium text-center mb-4 text-black">¿Qué te quita el sueño?</h3>
+          <p className="text-center text-gray-600 mb-4 text-black">
             Cuéntanos tu problema, dilema o incógnita, y nosotros lo convertimos en una idea única al estilo 2CabrasConTraje.
           </p>
           <div className="flex flex-col items-center gap-4">
@@ -82,7 +82,7 @@ export default function Page() {
               value={userInput}
               onChange={handleInputChange}
               placeholder="Escribe aquí tu problema..."
-              className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full sm:w-3/4 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
             />
             <button
               onClick={handleSubmission}

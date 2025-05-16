@@ -78,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({
           />
         </div>
 
-        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2">
+        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black">
           <h2 className="text-sm md:text-2xl font-bold text-center md:text-left">{product.name}</h2>
           <p className="text-xs md:text-base text-gray-600 text-center md:text-left">{product.description}</p>
           <p className="text-sm md:text-xl font-bold text-center md:text-left">{product.price}</p>

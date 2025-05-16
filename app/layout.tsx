@@ -13,9 +13,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
       <body className="bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main className="relative z-0">{children}</main>
         <Footer />
       </body>
     </html>
   );
 }
+

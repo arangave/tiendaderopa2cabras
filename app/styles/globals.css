@@ -390,9 +390,11 @@ footer .social-links a {
 }
 
 footer .social-links a:hover {
-    color: white;
+  background: linear-gradient(90deg, #67b2c1, #ff8eaa, #f6bd6b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-
 
 /*sudaderas*/
 

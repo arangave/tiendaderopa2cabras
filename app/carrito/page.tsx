@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import "../styles/globals.css";
 import Header from "../components/Header";
+import { TrashIcon } from "@heroicons/react/24/outline";
+
 
 interface Product {
   id: number;
@@ -148,10 +150,12 @@ export default function Carrito() {
                   />
                   <button
                     onClick={() => removeFromCart(item.id, item.size)}
-                    className="bg-red-800 text-white px-3 py-1 rounded hover:bg-red-500 transition"
+                    className="text-red-800 hover:text-red-700 transition"
+                    title="Eliminar"
                   >
-                    Eliminar
+                    <TrashIcon className="w-5 h-5" />
                   </button>
+
 
                 </div>
               </div>
@@ -291,13 +295,7 @@ export default function Carrito() {
 
 
 
-      {/* Footer */}
-      <footer className="text-center mt-10 mb-6 text-sm text-gray-500">
-        <div className="social-links mb-2">
-          <a href="#">Facebook</a> · <a href="#">Instagram</a> · <a href="#">Twitter</a>
-        </div>
-        <p>© 2025 2CabrasConTraje. Todos los derechos reservados.</p>
-      </footer>
+      
     </main>
   );
 }
