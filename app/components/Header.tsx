@@ -69,7 +69,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
       >
         <li><Link href="/inicio">Inicio</Link></li>
         <li><Link href="/2cabras">2Cabras</Link></li>
-        <li><Link href="#">Productos</Link></li>
+        <li><Link href="/productos">Productos</Link></li>
         <li>
           <Link href="/registro">
             <UserIcon className="w-6 h-6 text-white md:text-black" />
