@@ -7,25 +7,22 @@ export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get('token');
 
   if (!token) {
-    return NextResponse.json({ error: 'Missing token' }, { status: 400 });
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/registro?verified=0`);
   }
 
   try {
     const payload = verifyToken(token);
     const { id } = payload as jwt.JwtPayload;
-    const userId = id as number;
 
-    // Marcar usuario como verificado
     await prisma.user.update({
-      where: { id: userId },
+      where: { id: id as number },
       data: { verified: true },
     });
 
-    // Redirigir al login (usando base URL configurable)
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    return NextResponse.redirect(`${baseUrl}/registro`);
+    return NextResponse.redirect(`${baseUrl}/registro?verified=1`);
   } catch (err) {
-    console.error('Invalid or expired token', err);
-    return NextResponse.json({ error: 'Invalid or expired token' }, { status: 400 });
+    console.error('Token inválido o expirado:', err);
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/registro?verified=0`);
   }
 }

@@ -1,5 +1,7 @@
 "use client";
-import { useState, useRef } from "react";
+
+import { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
@@ -18,28 +20,44 @@ export default function RegistroPage() {
   const [email, setEmail] = useState("");
 
   const revealTimeout = useRef<NodeJS.Timeout | null>(null);
+  const searchParams = useSearchParams();
+
+useEffect(() => {
+  const verifiedStatus = searchParams.get("verified");
+  const unsubscribed = searchParams.get("unsubscribed");
+
+  if (verifiedStatus === "1") {
+    alert("✅ Tu cuenta ha sido confirmada con éxito. Ya puedes iniciar sesión.");
+  } else if (verifiedStatus === "0") {
+    alert("❌ El enlace de verificación no es válido o ha expirado.");
+  }
+
+  if (unsubscribed === "1") {
+    alert("🫡 Tu cuenta ha sido desactivada. Lamentamos verte partir.");
+  } else if (unsubscribed === "0") {
+    alert("❌ Hubo un error al procesar la baja.");
+  }
+}, [searchParams]);
+
+
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setAcceptTerms(false);
     setPassword("");
     setConfirmPassword("");
-    
   };
 
-  const validatePassword = (value: string) => {
-    return [
-      { test: value.length >= 6, label: "Debe tener al menos 6 caracteres." },
-      { test: /[A-Z]/.test(value), label: "Debe contener al menos una mayúscula." },
-      { test: /[a-z]/.test(value), label: "Debe contener al menos una minúscula." },
-      { test: /[0-9]/.test(value), label: "Debe contener al menos un número." },
-      { test: /[^A-Za-z0-9]/.test(value), label: "Debe incluir un carácter especial." },
-    ];
-  };
+  const validatePassword = (value: string) => [
+    { test: value.length >= 6, label: "Debe tener al menos 6 caracteres." },
+    { test: /[A-Z]/.test(value), label: "Debe contener al menos una mayúscula." },
+    { test: /[a-z]/.test(value), label: "Debe contener al menos una minúscula." },
+    { test: /[0-9]/.test(value), label: "Debe contener al menos un número." },
+    { test: /[^A-Za-z0-9]/.test(value), label: "Debe incluir un carácter especial." },
+  ];
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
-    
     setTemporarilyReveal(true);
     if (revealTimeout.current) clearTimeout(revealTimeout.current);
     revealTimeout.current = setTimeout(() => setTemporarilyReveal(false), 500);
@@ -54,10 +72,7 @@ export default function RegistroPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLogin && password !== confirmPassword) {
-      
-      return;
-    }
+    if (!isLogin && password !== confirmPassword) return;
 
     if (!isLogin) {
       try {
@@ -70,17 +85,23 @@ export default function RegistroPage() {
             firstName: nombre,
             lastName1: apellido1,
             lastName2: apellido2,
-          })
+          }),
         });
 
-
-        if (!res.ok) throw new Error("Error al registrar usuario");
-
         const data = await res.json();
-        alert("🎉 Usuario registrado correctamente");
-        console.log(data);
+
+        if (!res.ok) {
+          if (data.error?.includes("already exists")) {
+            alert("Este correo ya está registrado. Puedes iniciar sesión.");
+          } else {
+            alert("❌ Error al registrar usuario: " + (data.error || "Error desconocido."));
+          }
+          return;
+        }
+
+        alert("🎉 Usuario registrado correctamente. Revisa tu correo para validar tu cuenta.");
       } catch (err) {
-        alert("❌ Error al registrar usuario");
+        alert("❌ Error de conexión o del servidor.");
         console.error(err);
       }
     } else {
@@ -163,6 +184,14 @@ export default function RegistroPage() {
                   {showPassword ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
                 </button>
 
+                {isLogin && (
+                  <div className="mt-4 text-center">
+                    <a href="/recuperar" className="text-sm text-[#67b2c1] hover:text-[#ff8eaa] underline transition">
+                      ¿Has olvidado tu contraseña?
+                    </a>
+                  </div>
+                )}
+
                 {!isLogin && (
                   <ul className="text-sm mt-1 list-disc list-inside space-y-1">
                     {passwordChecks.map((rule, i) => (
@@ -180,10 +209,7 @@ export default function RegistroPage() {
                   <div className="relative">
                     <label className="block text-sm font-medium text-gray-700">Repetir contraseña</label>
                     <input type={confirmInputType} required minLength={6}
-                      value={confirmPassword} onChange={(e) => {
-                        setConfirmPassword(e.target.value);
-                        
-                      }}
+                      value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
                       className={`mt-1 w-full text-black px-4 py-2 pr-10 bg-gray-100 border ${
                         confirmPassword.length === 0
@@ -217,8 +243,7 @@ export default function RegistroPage() {
                     <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                       Acepto los{" "}
                       <a href="/terminos" target="_blank" rel="noopener noreferrer"
-                        className="underline text-[#67b2c1] hover:text-[#ff8eaa] transition"
-                      >
+                        className="underline text-[#67b2c1] hover:text-[#ff8eaa] transition">
                         Términos y Condiciones
                       </a>
                     </label>

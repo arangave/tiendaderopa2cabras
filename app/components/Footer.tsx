@@ -53,10 +53,12 @@ export default function Footer() {
         </a>
         <CookiesModal />
         <a
-          href="#"
+          href="/contacto"
+          target="_blank"
+          rel="noopener noreferrer"
           className="hover:text-[#67b2c1] underline transition"
         >
-          Contacto Legal
+          Contactanos
         </a>
       </div>
 

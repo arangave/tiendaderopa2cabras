@@ -45,15 +45,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const baseUrl = process.env.NEXTAUTH_URL;
-    if (!baseUrl) {
-      throw new Error('Missing NEXTAUTH_URL in .env');
-    }
-
     const token = generateToken({ id: newUser.id });
-    const verifyUrl: string = `${baseUrl}/api/auth/verify?token=${token}`;
 
-    await sendVerificationEmail(email, firstName, verifyUrl);
+    await sendVerificationEmail(email, firstName, token); // ✅ solo el token, la URL se genera en mailer
 
     return NextResponse.json({
       message: 'Usuario registrado correctamente. Por favor, revisa tu bandeja de entrada para confirmar tu cuenta.',
