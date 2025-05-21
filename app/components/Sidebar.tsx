@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+
 
 interface SidebarProps {
   sidebarOpen: boolean;
