@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate"
+
+
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
