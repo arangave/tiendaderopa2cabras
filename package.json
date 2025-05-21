@@ -2,14 +2,13 @@
   "name": "tienda-ropa",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "prisma generate --schema=backend/prisma/schema.prisma && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "prisma:generate": "prisma generate --schema=backend/prisma/schema.prisma",
-    "postinstall": "prisma generate --schema=backend/prisma/schema.prisma"
-  },
+"scripts": {
+  "dev": "next dev --turbopack",
+  "build": "prisma generate && next build",
+  "start": "next start",
+  "lint": "next lint",
+  "postinstall": "prisma generate"
+},
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.8.2",
