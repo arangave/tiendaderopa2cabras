@@ -8,7 +8,6 @@ export default function RegistroPage() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [temporarilyReveal, setTemporarilyReveal] = useState(false);
@@ -25,7 +24,7 @@ export default function RegistroPage() {
     setAcceptTerms(false);
     setPassword("");
     setConfirmPassword("");
-    setPasswordMatchError(false);
+    
   };
 
   const validatePassword = (value: string) => {
@@ -40,7 +39,7 @@ export default function RegistroPage() {
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
-    setPasswordMatchError(false);
+    
     setTemporarilyReveal(true);
     if (revealTimeout.current) clearTimeout(revealTimeout.current);
     revealTimeout.current = setTimeout(() => setTemporarilyReveal(false), 500);
@@ -56,7 +55,7 @@ export default function RegistroPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLogin && password !== confirmPassword) {
-      setPasswordMatchError(true);
+      
       return;
     }
 
@@ -183,7 +182,7 @@ export default function RegistroPage() {
                     <input type={confirmInputType} required minLength={6}
                       value={confirmPassword} onChange={(e) => {
                         setConfirmPassword(e.target.value);
-                        setPasswordMatchError(false);
+                        
                       }}
                       placeholder="••••••••"
                       className={`mt-1 w-full text-black px-4 py-2 pr-10 bg-gray-100 border ${
