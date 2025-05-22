@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import "../styles/globals.css";
 
+import IAFlotante from "../components/IAFlotante";
+
 import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
@@ -687,9 +689,11 @@ useEffect(() => {
       )}
 
 
-  
+  <IAFlotante />
+
       
     </main>
   </>
   );
 }
+
