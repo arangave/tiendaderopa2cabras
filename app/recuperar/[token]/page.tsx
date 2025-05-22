@@ -1,12 +1,10 @@
+'use client';
+import { useParams } from 'next/navigation';
 import ResetPasswordForm from './ResetPasswordForm';
 
-interface PageProps {
-  params: {
-    token: string;
-  };
-}
+export default function ResetPasswordPage() {
+  const params = useParams();
+  const token = params.token as string;
 
-export default function ResetPasswordPage({ params }: PageProps) {
-  return <ResetPasswordForm token={params.token} />;
+  return <ResetPasswordForm token={token} />;
 }
-

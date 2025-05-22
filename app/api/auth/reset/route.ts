@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/utils/token';
 
 export async function POST(req: NextRequest) {
@@ -12,7 +12,8 @@ export async function POST(req: NextRequest) {
     }
 
     const payload = verifyToken(token) as { id: number } | null;
-    if (!payload?.id) {
+
+    if (!payload || !payload.id) {
       return NextResponse.json({ error: 'Token inválido o expirado' }, { status: 401 });
     }
 
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
       data: {
         password: hashedPassword,
         resetToken: null,
-        resetTokenExpiry: null,
+        resetTokenExpiry: null
       },
     });
 

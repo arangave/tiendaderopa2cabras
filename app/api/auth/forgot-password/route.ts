@@ -1,23 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { generateToken } from "@/utils/token";
-import { sendResetPasswordEmail } from "@/utils/mailer";
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { generateToken } from '@/utils/token';
+import { sendResetPasswordEmail } from '@/utils/mailer';
 
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
 
     if (!email) {
-      return NextResponse.json({ error: "Email requerido" }, { status: 400 });
+      return NextResponse.json({ error: 'Email requerido' }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      // Por seguridad, no revelamos si el correo existe
       return NextResponse.json({
-        message: "Si existe una cuenta con ese correo, recibirás un email.",
-      });
+        error: 'No existe ninguna cuenta con ese correo electrónico.',
+      }, { status: 404 });
     }
 
     const token = generateToken({ id: user.id });
@@ -34,7 +33,7 @@ export async function POST(req: NextRequest) {
     await sendResetPasswordEmail(email, user.firstName, token);
 
     return NextResponse.json({
-      message: "Si el correo está registrado, se ha enviado un enlace para recuperar la contraseña.",
+      message: '✅ Te hemos enviado un correo para recuperar tu contraseña.',
     });
   } catch (error) {
     console.error("Error forgot-password:", error);
