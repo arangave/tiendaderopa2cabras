@@ -1,5 +1,12 @@
 import ResetPasswordForm from './ResetPasswordForm';
 
-export default function ResetPasswordPage({ params }: { params: { token: string } }) {
+interface PageProps {
+  params: {
+    token: string;
+  };
+}
+
+export default function ResetPasswordPage({ params }: PageProps) {
   return <ResetPasswordForm token={params.token} />;
 }
+
