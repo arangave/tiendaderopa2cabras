@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
-
 import "../styles/globals.css";
 import ZoomableImageModal from "./ZoomableImageModal";
-import { Product } from "./ProductoCard"; 
-
+import { Product } from "./ProductoCard";
 
 interface ModalProps {
   product: Product;
@@ -18,13 +16,38 @@ interface ModalProps {
   isDarkMode: boolean;
   isLiked: boolean;
   onClose: () => void;
-  onAddToCart: () => void;
+  onAddToCart: (fraseSeleccionada?: string) => void;
   onSelectSize: (size: string) => void;
   onZoomMove: (e: React.MouseEvent<HTMLImageElement>) => void;
   onToggleLike: () => void;
   onShowSizeGuide: () => void;
   onQuantityChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+const frasesCabrunas = [
+  "“A veces solo necesitas dos cabras con traje para conquistar el mundo.”",
+  "“El éxito es cuestión de actitud... y de cuernos.”",
+  "“No sigas el rebaño, vístete diferente.”",
+  "“Cabras y trajes: combinación ganadora.”",
+  "“El sistema teme a las cabras con estilo.”",
+  "“Si la vida te da un rebaño, sé la cabra con más flow.”",
+  "“Donde todos ven reglas, nosotros vemos cuernos.”",
+  "“Las cabras con traje saltan más alto.”",
+  "“Ponle traje a tus ideas y deja que las cabras las lleven lejos.”",
+  "“Rompe el molde, luce los cuernos.”",
+  "“No hace falta seguir al pastor si puedes liderar el rebaño.”",
+  "“La moda es pasajera, los cuernos son para siempre.”",
+  "“La rebeldía se lleva mejor en traje.”",
+  "“No temas destacar, teme ser normal.”",
+  "“En un mundo de ovejas, sé cabra con corbata.”",
+  "“A veces para escalar hay que tener cuernos… y un buen traje.”",
+  "“Lo imposible es solo lo que no ha intentado una cabra con traje.”",
+  "“Si nadie te entiende, es que ya vas por delante.”",
+  "“El éxito se mide en saltos, no en pasos.”",
+  "“Haz ruido, deja huella, lleva traje.”",
+  "“Los sueños grandes piden trajes a medida… y cuernos afilados.”",
+  "“Atrévete a desentonar, ahí está la magia.”"
+];
 
 const Modal: React.FC<ModalProps> = ({
   product,
@@ -46,9 +69,50 @@ const Modal: React.FC<ModalProps> = ({
   const [showZoomModal, setShowZoomModal] = useState(false);
   const handleZoomToggle = () => setShowZoomModal((prev) => !prev);
 
+  // Frases
+  const [tipoFrase, setTipoFrase] = useState<"random" | "personal" | "ia" | "ninguna">("ninguna");
+  const [frasePersonal, setFrasePersonal] = useState("");
+  const [fraseIA, setFraseIA] = useState("");
+  const [preguntaIA, setPreguntaIA] = useState("");
+  const [loadingIA, setLoadingIA] = useState(false);
+  const [fraseRandom, setFraseRandom] = useState("");
+
+  // Al pulsar generar random
+  const handleRandomFrase = () => {
+    setFraseRandom("");
+    setTimeout(() => {
+      const frase = frasesCabrunas[Math.floor(Math.random() * frasesCabrunas.length)];
+      setFraseRandom(frase);
+    }, 400);
+  };
+
+  // Al pulsar generar IA
+  const handleFraseIA = async () => {
+    setLoadingIA(true);
+    setFraseIA("");
+    try {
+      const res = await fetch("/api/ia", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta: preguntaIA }),
+      });
+      const data = await res.json();
+      setFraseIA(data.frase || "No se pudo generar la frase.");
+    } catch {
+      setFraseIA("Error generando la frase.");
+    }
+    setLoadingIA(false);
+  };
+
+  // Selección de frase para la camiseta
+  let fraseSeleccionada = "";
+  if (tipoFrase === "random" && fraseRandom) fraseSeleccionada = fraseRandom;
+  if (tipoFrase === "personal" && frasePersonal) fraseSeleccionada = frasePersonal;
+  if (tipoFrase === "ia" && fraseIA) fraseSeleccionada = fraseIA;
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-none bg-opacity-50 z-[9999]">
-      <div className="modal-glow bg-white p-3 md:p-6 rounded-lg shadow-lg w-[95%] max-w-xs sm:max-w-sm md:max-w-2xl relative z-10 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4">
+<div className="modal-glow bg-white p-3 md:p-6 rounded-lg shadow-lg w-[95%] max-w-xs sm:max-w-sm md:max-w-3xl relative z-10 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4">
         {/* Botón cerrar */}
         <button
           onClick={onClose}
@@ -60,28 +124,111 @@ const Modal: React.FC<ModalProps> = ({
             <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute -rotate-45 top-2 left-0" />
           </div>
         </button>
+        {/* Imagen producto + Personalización debajo */}
+        <div className="flex flex-col items-center w-full md:w-auto">
+          <div className="relative w-[200px] h-[180px] md:w-[260px] md:h-[300px] overflow-hidden rounded-md">
+            <Image
+              src={selectedImage}
+              alt={product.name}
+              fill
+              className={`object-cover object-center transition-transform duration-300 cursor-crosshair ${
+                zoom ? "scale-[2]" : "scale-100"
+              }`}
+              onMouseMove={onZoomMove}
+              onClick={handleZoomToggle}
+              style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
+            />
+          </div>
+{/* --- BLOQUE DE PERSONALIZACIÓN DE FRASE --- */}
+<div className="flex flex-col items-center w-full my-2">
+  <div className="bg-gray-100 rounded-lg p-3 flex flex-col gap-2 items-center"
+    style={{ width: "200px", maxWidth: "100%" }} // móvil
+  >
+    <label className="font-semibold text-sm mb-1 text-black w-full text-center">
+      Personaliza tu camiseta con una frase:
+    </label>
+    <select
+      className="p-2 rounded border text-xs font-semibold bg-white text-black w-full"
+      style={{ width: "100%" }}
+      value={tipoFrase}
+      onChange={(e) => {
+        setTipoFrase(e.target.value as "ninguna" | "random" | "personal" | "ia");
+        if (e.target.value === "random") handleRandomFrase();
+      }}
+    >
+      <option value="ninguna">Sin frase</option>
+      <option value="random">Frase random</option>
+      <option value="personal">Tu propia frase</option>
+      <option value="ia">Frase al estilo 2CabrasConTraje</option>
+    </select>
 
-        {/* Imagen producto */}
-        <div className="relative w-[200px] h-[180px] md:w-[260px] md:h-[300px] overflow-hidden rounded-md">
-          <Image
-            src={selectedImage}
-            alt={product.name}
-            fill
-            className={`object-cover object-center transition-transform duration-300 cursor-crosshair ${
-              zoom ? "scale-[2]" : "scale-100"
-            }`}
-            onMouseMove={onZoomMove}
-            onClick={handleZoomToggle}
-            style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
-          />
+    {/* Opciones según selección */}
+    {tipoFrase === "random" && (
+      <div
+        className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black"
+        style={{ width: "100%" }}
+      >
+        {fraseRandom && `"${fraseRandom}"`}
+      </div>
+    )}
+    {tipoFrase === "personal" && (
+      <input
+        className="border rounded px-2 py-1 text-xs w-full mt-1 text-black"
+        type="text"
+        maxLength={80}
+        placeholder="Escribe tu frase aquí..."
+        value={frasePersonal}
+        onChange={(e) => setFrasePersonal(e.target.value)}
+        style={{ width: "100%" }}
+      />
+    )}
+    {tipoFrase === "ia" && (
+      <div className="flex flex-col gap-1 mt-1 w-full">
+        <input
+          className="border rounded px-2 py-1 text-xs w-full text-black"
+          type="text"
+          maxLength={80}
+          placeholder="¿Qué te quita el sueño?"
+          value={preguntaIA}
+          onChange={(e) => setPreguntaIA(e.target.value)}
+          style={{ width: "100%" }}
+        />
+        <button
+          onClick={handleFraseIA}
+          className="bg-black text-white text-xs px-2 py-1 rounded hover:bg-gray-800 disabled:opacity-60 w-full"
+          disabled={!preguntaIA.trim() || loadingIA}
+        >
+          {loadingIA ? "Generando..." : "Generar frase IA"}
+        </button>
+        {fraseIA && (
+          <div
+            className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black"
+            style={{ width: "100%" }}
+          >
+            {`"${fraseIA}"`}
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+  {/* Aplica el mismo ancho en escritorio */}
+  <style jsx>{`
+    @media (min-width: 768px) {
+      div.bg-gray-100 {
+        width: 260px !important;
+      }
+    }
+  `}</style>
+</div>
+{/* --- FIN BLOQUE PERSONALIZACIÓN --- */}
+
         </div>
 
-        {/* Info */}
-        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black">
+        {/* Info producto */}
+        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black max-h-[70vh] overflow-y-auto mt-2 md:mt-0">
           <h2 className="text-sm md:text-2xl font-bold text-center md:text-left">{product.name}</h2>
           <p className="text-xs md:text-base text-gray-600 text-center md:text-left">{product.description}</p>
           <p className="text-sm md:text-xl font-bold text-center md:text-left">{product.price}</p>
-
           {/* Cantidad */}
           <div className="flex items-center justify-center md:justify-start space-x-3">
             <label htmlFor="quantity" className="text-xs md:text-lg">Cantidad:</label>
@@ -94,7 +241,6 @@ const Modal: React.FC<ModalProps> = ({
               className="w-14 p-1 md:p-2 border rounded-md text-center"
             />
           </div>
-
           {/* Talla */}
           <div className="flex flex-col space-y-1 md:space-y-2 w-full">
             <label className="text-xs md:text-lg text-left ml-4 md:ml-0">Talla:</label>
@@ -114,7 +260,6 @@ const Modal: React.FC<ModalProps> = ({
               ))}
             </div>
           </div>
-
           {/* Colores */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
             <div className="mt-2">
@@ -132,8 +277,6 @@ const Modal: React.FC<ModalProps> = ({
               </div>
             </div>
           )}
-
-
           {/* Guía de tallas */}
           <div className="w-full flex justify-center md:justify-center mt-1">
             <button
@@ -143,11 +286,10 @@ const Modal: React.FC<ModalProps> = ({
               Guía de Tallas
             </button>
           </div>
-
           {/* Acciones */}
           <div className="w-full flex justify-center items-center gap-3 md:gap-4 md:justify-center mt-3">
             <button
-              onClick={onAddToCart}
+              onClick={() => onAddToCart(fraseSeleccionada)}
               className="w-[140px] ml-9 md:ml-14 md:w-[180px] px-3 py-1.5 md:px-6 md:py-2 bg-black text-white text-xs md:text-base font-semibold rounded-md transition-all duration-300 hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b]"
             >
               Añadir a la cesta
@@ -169,7 +311,6 @@ const Modal: React.FC<ModalProps> = ({
           </div>
         </div>
       </div>
-
       {/* Zoom modal (opcional) */}
       {showZoomModal && (
         <ZoomableImageModal
