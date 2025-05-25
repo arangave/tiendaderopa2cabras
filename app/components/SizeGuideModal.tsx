@@ -6,8 +6,8 @@ interface Props {
 }
 
 const SizeGuideModal: React.FC<Props> = ({ onClose }) => (
-  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-60">
-    <div className="bg-white max-w-2xl w-full p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-60 text-black">
+    <div className="bg-white  max-w-2xl w-full p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
       <button
         onClick={onClose}
         className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
