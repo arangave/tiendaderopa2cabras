@@ -4,14 +4,32 @@ import { X } from "lucide-react";
 export default function IAFlotante() {
   const [open, setOpen] = useState(false);
 
-  // Random phrase
+  // Frase random
   const [fraseRandom, setFraseRandom] = useState("");
   const [loadingRandom, setLoadingRandom] = useState(false);
   const frases = [
     "“A veces solo necesitas dos cabras con traje para conquistar el mundo.”",
     "“El éxito es cuestión de actitud... y de cuernos.”",
     "“No sigas el rebaño, vístete diferente.”",
-    "“Cabras y trajes: combinación ganadora.”"
+    "“Cabras y trajes: combinación ganadora.”",
+    "“El sistema teme a las cabras con estilo.”",
+    "“Si la vida te da un rebaño, sé la cabra con más flow.”",
+    "“Donde todos ven reglas, nosotros vemos cuernos.”",
+    "“Las cabras con traje saltan más alto.”",
+    "“Ponle traje a tus ideas y deja que las cabras las lleven lejos.”",
+    "“Rompe el molde, luce los cuernos.”",
+    "“No hace falta seguir al pastor si puedes liderar el rebaño.”",
+    "“La moda es pasajera, los cuernos son para siempre.”",
+    "“La rebeldía se lleva mejor en traje.”",
+    "“No temas destacar, teme ser normal.”",
+    "“En un mundo de ovejas, sé cabra con corbata.”",
+    "“A veces para escalar hay que tener cuernos… y un buen traje.”",
+    "“Lo imposible es solo lo que no ha intentado una cabra con traje.”",
+    "“Si nadie te entiende, es que ya vas por delante.”",
+    "“El éxito se mide en saltos, no en pasos.”",
+    "“Haz ruido, deja huella, lleva traje.”",
+    "“Los sueños grandes piden trajes a medida… y cuernos afilados.”",
+    "“Atrévete a desentonar, ahí está la magia.”"
   ];
   const generarFraseRandom = () => {
     setFraseRandom("");
@@ -23,36 +41,59 @@ export default function IAFlotante() {
     }, 1000);
   };
 
-  // Personalizada con IA
+  // Frase IA personalizada
   const [pregunta, setPregunta] = useState("");
   const [fraseIA, setFraseIA] = useState("");
   const [loadingIA, setLoadingIA] = useState(false);
+  const [errorIA, setErrorIA] = useState("");
 
-  const generarFraseIA = async () => {
-    setFraseIA("");
-    setLoadingIA(true);
-    // Simulación: sustituye por tu llamada real a IA
-    setTimeout(() => {
-  setFraseIA(
-    `“Aunque te quite el sueño: ${pregunta}, recuerda que dos cabras con traje pueden con todo.”`
-  );
-  setLoadingIA(false);
-}, 1200);
+  // Cambia esto por el endpoint real de tu API
+  const ENDPOINT_IA = "/api/ia"; // Cambia si usas otro nombre
 
-  };
+const generarFraseIA = async () => {
+  setFraseIA("");
+  setLoadingIA(true);
 
-  // Modal align
+  try {
+    const res = await fetch("/api/ia", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pregunta }),
+    });
+    const data = await res.json();
+    setFraseIA(data.frase || "No se pudo generar la frase.");
+  } catch {
+    setFraseIA("Error generando la frase.");
+  } finally {
+    setLoadingIA(false);
+  }
+};
+
+
+  // Modal align (solo desktop)
   const buttonRef = useRef<HTMLDivElement>(null);
   const [panelPos, setPanelPos] = useState<{ right: number; bottom: number }>({ right: 24, bottom: 24 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detecta si es móvil (tailwind breakpoint sm: 640px)
   useEffect(() => {
-    if (open && buttonRef.current) {
+    function handleResize() {
+      setIsMobile(window.innerWidth < 640);
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (open && buttonRef.current && !isMobile) {
       const rect = buttonRef.current.getBoundingClientRect();
       setPanelPos({
         right: window.innerWidth - rect.right,
         bottom: window.innerHeight - rect.bottom,
       });
     }
-  }, [open]);
+  }, [open, isMobile]);
 
   // Click fuera cierra modal
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -62,10 +103,10 @@ export default function IAFlotante() {
   return (
     <>
       {/* BOTÓN FLOTANTE */}
-      <div className="fixed bottom-6 right-6 z-50 group" ref={buttonRef}>
-        {/* Tooltip */}
-        <div className="
-          absolute right-full bottom-1/2 translate-y-1/2 mr-4 flex items-center w-max z-50 pointer-events-none
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group" ref={buttonRef}>
+        {/* Tooltip solo en desktop */}
+        <div className="hidden sm:flex
+          absolute right-full bottom-1/2 translate-y-1/2 mr-4 items-center w-max z-50 pointer-events-none
           opacity-0 group-hover:opacity-100
           transition-all duration-1000
           -translate-x-2 group-hover:translate-x-0
@@ -80,11 +121,12 @@ export default function IAFlotante() {
         <button
           onClick={() => setOpen((prev) => !prev)}
           className="
-            bg-black text-white p-3 rounded-full shadow-xl
+            bg-black text-white p-3 sm:p-3 rounded-full shadow-xl
             transition-colors duration-[1500ms] ease-in-out
             group-hover:bg-gradient-to-r group-hover:from-[#67b2c1]/40 group-hover:via-[#ff8eaa]/40 group-hover:to-[#f6bd6b]/40
             group-hover:text-white
             focus:outline-none
+            text-2xl sm:text-2xl
           "
           aria-label="Abrir IA"
         >
@@ -95,19 +137,35 @@ export default function IAFlotante() {
       {/* MODAL y fondo backdrop clicable */}
       {open && (
         <>
+          {/* Fondo transparente clickable */}
           <div
-            className="fixed inset-0 z-[1000]"
-            style={{ background: "transparent" }}
+            className="fixed inset-0 z-[1000] bg-black/20 backdrop-blur-[2px]"
             onClick={handleBackdropClick}
           />
+          {/* MODAL: BottomSheet en móvil, flotante en desktop */}
           <div
-            style={{
-              position: "fixed",
-              right: panelPos.right + 64,
-              bottom: panelPos.bottom,
-              zIndex: 1001,
-            }}
-            className="bg-white p-6 rounded-xl w-full max-w-lg shadow-xl border border-gray-200 text-black"
+            style={
+              isMobile
+                ? {
+                    position: "fixed",
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 1001,
+                  }
+                : {
+                    position: "fixed",
+                    right: panelPos.right + 64,
+                    bottom: panelPos.bottom,
+                    zIndex: 1001,
+                  }
+            }
+            className={`
+              bg-white p-4 sm:p-6 rounded-t-xl sm:rounded-xl w-full
+              ${isMobile ? "max-w-full" : "max-w-lg"}
+              shadow-xl border border-gray-200 text-black
+              transition-all duration-300
+            `}
           >
             <div className="flex justify-between items-center mb-4">
               <div className="text-lg font-bold">Frase estilo 2 Cabras</div>
@@ -128,6 +186,7 @@ export default function IAFlotante() {
                   focus:outline-none
                   font-bold
                   shadow
+                  text-sm sm:text-base
                 "
               >
                 {loadingRandom ? "Generando..." : "Generar frase random"}
@@ -150,7 +209,7 @@ export default function IAFlotante() {
             <div>
               <input
                 type="text"
-                className="w-full border rounded px-3 py-2 mb-3 text-black"
+                className="w-full border rounded px-3 py-2 mb-3 text-black text-sm sm:text-base"
                 placeholder="¿Qué te quita el sueño?"
                 value={pregunta}
                 onChange={(e) => setPregunta(e.target.value)}
@@ -167,6 +226,7 @@ export default function IAFlotante() {
                   focus:outline-none
                   font-bold
                   shadow
+                  text-sm sm:text-base
                   disabled:opacity-60
                 "
               >
@@ -175,6 +235,11 @@ export default function IAFlotante() {
               {fraseIA && (
                 <div className="mt-4 p-3 bg-gray-100 rounded text-sm text-center italic text-black">
                   {fraseIA}
+                </div>
+              )}
+              {errorIA && (
+                <div className="mt-2 p-2 rounded text-center bg-red-100 text-red-700 text-xs">
+                  {errorIA}
                 </div>
               )}
             </div>

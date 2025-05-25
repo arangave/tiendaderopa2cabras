@@ -6,6 +6,9 @@ import Image from "next/image";
 import "../styles/globals.css";
 
 import IAFlotante from "../components/IAFlotante";
+import NewsletterForm from "../components/NewsletterForm";
+import { useSearchParams } from "next/navigation";
+
 
 import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 
@@ -50,7 +53,28 @@ export default function Inicio() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [windowWidth, setWindowWidth] = useState(0);
   
-  
+const [unsubMsg, setUnsubMsg] = useState<string | null>(null);
+
+const searchParams = useSearchParams();
+
+useEffect(() => {
+  const unsubscribed = searchParams.get("unsubscribed");
+  if (unsubscribed === "1") {
+    setUnsubMsg("Te has dado de baja correctamente de la newsletter.");
+  } else if (unsubscribed === "0") {
+    setUnsubMsg("No encontramos tu suscripción a la newsletter.");
+  } else {
+    setUnsubMsg(null);
+  }
+}, [searchParams]);
+
+useEffect(() => {
+  if (unsubMsg) {
+    const timer = setTimeout(() => setUnsubMsg(null), 5000);
+    return () => clearTimeout(timer);
+  }
+}, [unsubMsg]);
+
 
 
   useEffect(() => {
@@ -180,6 +204,13 @@ useEffect(() => {
   return (
     
       <>
+      {unsubMsg && (
+          <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-[#ff8eaa] text-white px-4 py-2 rounded-md shadow-lg z-[9999] transition-all duration-300">
+            {unsubMsg}
+          </div>
+        )}
+
+
         {toastMessage && (
           <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded-md shadow-lg z-[9999] transition-all duration-300">
             {toastMessage}
@@ -640,26 +671,8 @@ useEffect(() => {
     Recibe ideas, filosofía de marca y alguna que otra forma de<br /> &quot;poner los cuernos&quot;... al sistema. ✨
   </p>
 
-  <form
-    onSubmit={(e) => {
-      e.preventDefault();
-      alert("Gracias por unirte al mundo 2CabrasConTraje 🐐");
-    }}
-    className="flex flex-col items-center justify-center gap-4 max-w-md mx-auto"
-  >
-    <input
-      type="email"
-      placeholder="Tu correo electrónico"
-      required
-      className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition text-black"
-    />
-    <button
-      type="submit"
-      className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
-    >
-      Unirme
-    </button>
-  </form>
+    <NewsletterForm />
+
 </section>
 
 

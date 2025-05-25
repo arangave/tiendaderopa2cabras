@@ -18,6 +18,8 @@ model User {
   createdAt         DateTime @default(now())
   verifyToken       String?  @unique
   verifyTokenExpiry DateTime?
+  newsletter        Boolean  @default(false)
+
 
   // 🔐 Campos para recuperación de contraseña
   resetToken        String?  @unique
