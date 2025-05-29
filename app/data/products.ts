@@ -1,4 +1,18 @@
-import { Product } from "../components/ProductoCard";
+// data/products.ts
+export interface Product {
+  id: number;
+  name: string;
+  description?: string;
+  price: string;
+  image: string;
+  quantity: number;
+  size?: string;
+  colors?: {
+    name: string;
+    hex: string;
+    image: string;
+  }[];
+}
 
 //  Camisetas Cabras Rebeldes
 export const rebelTshirts: Product[] = Array.from({ length: 10 }, (_, i) => ({
@@ -19,7 +33,7 @@ export const rebelTshirts: Product[] = Array.from({ length: 10 }, (_, i) => ({
       image: "/images/camiseta doblada por delante logo negro con letras- fondo blanco.png",
     },
   ],
-  image: "/images/Backside T-Shirt Mockup.png", // Imagen por defecto: color negro
+  image: "/images/Backside T-Shirt Mockup.png",
 }));
 
 //  Sudaderas Cabras Rebeldes
