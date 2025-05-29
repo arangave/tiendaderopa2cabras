@@ -51,7 +51,7 @@ export default function ProductoCard({ product, onOpenModal, onToggleLike, isLik
           Ver Producto
         </button>
       </div>
-
+{/* Corazón abajo a la derecha */}
       {/* Corazón abajo a la derecha */}
       <button
         onClick={() => onToggleLike(product)}
