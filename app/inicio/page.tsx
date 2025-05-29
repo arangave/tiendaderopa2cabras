@@ -1,23 +1,16 @@
-// ...importaciones
-
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import "../styles/globals.css";
-
 import IAFlotante from "../components/IAFlotante";
 import NewsletterForm from "../components/NewsletterForm";
 import { useSearchParams } from "next/navigation";
-
-
 import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
-
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
-
-import ProductoCard, { Product } from "../components/ProductoCard";
-import {
+import ProductoCard from "../components/ProductoCard";
+import type { Product } from "../data/products";import {
   destacados,
   rebelTshirts,
   rebelSweaters,
