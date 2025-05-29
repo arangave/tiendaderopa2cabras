@@ -459,9 +459,8 @@ useEffect(() => {
 </section>
 
 
-
-      {/* CARRUSEL DE SUDADERAS */}
-      <section className="products mt-0">
+{/* CARRUSEL DE SUDADERAS */}
+<section className="products mt-0">
   <div className="flex flex-col items-center justify-center my-6">
     <h2 className="text-center text-3xl font-bold text-black mb-2">Sudaderas</h2>
     <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded" />
@@ -475,7 +474,7 @@ useEffect(() => {
             prev === 0 ? sweaters.length - itemsPerPage : prev - 1
           )
         }
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
       >
         ‹
       </button>
@@ -495,49 +494,12 @@ useEffect(() => {
             className="flex justify-center px-3 flex-shrink-0 mb-6"
             style={{ width: `${100 / sweaters.length}%` }}
           >
-            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative max-w-xs w-full">
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={300}
-                height={300}
-                className="cursor-pointer rounded-md"
-              />
-              <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
-              <p className="text-gray-600">{item.price}</p>
-
-              <div className="flex justify-center items-center gap-4 mt-4">
-                <button
-                  className="btn shadow-md shadow-black/40 hover:shadow-lg transition duration-300"
-                  onClick={() =>
-                    openModal({
-                      ...item,
-                      description: "Sudadera exclusiva",
-                      quantity: 1,
-                    })
-                  }
-                >
-                  Ver Producto
-                </button>
-              </div>
-
-              <button
-                onClick={() =>
-                  toggleLike({
-                    ...item,
-                    description: "Sudadera exclusiva",
-                    quantity: 1,
-                  })
-                }
-                className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
-              >
-                {isProductLiked(item.id) ? (
-                  <HeartIconSolid className="w-6 h-6" style={{ fill: "url(#grad)" }} />
-                ) : (
-                  <HeartIcon className="w-6 h-6 text-black" />
-                )}
-              </button>
-            </div>
+            <ProductoCard
+              product={{ ...item, description: "Sudadera exclusiva", quantity: 1 }}
+              onOpenModal={openModal}
+              onToggleLike={toggleLike}
+              isLiked={isProductLiked(item.id)}
+            />
           </div>
         ))}
       </div>
@@ -550,7 +512,7 @@ useEffect(() => {
             prev >= sweaters.length - itemsPerPage ? 0 : prev + 1
           )
         }
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
       >
         ›
       </button>
@@ -558,10 +520,7 @@ useEffect(() => {
   </div>
 </section>
 
-
-
-
-{/* PRODUCTOS CAMISETAS */}
+{/* CARRUSEL DE CAMISETAS */}
 <section className="products mt-0">
   <div className="flex flex-col items-center justify-center my-6">
     <h2 className="text-center text-3xl font-bold text-black mb-2">Camisetas</h2>
@@ -576,7 +535,7 @@ useEffect(() => {
             prev === 0 ? tshirts.length - itemsPerPage : prev - 1
           )
         }
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
       >
         ‹
       </button>
@@ -596,43 +555,12 @@ useEffect(() => {
             className="flex justify-center px-3 flex-shrink-0 mb-6"
             style={{ width: `${100 / tshirts.length}%` }}
           >
-            <div className="product-card group bg-white p-4 rounded-lg shadow-md relative max-w-xs w-full">
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={300}
-                height={300}
-                className="cursor-pointer rounded-md"
-              />
-              <h3 className="text-lg font-semibold mt-2 text-black">{item.name}</h3>
-              <p className="text-gray-600">{item.price}</p>
-
-              <div className="flex justify-center items-center gap-4 mt-4">
-                <button
-                  className="btn shadow-md shadow-black/40 hover:shadow-lg transition duration-300"
-                  onClick={() =>
-                    openModal({
-                      ...item,
-                      description: "Camiseta exclusiva",
-                      quantity: 1,
-                    })
-                  }
-                >
-                  Ver Producto
-                </button>
-              </div>
-
-              <button
-                onClick={() => toggleLike(item)}
-                className="absolute bottom-4 right-4 p-2 hover:scale-110 transition"
-              >
-                {isProductLiked(item.id) ? (
-                  <HeartIconSolid className="w-6 h-6" style={{ fill: "url(#grad)" }} />
-                ) : (
-                  <HeartIcon className="w-6 h-6 text-black" />
-                )}
-              </button>
-            </div>
+            <ProductoCard
+              product={{ ...item, description: "Camiseta exclusiva", quantity: 1 }}
+              onOpenModal={openModal}
+              onToggleLike={toggleLike}
+              isLiked={isProductLiked(item.id)}
+            />
           </div>
         ))}
       </div>
@@ -645,14 +573,13 @@ useEffect(() => {
             prev >= tshirts.length - itemsPerPage ? 0 : prev + 1
           )
         }
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
       >
         ›
       </button>
     )}
   </div>
 </section>
-
 
 
 
