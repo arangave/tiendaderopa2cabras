@@ -6,11 +6,13 @@ import IAFlotante from "../components/IAFlotante";
 import NewsletterForm from "../components/NewsletterForm";
 import { useSearchParams } from "next/navigation";
 import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
-import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+
+
 import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard from "../components/ProductoCard";
-import type { Product } from "../data/products";import {
+import type { Product } from "../data/products";
+import {
   destacados,
   rebelTshirts,
   rebelSweaters,
@@ -22,12 +24,6 @@ import type { Product } from "../data/products";import {
 const products: Product[] = destacados;
 const sweaters = [...rebelSweaters, ...naughtySweaters].slice(0, 6);
 const tshirts = [...rebelTshirts, ...naughtyTshirts].slice(0, 6);
-
-
-
-
-
-
 
 export default function Inicio() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);

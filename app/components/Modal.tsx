@@ -1,11 +1,13 @@
+// app/components/Modal.tsx
 "use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import "../styles/globals.css";
 import ZoomableImageModal from "./ZoomableImageModal";
-import { Product } from "./ProductoCard";
+import type { Product } from "../data/products";
 
 interface ModalProps {
   product: Product;
@@ -16,9 +18,9 @@ interface ModalProps {
   isDarkMode: boolean;
   isLiked: boolean;
   onClose: () => void;
-  onAddToCart: (fraseSeleccionada?: string) => void;
+  onAddToCart: (fraseSeleccionada?: string, colorSeleccionado?: string) => void;
   onSelectSize: (size: string) => void;
-  onZoomMove: (e: React.MouseEvent<HTMLImageElement>) => void;
+  onZoomMove: (e: React.MouseEvent<HTMLDivElement>) => void;
   onToggleLike: () => void;
   onShowSizeGuide: () => void;
   onQuantityChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -66,6 +68,7 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const sizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
   const [selectedImage, setSelectedImage] = useState(product.image);
+  const [selectedColor, setSelectedColor] = useState<string>("");
   const [showZoomModal, setShowZoomModal] = useState(false);
   const handleZoomToggle = () => setShowZoomModal((prev) => !prev);
 
@@ -77,7 +80,6 @@ const Modal: React.FC<ModalProps> = ({
   const [loadingIA, setLoadingIA] = useState(false);
   const [fraseRandom, setFraseRandom] = useState("");
 
-  // Al pulsar generar random
   const handleRandomFrase = () => {
     setFraseRandom("");
     setTimeout(() => {
@@ -86,7 +88,6 @@ const Modal: React.FC<ModalProps> = ({
     }, 400);
   };
 
-  // Al pulsar generar IA
   const handleFraseIA = async () => {
     setLoadingIA(true);
     setFraseIA("");
@@ -104,7 +105,6 @@ const Modal: React.FC<ModalProps> = ({
     setLoadingIA(false);
   };
 
-  // Selección de frase para la camiseta
   let fraseSeleccionada = "";
   if (tipoFrase === "random" && fraseRandom) fraseSeleccionada = fraseRandom;
   if (tipoFrase === "personal" && frasePersonal) fraseSeleccionada = frasePersonal;
@@ -112,7 +112,9 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-none bg-opacity-50 z-[9999]">
-<div className="modal-glow bg-white p-3 md:p-6 rounded-lg shadow-lg w-[95%] max-w-xs sm:max-w-sm md:max-w-3xl relative z-10 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4">
+      <div
+        className="modal-glow bg-white py-4 px-3 md:py-8 md:px-6 rounded-lg shadow-lg w-[95%] max-w-xs sm:max-w-sm md:max-w-3xl relative z-10 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4 "
+      >
         {/* Botón cerrar */}
         <button
           onClick={onClose}
@@ -124,9 +126,10 @@ const Modal: React.FC<ModalProps> = ({
             <span className="block w-full h-[2px] bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded absolute -rotate-45 top-2 left-0" />
           </div>
         </button>
-        {/* Imagen producto + Personalización debajo */}
+
+        {/* Imagen y bloque de frases */}
         <div className="flex flex-col items-center w-full md:w-auto">
-          <div className="relative w-[200px] h-[180px] md:w-[260px] md:h-[300px] overflow-hidden rounded-md">
+          <div className="relative w-[150px] h-[130px] md:w-[260px] md:h-[300px] overflow-hidden rounded-md">
             <Image
               src={selectedImage}
               alt={product.name}
@@ -139,96 +142,87 @@ const Modal: React.FC<ModalProps> = ({
               style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
             />
           </div>
-{/* --- BLOQUE DE PERSONALIZACIÓN DE FRASE --- */}
-<div className="flex flex-col items-center w-full my-2">
-  <div className="bg-gray-100 rounded-lg p-3 flex flex-col gap-2 items-center"
-    style={{ width: "200px", maxWidth: "100%" }} // móvil
-  >
-    <label className="font-semibold text-sm mb-1 text-black w-full text-center">
-      Personaliza tu camiseta con una frase:
-    </label>
-    <select
-      className="p-2 rounded border text-xs font-semibold bg-white text-black w-full"
-      style={{ width: "100%" }}
-      value={tipoFrase}
-      onChange={(e) => {
-        setTipoFrase(e.target.value as "ninguna" | "random" | "personal" | "ia");
-        if (e.target.value === "random") handleRandomFrase();
-      }}
-    >
-      <option value="ninguna">Sin frase</option>
-      <option value="random">Frase random</option>
-      <option value="personal">Tu propia frase</option>
-      <option value="ia">Frase al estilo 2CabrasConTraje</option>
-    </select>
 
-    {/* Opciones según selección */}
-    {tipoFrase === "random" && (
-      <div
-        className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black"
-        style={{ width: "100%" }}
-      >
-        {fraseRandom && `"${fraseRandom}"`}
-      </div>
-    )}
-    {tipoFrase === "personal" && (
-      <input
-        className="border rounded px-2 py-1 text-xs w-full mt-1 text-black"
-        type="text"
-        maxLength={80}
-        placeholder="Escribe tu frase aquí..."
-        value={frasePersonal}
-        onChange={(e) => setFrasePersonal(e.target.value)}
-        style={{ width: "100%" }}
-      />
-    )}
-    {tipoFrase === "ia" && (
-      <div className="flex flex-col gap-1 mt-1 w-full">
-        <input
-          className="border rounded px-2 py-1 text-xs w-full text-black"
-          type="text"
-          maxLength={80}
-          placeholder="¿Qué te quita el sueño?"
-          value={preguntaIA}
-          onChange={(e) => setPreguntaIA(e.target.value)}
-          style={{ width: "100%" }}
-        />
-        <button
-          onClick={handleFraseIA}
-          className="bg-black text-white text-xs px-2 py-1 rounded hover:bg-gray-800 disabled:opacity-60 w-full"
-          disabled={!preguntaIA.trim() || loadingIA}
-        >
-          {loadingIA ? "Generando..." : "Generar frase IA"}
-        </button>
-        {fraseIA && (
-          <div
-            className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black"
-            style={{ width: "100%" }}
-          >
-            {`"${fraseIA}"`}
+          {/* BLOQUE DE PERSONALIZACIÓN DE FRASE */}
+          <div className="flex flex-col items-center w-full my-2">
+            <div
+              className="bg-gray-100 rounded-lg p-3 flex flex-col gap-2 items-center"
+              style={{ width: "200px", maxWidth: "100%" }}
+            >
+              <label className="font-semibold text-sm mb-1 text-black w-full text-center">
+                Personaliza tu camiseta con una frase:
+              </label>
+              <select
+                className="p-2 rounded border text-xs font-semibold bg-white text-black w-full"
+                value={tipoFrase}
+                onChange={(e) => {
+                  const val = e.target.value as "ninguna" | "random" | "personal" | "ia";
+                  setTipoFrase(val);
+                  if (val === "random") handleRandomFrase();
+                }}
+              >
+                <option value="ninguna">Sin frase</option>
+                <option value="random">Frase random</option>
+                <option value="personal">Tu propia frase</option>
+                <option value="ia">Frase IA</option>
+              </select>
+
+              {tipoFrase === "random" && fraseRandom && (
+                <div className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black">
+                  "{fraseRandom}"
+                </div>
+              )}
+              {tipoFrase === "personal" && (
+                <input
+                  className="border rounded px-2 py-1 text-xs w-full mt-1 text-black"
+                  type="text"
+                  maxLength={80}
+                  placeholder="Escribe tu frase aquí..."
+                  value={frasePersonal}
+                  onChange={(e) => setFrasePersonal(e.target.value)}
+                />
+              )}
+              {tipoFrase === "ia" && (
+                <div className="flex flex-col gap-1 mt-1 w-full">
+                  <input
+                    className="border rounded px-2 py-1 text-xs w-full text-black"
+                    type="text"
+                    maxLength={80}
+                    placeholder="¿Qué te quita el sueño?"
+                    value={preguntaIA}
+                    onChange={(e) => setPreguntaIA(e.target.value)}
+                  />
+                  <button
+                    onClick={handleFraseIA}
+                    className="bg-black text-white text-xs px-2 py-1 rounded hover:bg-gray-800 disabled:opacity-60 w-full"
+                    disabled={!preguntaIA.trim() || loadingIA}
+                  >
+                    {loadingIA ? "Generando..." : "Generar frase IA"}
+                  </button>
+                  {fraseIA && (
+                    <div className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black">
+                      "{fraseIA}"
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <style jsx>{`
+              @media (min-width: 768px) {
+                div.bg-gray-100 {
+                  width: 260px !important;
+                }
+              }
+            `}</style>
           </div>
-        )}
-      </div>
-    )}
-  </div>
-  {/* Aplica el mismo ancho en escritorio */}
-  <style jsx>{`
-    @media (min-width: 768px) {
-      div.bg-gray-100 {
-        width: 260px !important;
-      }
-    }
-  `}</style>
-</div>
-{/* --- FIN BLOQUE PERSONALIZACIÓN --- */}
-
         </div>
 
-        {/* Info producto */}
-        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black max-h-[70vh] overflow-y-auto mt-2 md:mt-0">
+        {/* Info del producto + GUÍA DE TALLAS */}
+        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black max-h-[80vh] overflow-y-auto mt-2 md:mt-0">
           <h2 className="text-sm md:text-2xl font-bold text-center md:text-left">{product.name}</h2>
           <p className="text-xs md:text-base text-gray-600 text-center md:text-left">{product.description}</p>
           <p className="text-sm md:text-xl font-bold text-center md:text-left">{product.price}</p>
+
           {/* Cantidad */}
           <div className="flex items-center justify-center md:justify-start space-x-3">
             <label htmlFor="quantity" className="text-xs md:text-lg">Cantidad:</label>
@@ -238,9 +232,10 @@ const Modal: React.FC<ModalProps> = ({
               value={quantity}
               onChange={onQuantityChange}
               min="1"
-              className="w-14 p-1 md:p-2 border rounded-md text-center"
+              className="w-14 p-1 md:p-2 border rounded-md text-center text-black"
             />
           </div>
+
           {/* Talla */}
           <div className="flex flex-col space-y-1 md:space-y-2 w-full">
             <label className="text-xs md:text-lg text-left ml-4 md:ml-0">Talla:</label>
@@ -260,24 +255,8 @@ const Modal: React.FC<ModalProps> = ({
               ))}
             </div>
           </div>
-          {/* Colores */}
-          {Array.isArray(product.colors) && product.colors.length > 0 && (
-            <div className="mt-2">
-              <label className="text-xs md:text-lg block mb-1">Color:</label>
-              <div className="flex gap-2 justify-center md:justify-start">
-                {product.colors.map((color, index) => (
-                  <button
-                    key={index}
-                    className="w-6 h-6 rounded-full border border-gray-300 hover:scale-110 transition"
-                    style={{ backgroundColor: color.hex }}
-                    aria-label={color.name}
-                    onClick={() => setSelectedImage(color.image)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-          {/* Guía de tallas */}
+
+          {/* BOTÓN GUÍA DE TALLAS */}
           <div className="w-full flex justify-center md:justify-center mt-1">
             <button
               onClick={onShowSizeGuide}
@@ -286,32 +265,55 @@ const Modal: React.FC<ModalProps> = ({
               Guía de Tallas
             </button>
           </div>
-          {/* Acciones */}
+
+          {/* Colores */}
+          {Array.isArray(product.colors) && product.colors.length > 0 && (
+            <div className="mt-2">
+              <label className="text-xs md:text-lg block mb-1">Color:</label>
+              <div className="flex gap-2 justify-center md:justify-start">
+                {product.colors.map((colorObj, index) => (
+                  <button
+                    key={index}
+                    className="w-6 h-6 rounded-full border border-gray-300 hover:scale-110 transition"
+                    style={{ backgroundColor: colorObj.hex }}
+                    aria-label={colorObj.name}
+                    onClick={() => {
+                      setSelectedImage(colorObj.image);
+                      setSelectedColor(colorObj.name);
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Acciones: AÑADIR A LA CESTA y CORAZÓN */}
           <div className="w-full flex justify-center items-center gap-3 md:gap-4 md:justify-center mt-3">
             <button
-              onClick={() => onAddToCart(fraseSeleccionada)}
+              onClick={() => onAddToCart(fraseSeleccionada, selectedColor)}
               className="w-[140px] ml-9 md:ml-14 md:w-[180px] px-3 py-1.5 md:px-6 md:py-2 bg-black text-white text-xs md:text-base font-semibold rounded-md transition-all duration-300 hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b]"
             >
               Añadir a la cesta
             </button>
-            <button
-              onClick={onToggleLike}
-              aria-label="Me gusta"
-              className="p-1 md:p-2 hover:scale-110 transition"
-            >
-              {isLiked ? (
-                <HeartIconSolid
-                  className="w-5 h-5 md:w-6 md:h-6"
-                  style={{ fill: "url(#grad)", stroke: "none" }}
-                />
-              ) : (
-                <HeartIcon className="w-5 h-5 md:w-6 md:h-6 text-black" />
-              )}
-            </button>
+              <button
+                onClick={onToggleLike}
+                aria-label="Me gusta"
+                className="p-1 md:p-2 hover:scale-105 transition-transform"
+              >
+                {isLiked ? (
+                  <HeartIconSolid
+                    className="w-4 h-4 md:w-5 md:h-5"
+                    style={{ fill: "url(#grad)", stroke: "none" }}
+                  />
+                ) : (
+                  <HeartIcon className="w-4 h-4 md:w-5 md:h-5 text-black" />
+                )}
+              </button>
           </div>
         </div>
       </div>
-      {/* Zoom modal (opcional) */}
+
+      {/* Zoom alternativo */}
       {showZoomModal && (
         <ZoomableImageModal
           imageSrc={selectedImage}

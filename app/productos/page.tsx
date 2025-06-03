@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
-import ProductoCard, { Product } from "../components/ProductoCard";
+import ProductoCard from "../components/ProductoCard";
+import type { Product } from "../data/products";
 import Sidebar from "../components/Sidebar";
-
 
 import {
   rebelTshirts,
@@ -35,6 +35,7 @@ export default function ProductosPage() {
   const [selectedMain, setSelectedMain] = useState<string | null>(null);
   const [isDarkMode] = useState(true);
 
+  // Control overflow en móvil
   useEffect(() => {
     const body = document.body;
     if (sidebarOpen && window.innerWidth < 768) {
@@ -55,12 +56,20 @@ export default function ProductosPage() {
     );
   };
 
-  const addToCart = (product: Product) => {
+  // Ahora recibe frase y color
+  const addToCart = (product: Product, frase?: string, color?: string) => {
     if (!selectedSize) return alert("Selecciona una talla");
-    const productoFinal = { ...product, quantity, size: selectedSize };
+    const productoFinal = {
+      ...product,
+      quantity,
+      size: selectedSize,
+      phrase: frase,
+      color: color,
+    };
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const newCart = [...currentCart, productoFinal];
-    localStorage.setItem("cart", JSON.stringify(newCart));
+    localStorage.setItem("cart", JSON.stringify([...currentCart, productoFinal]));
+    // Puedes cerrar modal si quieres:
+    setSelectedProduct(null);
   };
 
   return (
@@ -71,20 +80,30 @@ export default function ProductosPage() {
         categoriaActiva={categoriaActiva}
         setCategoriaActiva={setCategoriaActiva}
         openSections={openSections}
-        toggleSection={(s) => setOpenSections((prev) => ({ ...prev, [s]: !prev[s] }))}
+        toggleSection={(s) =>
+          setOpenSections((prev) => ({ ...prev, [s]: !prev[s] }))
+        }
         selectedMain={selectedMain}
         setSelectedMain={setSelectedMain}
       />
 
-        <main
-          className={`transition-all duration-300 px-4 py-2 grid gap-6 pl-10 w-full
-            grid-cols-1 sm:grid-cols-2
-            ${sidebarOpen ? "md:grid-cols-3 lg:grid-cols-4 md:ml-64" : "md:grid-cols-3 lg:grid-cols-4"}
-            ${sidebarOpen && typeof window !== "undefined" && window.innerWidth < 768 ? "hidden" : ""}
-          `}
-        >
-
-
+      <main
+        className={`transition-all duration-300 px-4 py-2 grid gap-6 pl-10 w-full
+          grid-cols-1 sm:grid-cols-2
+          ${
+            sidebarOpen
+              ? "md:grid-cols-3 lg:grid-cols-4 md:ml-64"
+              : "md:grid-cols-3 lg:grid-cols-4"
+          }
+          ${
+            sidebarOpen &&
+            typeof window !== "undefined" &&
+            window.innerWidth < 768
+              ? "hidden"
+              : ""
+          }
+        `}
+      >
         {productosData[categoriaActiva]?.map((product) => (
           <ProductoCard
             key={product.id}
@@ -106,17 +125,22 @@ export default function ProductosPage() {
           isDarkMode={isDarkMode}
           isLiked={isLiked(selectedProduct.id)}
           onClose={() => setSelectedProduct(null)}
-          onAddToCart={() => addToCart(selectedProduct)}
+          onAddToCart={(frase, color) =>
+            addToCart(selectedProduct, frase, color)
+          }
           onSelectSize={setSelectedSize}
           onZoomMove={(e) => {
-            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+            const { left, top, width, height } =
+              e.currentTarget.getBoundingClientRect();
             const x = ((e.clientX - left) / width) * 100;
             const y = ((e.clientY - top) / height) * 100;
             setZoomPosition({ x, y });
           }}
           onToggleLike={() => toggleLike(selectedProduct)}
           onShowSizeGuide={() => setShowSizeGuideModal(true)}
-          onQuantityChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+          onQuantityChange={(e) =>
+            setQuantity(parseInt(e.target.value) || 1)
+          }
         />
       )}
 
