@@ -3,11 +3,11 @@
 import dynamic from "next/dynamic";
 
 export const metadata = {
-  title: "Cancelar suscripción",
+  title: "Cancelar suscripción – Tienda Ropa",
   description: "Procesando baja de newsletter…",
 };
 
-// Importamos dinámicamente el componente cliente, solo en navegador
+// Importamos el componente cliente de manera dinámica y solo en el navegador.
 const UnsubscribeClient = dynamic(() => import("./UnsubscribeClient"), {
   ssr: false,
 });
