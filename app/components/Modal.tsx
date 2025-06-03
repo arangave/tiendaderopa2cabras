@@ -113,7 +113,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-none bg-opacity-50 z-[9999]">
       <div
-        className="modal-glow bg-white py-4 px-3 md:py-8 md:px-6 rounded-lg shadow-lg w-[95%] max-w-xs sm:max-w-sm md:max-w-3xl relative z-10 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4 "
+        className="modal-glow bg-white py-4 px-3 md:py-8 md:px-6 rounded-lg shadow-lg w-[95%] max-w-xs sm:max-w-sm md:max-w-3xl relative z-10 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4"
       >
         {/* Botón cerrar */}
         <button
@@ -295,20 +295,20 @@ const Modal: React.FC<ModalProps> = ({
             >
               Añadir a la cesta
             </button>
-              <button
-                onClick={onToggleLike}
-                aria-label="Me gusta"
-                className="p-1 md:p-2 hover:scale-105 transition-transform"
-              >
-                {isLiked ? (
-                  <HeartIconSolid
-                    className="w-4 h-4 md:w-5 md:h-5"
-                    style={{ fill: "url(#grad)", stroke: "none" }}
-                  />
-                ) : (
-                  <HeartIcon className="w-4 h-4 md:w-5 md:h-5 text-black" />
-                )}
-              </button>
+            <button
+              onClick={onToggleLike}
+              aria-label="Me gusta"
+              className="p-1 md:p-2 hover:scale-105 transition-transform"
+            >
+              {isLiked ? (
+                <HeartIconSolid
+                  className="w-4 h-4 md:w-5 md:h-5"
+                  style={{ fill: "url(#grad)", stroke: "none" }}
+                />
+              ) : (
+                <HeartIcon className="w-4 h-4 md:w-5 md:h-5 text-black" />
+              )}
+            </button>
           </div>
         </div>
       </div>

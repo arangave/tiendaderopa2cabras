@@ -22,7 +22,9 @@ const productosData: Record<string, Product[]> = {
 };
 
 export default function ProductosPage() {
-  const [categoriaActiva, setCategoriaActiva] = useState("Cabras Rebeldes-Camisetas");
+  const [categoriaActiva, setCategoriaActiva] = useState(
+    "Cabras Rebeldes-Camisetas"
+  );
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -35,16 +37,33 @@ export default function ProductosPage() {
   const [selectedMain, setSelectedMain] = useState<string | null>(null);
   const [isDarkMode] = useState(true);
 
-  // Control overflow en móvil
+  // Nuevo estado para detectar si estamos en “mobile”
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Efecto para actualizar “isMobile” solo en cliente
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
+  // Control overflow en móvil (igual que antes)
   useEffect(() => {
     const body = document.body;
-    if (sidebarOpen && window.innerWidth < 768) {
+    if (sidebarOpen && isMobile) {
       body.classList.add("overflow-hidden");
     } else {
       body.classList.remove("overflow-hidden");
     }
-    return () => body.classList.remove("overflow-hidden");
-  }, [sidebarOpen]);
+    return () => {
+      body.classList.remove("overflow-hidden");
+    };
+  }, [sidebarOpen, isMobile]);
 
   const isLiked = (id: number) => likes.some((p) => p.id === id);
 
@@ -56,7 +75,6 @@ export default function ProductosPage() {
     );
   };
 
-  // Ahora recibe frase y color
   const addToCart = (product: Product, frase?: string, color?: string) => {
     if (!selectedSize) return alert("Selecciona una talla");
     const productoFinal = {
@@ -67,8 +85,10 @@ export default function ProductosPage() {
       color: color,
     };
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    localStorage.setItem("cart", JSON.stringify([...currentCart, productoFinal]));
-    // Puedes cerrar modal si quieres:
+    localStorage.setItem(
+      "cart",
+      JSON.stringify([...currentCart, productoFinal])
+    );
     setSelectedProduct(null);
   };
 
@@ -88,21 +108,14 @@ export default function ProductosPage() {
       />
 
       <main
-        className={`transition-all duration-300 px-4 py-2 grid gap-6 pl-10 w-full
-          grid-cols-1 sm:grid-cols-2
-          ${
-            sidebarOpen
-              ? "md:grid-cols-3 lg:grid-cols-4 md:ml-64"
-              : "md:grid-cols-3 lg:grid-cols-4"
-          }
-          ${
-            sidebarOpen &&
-            typeof window !== "undefined" &&
-            window.innerWidth < 768
-              ? "hidden"
-              : ""
-          }
-        `}
+        className={
+          // Aquí unificamos todas las clases en un solo string, sin saltos
+          "transition-all duration-300 px-4 py-2 grid gap-6 pl-10 w-full " +
+          "grid-cols-1 sm:grid-cols-2 " +
+          (sidebarOpen ? "md:grid-cols-3 lg:grid-cols-4 md:ml-64 " : "md:grid-cols-3 lg:grid-cols-4 ") +
+          // Ahora usamos el estado `isMobile` en lugar de `window` directo
+          (sidebarOpen && isMobile ? "hidden" : "")
+        }
       >
         {productosData[categoriaActiva]?.map((product) => (
           <ProductoCard

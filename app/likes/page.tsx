@@ -2,7 +2,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import "../styles/globals.css";
 import Header from "../components/Header";
 import ProductoCard from "../components/ProductoCard";
@@ -15,13 +14,15 @@ export default function LikesPage() {
   const [cart, setCart] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");          // *** Añadido ***
+  const [fraseSeleccionada, setFraseSeleccionada] = useState<string>("");  // *** Añadido ***
   const [quantity, setQuantity] = useState<number>(1);
   const [zoom, setZoom] = useState<boolean>(false);
   const [zoomPosition, setZoomPosition] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Cargar favoritos y carrito de localStorage al montar
+  // 1) Cargar favoritos y carrito desde localStorage al montar
   useEffect(() => {
     const storedLikes = localStorage.getItem("favorites");
     const storedCart = localStorage.getItem("cart");
@@ -29,18 +30,19 @@ export default function LikesPage() {
     if (storedCart) setCart(JSON.parse(storedCart));
   }, []);
 
-  // Sincronizar localStorage cuando cambian los likes
+  // 2) Sincronizar localStorage cada vez que cambian los likes
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(likes));
   }, [likes]);
 
-  // Sincronizar localStorage cuando cambia el carrito
+  // 3) Sincronizar localStorage cada vez que cambia el carrito
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
   const isProductLiked = (id: number) => likes.some((p) => p.id === id);
 
+  // 4) toggleLike añade o quita favoritos
   const toggleLike = (product: Product) => {
     setLikes((prev) => {
       const exists = prev.find((p) => p.id === product.id);
@@ -48,7 +50,7 @@ export default function LikesPage() {
         // Si ya está en favoritos, lo quitamos
         return prev.filter((p) => p.id !== product.id);
       } else {
-        // Si no está, lo añadimos (sin talla/nada extra)
+        // Si no está, lo añadimos. Puede llevar color/phrase
         return [...prev, { ...product, quantity: 1 }];
       }
     });
@@ -59,10 +61,13 @@ export default function LikesPage() {
     );
   };
 
+  // 5) Abrir y cerrar modal
   const openModal = (product: Product) => {
     setSelectedProduct(product);
     setZoom(false);
     setSelectedSize("");
+    setSelectedColor("");          // reset al abrir modal
+    setFraseSeleccionada("");      // reset al abrir modal
     setQuantity(1);
   };
   const closeModal = () => {
@@ -70,17 +75,25 @@ export default function LikesPage() {
     setZoom(false);
   };
 
+  // 6) Mensaje toast
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 2500);
   };
 
+  // 7) Añadir al carrito desde el modal
   const addToCart = (product: Product) => {
     if (!selectedSize) {
       alert("Por favor, selecciona una talla.");
       return;
     }
-    const productWithOptions = { ...product, quantity, size: selectedSize };
+    const productWithOptions: Product = {
+      ...product,
+      quantity,
+      size: selectedSize,
+      color: selectedColor,
+      phrase: fraseSeleccionada,
+    };
     const alreadyInCart = cart.some(
       (p) => p.id === product.id && p.size === selectedSize
     );
@@ -93,6 +106,7 @@ export default function LikesPage() {
     closeModal();
   };
 
+  // 8) Manejo del zoom en la imagen
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
@@ -100,6 +114,7 @@ export default function LikesPage() {
     setZoomPosition({ x, y });
   };
 
+  // 9) Cambiar cantidad en el modal
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQty = Math.max(1, parseInt(e.target.value, 10));
     setQuantity(newQty);
@@ -148,15 +163,25 @@ export default function LikesPage() {
           onAddToCart={() => addToCart(selectedProduct)}
           onSelectSize={setSelectedSize}
           onZoomMove={handleMouseMove}
-          onToggleLike={() => toggleLike(selectedProduct)}
+          onToggleLike={() => {
+            // Aquí sí usamos las variables correctas: selectedColor y fraseSeleccionada
+            const productWithExtras: Product = {
+              ...selectedProduct,
+              quantity,
+              size: selectedSize || undefined,
+              color: selectedColor || undefined,
+              phrase: fraseSeleccionada || undefined,
+            };
+            toggleLike(productWithExtras);
+          }}
           onShowSizeGuide={() => setShowSizeGuideModal(true)}
           onQuantityChange={handleQuantityChange}
+          // AÑADIMOS dos props nuevas para que el modal pueda actualizar color y frase en el padre:
+
         />
       )}
 
-      {showSizeGuideModal && (
-        <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />
-      )}
+      {showSizeGuideModal && <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />}
     </main>
   );
 }

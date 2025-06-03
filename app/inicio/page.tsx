@@ -370,7 +370,7 @@ useEffect(() => {
     </p>
 
     <a
-      href="#"
+      href="/productos"
       className="btn px-3 py-1 sm:px-5 sm:py-2 text-[8px] sm:text-[10px] shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
     >
       Ver Colección
@@ -591,9 +591,6 @@ useEffect(() => {
 
 </section>
 
-
-
-      
       {selectedProduct && (
         <Modal
           product={selectedProduct}
@@ -610,6 +607,7 @@ useEffect(() => {
           onToggleLike={() => toggleLike(selectedProduct)}
           onShowSizeGuide={() => setShowSizeGuideModal(true)}
           onQuantityChange={handleQuantityChange}
+
         />
       )}
 

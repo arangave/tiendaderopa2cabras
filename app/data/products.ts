@@ -7,6 +7,11 @@ export interface Product {
   image: string;
   quantity: number;
   size?: string;
+
+  // Propiedades nuevas:
+  color?: string;      // color “seleccionado” por el usuario
+  phrase?: string;     // frase de personalización, si hubiera
+
   colors?: {
     name: string;
     hex: string;
