@@ -19,6 +19,7 @@ import {
   naughtyTshirts,
   naughtySweaters,
 } from "../data/products";
+import { SearchParams } from "next/dist/server/request/search-params";
 
 
 const products: Product[] = destacados;
@@ -47,7 +48,7 @@ const [unsubMsg, setUnsubMsg] = useState<string | null>(null);
 const searchParams = useSearchParams();
 
 useEffect(() => {
-  const unsubscribed = searchParams.get("unsubscribed");
+  const unsubscribed = searchParams?.get("unsubscribed");
   if (unsubscribed === "1") {
     setUnsubMsg("Te has dado de baja correctamente de la newsletter.");
   } else if (unsubscribed === "0") {

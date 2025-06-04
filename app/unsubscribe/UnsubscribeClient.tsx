@@ -1,10 +1,8 @@
-// /app/unsubscribe/UnsubscribeClient.tsx
 "use client";
-
 import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function UnsubscribeClient() {
+export default function UnsubscribePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -15,8 +13,10 @@ export default function UnsubscribeClient() {
       return;
     }
 
+    // Llama a la API
     fetch(`/api/auth/newsletter/unsubscribe?email=${encodeURIComponent(email)}`)
       .then(() => {
+        // Después de procesar, redirige al inicio con el mensaje
         router.replace("/inicio?unsubscribed=1");
       })
       .catch(() => {
@@ -32,3 +32,7 @@ export default function UnsubscribeClient() {
     </div>
   );
 }
+
+
+
+
