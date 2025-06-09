@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
@@ -37,6 +38,10 @@
     "postcss": "^8.5.3",
     "prisma": "^6.8.2",
     "tailwindcss": "^4.0.15",
-    "typescript": "^5"
+    "typescript": "^5",
+    "ts-node": "^10.9.1"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

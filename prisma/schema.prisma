@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TipoFrase {
+  SIN_FRASE
+  RANDOM
+  PERSONAL
+  IA
+}
+
 model User {
   id                Int      @id @default(autoincrement())
   email             String   @unique
@@ -19,15 +26,81 @@ model User {
   verifyToken       String?  @unique
   verifyTokenExpiry DateTime?
   newsletter        Boolean  @default(false)
-
-
-  // 🔐 Campos para recuperación de contraseña
   resetToken        String?  @unique
   resetTokenExpiry  DateTime?
+
+  pedidos           Pedido[]
 }
 
 model Subscriber {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   createdAt DateTime @default(now())
+}
+
+model Categoria {
+  id          Int        @id @default(autoincrement())
+  nombre      String     @unique
+  descripcion String?
+  productos   Producto[]
+}
+
+model Producto {
+  id          Int                @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  precio      Float
+  categoriaId Int
+  categoria   Categoria          @relation(fields: [categoriaId], references: [id])
+
+  tipoFrase   TipoFrase          @default(SIN_FRASE)
+
+  imagenes    Imagen[]
+  colores     Color[]
+  detalles    DetallePedido[]
+
+  creadoEn    DateTime           @default(now())
+  actualizadoEn DateTime         @updatedAt
+}
+
+model Imagen {
+  id          Int       @id @default(autoincrement())
+  url         String
+  productoId  Int
+  producto    Producto  @relation(fields: [productoId], references: [id])
+}
+
+model Color {
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  hex         String
+  productoId  Int
+  producto    Producto  @relation(fields: [productoId], references: [id])
+  imagenUrl   String?   // Imagen asociada a ese color si quieres
+}
+
+model Pedido {
+  id           Int             @id @default(autoincrement())
+  usuarioId    Int
+  usuario      User            @relation(fields: [usuarioId], references: [id])
+  fecha        DateTime        @default(now())
+  estado       String          // Ej: 'pendiente', 'pagado', 'enviado', etc.
+
+  detalles     DetallePedido[]
+}
+
+model DetallePedido {
+  id           Int             @id @default(autoincrement())
+  pedidoId     Int
+  pedido       Pedido          @relation(fields: [pedidoId], references: [id])
+
+  productoId   Int
+  producto     Producto        @relation(fields: [productoId], references: [id])
+
+  cantidad     Int             @default(1)
+  talla        String          // Ej: "M", "XL"
+  color        String?         // Color escogido
+  frase        String?         // Frase personalizada, puede ser vacía si no tiene
+
+  creadoEn     DateTime        @default(now())
 }

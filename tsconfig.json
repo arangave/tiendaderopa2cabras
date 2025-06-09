@@ -18,9 +18,10 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",  // Esta línea es necesaria para que las rutas relativas funcionen correctamente
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
+      
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "types" ],

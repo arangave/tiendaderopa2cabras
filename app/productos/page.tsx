@@ -7,24 +7,41 @@ import ProductoCard from "../components/ProductoCard";
 import type { Product } from "../data/products";
 import Sidebar from "../components/Sidebar";
 
-import {
-  rebelTshirts,
-  rebelSweaters,
-  naughtyTshirts,
-  naughtySweaters,
-} from "../data/products";
+interface CategoriaConProductos {
+  id: number;
+  nombre: string;
+  productos: ProductoAPI[];
+}
 
-const productosData: Record<string, Product[]> = {
-  "Cabras Rebeldes-Camisetas": rebelTshirts,
-  "Cabras Rebeldes-Sudaderas": rebelSweaters,
-  "Cabras Traviesas-Camisetas": naughtyTshirts,
-  "Cabras Traviesas-Sudaderas": naughtySweaters,
-};
+interface ProductoAPI {
+  id: number;
+  nombre: string;
+  descripcion?: string;
+  precio: number;
+  imagenes: { url: string }[];
+  colores: { nombre: string; hex: string; imagenUrl?: string }[];
+  categoria: { nombre: string };
+}
+
+function mapProductoAPIToProduct(producto: ProductoAPI): Product {
+  return {
+    id: producto.id,
+    name: producto.nombre,
+    description: producto.descripcion,
+    price: producto.precio.toFixed(2) + "€",
+    image: producto.imagenes[0]?.url || "/images/default.png",
+    quantity: 1,
+    colors: producto.colores.map((c) => ({
+      name: c.nombre,
+      hex: c.hex,
+      image: c.imagenUrl || producto.imagenes[0]?.url || "/images/default.png",
+    })),
+  };
+}
 
 export default function ProductosPage() {
-  const [categoriaActiva, setCategoriaActiva] = useState(
-    "Cabras Rebeldes-Camisetas"
-  );
+  const [categorias, setCategorias] = useState<CategoriaConProductos[]>([]);
+  const [categoriaActiva, setCategoriaActiva] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -36,34 +53,30 @@ export default function ProductosPage() {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const [selectedMain, setSelectedMain] = useState<string | null>(null);
   const [isDarkMode] = useState(true);
-
-  // Nuevo estado para detectar si estamos en “mobile”
   const [isMobile, setIsMobile] = useState(false);
 
-  // Efecto para actualizar “isMobile” solo en cliente
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Control overflow en móvil (igual que antes)
   useEffect(() => {
-    const body = document.body;
-    if (sidebarOpen && isMobile) {
-      body.classList.add("overflow-hidden");
-    } else {
-      body.classList.remove("overflow-hidden");
+    async function fetchCategoriasConProductos() {
+      try {
+        const res = await fetch("/api/categories-with-products");
+        const data: CategoriaConProductos[] = await res.json();
+        setCategorias(data);
+        if (data.length > 0) {
+          setCategoriaActiva(data[0].nombre + "-Productos");
+        }
+      } catch (error) {
+        console.error("Error cargando categorías y productos:", error);
+      }
     }
-    return () => {
-      body.classList.remove("overflow-hidden");
-    };
-  }, [sidebarOpen, isMobile]);
+    fetchCategoriasConProductos();
+  }, []);
 
   const isLiked = (id: number) => likes.some((p) => p.id === id);
 
@@ -85,12 +98,12 @@ export default function ProductosPage() {
       color: color,
     };
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    localStorage.setItem(
-      "cart",
-      JSON.stringify([...currentCart, productoFinal])
-    );
+    localStorage.setItem("cart", JSON.stringify([...currentCart, productoFinal]));
     setSelectedProduct(null);
   };
+
+  const productosFiltrados =
+    categorias.find((c) => categoriaActiva === c.nombre + "-Productos")?.productos || [];
 
   return (
     <div className="flex pt-28 flex-1 w-full">
@@ -100,32 +113,31 @@ export default function ProductosPage() {
         categoriaActiva={categoriaActiva}
         setCategoriaActiva={setCategoriaActiva}
         openSections={openSections}
-        toggleSection={(s) =>
-          setOpenSections((prev) => ({ ...prev, [s]: !prev[s] }))
-        }
+        toggleSection={(s) => setOpenSections((prev) => ({ ...prev, [s]: !prev[s] }))}
         selectedMain={selectedMain}
         setSelectedMain={setSelectedMain}
       />
 
       <main
         className={
-          // Aquí unificamos todas las clases en un solo string, sin saltos
           "transition-all duration-300 px-4 py-2 grid gap-6 pl-10 w-full " +
           "grid-cols-1 sm:grid-cols-2 " +
           (sidebarOpen ? "md:grid-cols-3 lg:grid-cols-4 md:ml-64 " : "md:grid-cols-3 lg:grid-cols-4 ") +
-          // Ahora usamos el estado `isMobile` en lugar de `window` directo
           (sidebarOpen && isMobile ? "hidden" : "")
         }
       >
-        {productosData[categoriaActiva]?.map((product) => (
-          <ProductoCard
-            key={product.id}
-            product={product}
-            isLiked={isLiked(product.id)}
-            onToggleLike={() => toggleLike(product)}
-            onOpenModal={() => setSelectedProduct(product)}
-          />
-        ))}
+        {productosFiltrados.map((productoAPI) => {
+          const product = mapProductoAPIToProduct(productoAPI);
+          return (
+            <ProductoCard
+              key={product.id}
+              product={product}
+              isLiked={isLiked(product.id)}
+              onToggleLike={() => toggleLike(product)}
+              onOpenModal={() => setSelectedProduct(product)}
+            />
+          );
+        })}
       </main>
 
       {selectedProduct && (
@@ -138,28 +150,21 @@ export default function ProductosPage() {
           isDarkMode={isDarkMode}
           isLiked={isLiked(selectedProduct.id)}
           onClose={() => setSelectedProduct(null)}
-          onAddToCart={(frase, color) =>
-            addToCart(selectedProduct, frase, color)
-          }
+          onAddToCart={(frase, color) => addToCart(selectedProduct, frase, color)}
           onSelectSize={setSelectedSize}
           onZoomMove={(e) => {
-            const { left, top, width, height } =
-              e.currentTarget.getBoundingClientRect();
+            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
             const x = ((e.clientX - left) / width) * 100;
             const y = ((e.clientY - top) / height) * 100;
             setZoomPosition({ x, y });
           }}
           onToggleLike={() => toggleLike(selectedProduct)}
           onShowSizeGuide={() => setShowSizeGuideModal(true)}
-          onQuantityChange={(e) =>
-            setQuantity(parseInt(e.target.value) || 1)
-          }
+          onQuantityChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
         />
       )}
 
-      {showSizeGuideModal && (
-        <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />
-      )}
+      {showSizeGuideModal && <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />}
     </div>
   );
 }
