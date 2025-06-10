@@ -13,8 +13,8 @@ interface Product {
   image: string;
   quantity: number;
   size?: string;
-  color?: string;     
-  phrase?: string;     
+  color?: string;
+  phrase?: string;
 }
 
 export default function Carrito() {
@@ -106,74 +106,139 @@ export default function Carrito() {
       {/* ────────────── LISTA DE PRODUCTOS Y RESUMEN ────────────── */}
       <section className="mt-8 px-4 py-8 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="col-span-1 lg:col-span-8 bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-6 overflow-x-auto">
-          <table className="min-w-full table-auto">
-            <thead>
-              <tr>
-                <th className="pb-2"></th>
-                <th className="pb-2 text-left text-black">Foto</th>
-                <th className="pb-2 text-left text-black">Producto</th>
-                <th className="pb-2 text-right text-black">Precio</th>
-                <th className="pb-2 text-center text-black">Cantidad</th>
-                <th className="pb-2 text-right text-black">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cart.map((item, i) => {
-                const price = parseFloat(item.price.replace(",", "."));
-                const lineTotal = (price * item.quantity).toFixed(2);
-                return (
-                  <tr key={i} className="border-t">
-                    <td className="py-4">
-                      <button
-                        onClick={() => removeFromCart(item.id, item.size)}
-                        className="text-red-600 hover:text-red-800 transition"
-                      >
-                        <TrashIcon className="w-5 h-5" />
-                      </button>
-                    </td>
-                    <td className="py-4">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={60}
-                        height={60}
-                        className="rounded"
-                      />
-                    </td>
-                    <td className="py-4 text-black">
-                      <p className="font-semibold">{item.name}</p>
-                      {item.size && (
-                        <p className="text-sm text-gray-600">Talla: {item.size}</p>
-                      )}
-                      {item.color && (
-                        <p className="text-sm text-gray-600">Color: {item.color}</p>
-                      )}
-                      {item.phrase && (
-                        <p className="text-sm text-gray-600">Frase: {item.phrase}</p>
-                      )}
-                    </td>
-                    <td className="py-4 text-right text-black">{item.price}</td>
-                    <td className="py-4 text-center">
-                      <input
-                        type="number"
-                        min={1}
-                        value={item.quantity}
-                        onChange={(e) =>
-                          updateQuantity(
-                            item.id,
-                            Math.max(1, parseInt(e.target.value)),
-                            item.size
-                          )
-                        }
-                        className="w-16 border rounded px-2 text-center text-black"
-                      />
-                    </td>
-                    <td className="py-4 text-right text-black">{lineTotal}€</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+
+          {/* Desktop: tabla */}
+          <div className="hidden lg:block">
+            <table className="min-w-full table-auto">
+              <thead>
+                <tr>
+                  <th className="pb-2"></th>
+                  <th className="pb-2 text-left text-black">Foto</th>
+                  <th className="pb-2 text-left text-black">Producto</th>
+                  <th className="pb-2 text-right text-black">Precio</th>
+                  <th className="pb-2 text-center text-black">Cantidad</th>
+                  <th className="pb-2 text-right text-black">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.map((item, i) => {
+                  const price = parseFloat(item.price.replace(",", "."));
+                  const lineTotal = (price * item.quantity).toFixed(2);
+                  return (
+                    <tr key={i} className="border-t">
+                      <td className="py-4">
+                        <button
+                          onClick={() => removeFromCart(item.id, item.size)}
+                          className="text-red-600 hover:text-red-800 transition"
+                        >
+                          <TrashIcon className="w-5 h-5" />
+                        </button>
+                      </td>
+                      <td className="py-4">
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          width={120}
+                          height={120}
+                          className="rounded-lg object-cover w-28 h-28"
+                        />
+                      </td>
+                      <td className="py-4 text-black">
+                        <p className="font-semibold">{item.name}</p>
+                        {item.size && (
+                          <p className="text-sm text-gray-600">Talla: {item.size}</p>
+                        )}
+                        {item.color && (
+                          <p className="text-sm text-gray-600">Color: {item.color}</p>
+                        )}
+                        {item.phrase && (
+                          <p className="text-sm text-gray-600">Frase: {item.phrase}</p>
+                        )}
+                      </td>
+                      <td className="py-4 text-right text-black">{item.price}</td>
+                      <td className="py-4 text-center">
+                        <input
+                          type="number"
+                          min={1}
+                          value={item.quantity}
+                          onChange={(e) =>
+                            updateQuantity(
+                              item.id,
+                              Math.max(1, parseInt(e.target.value)),
+                              item.size
+                            )
+                          }
+                          className="w-16 border rounded px-2 text-center text-black"
+                        />
+                      </td>
+                      <td className="py-4 text-right text-black">{lineTotal}€</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile: tarjetas */}
+          <div className="block lg:hidden space-y-6">
+            {cart.map((item, i) => {
+              const price = parseFloat(item.price.replace(",", "."));
+              const lineTotal = (price * item.quantity).toFixed(2);
+              return (
+                <div key={i} className="flex flex-col bg-white rounded-xl shadow p-4 relative">
+                  {/* Botón eliminar arriba a la derecha */}
+                  <button
+                    onClick={() => removeFromCart(item.id, item.size)}
+                    className="absolute top-2 right-2 text-red-600 hover:text-red-800 transition"
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </button>
+                  {/* Fila con imagen, precio y cantidad */}
+                  <div className="flex items-center gap-4">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={80}
+                      height={80}
+                      className="rounded w-20 h-20 object-cover"
+                    />
+                    <div className="flex flex-col justify-between h-full flex-1">
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-lg text-black">{item.price}</span>
+                        <input
+                          type="number"
+                          min={1}
+                          value={item.quantity}
+                          onChange={(e) =>
+                            updateQuantity(
+                              item.id,
+                              Math.max(1, parseInt(e.target.value)),
+                              item.size
+                            )
+                          }
+                          className="w-16 border rounded px-2 text-center text-black"
+                        />
+                      </div>
+                      <div className="text-right font-bold text-black">{lineTotal}€</div>
+                    </div>
+                  </div>
+                  {/* Debajo: nombre, talla, color, frase */}
+                  <div className="mt-4">
+                    <p className="font-semibold text-black">{item.name}</p>
+                    {item.size && (
+                      <p className="text-sm text-gray-600">Talla: {item.size}</p>
+                    )}
+                    {item.color && (
+                      <p className="text-sm text-gray-600">Color: {item.color}</p>
+                    )}
+                    {item.phrase && (
+                      <p className="text-sm text-gray-600">Frase: {item.phrase}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         <aside className="col-span-1 lg:col-span-4 bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-6 flex flex-col">
