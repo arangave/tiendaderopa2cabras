@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard from "../components/ProductoCard";
-import type { Product } from "../data/products";
 import Sidebar from "../components/Sidebar";
 
 interface CategoriaConProductos {
@@ -18,10 +17,24 @@ interface ProductoAPI {
   nombre: string;
   descripcion?: string;
   precio: number;
-  tipo: string; // <- AÑADIDO
+  tipo: string; // CAMISETA o SUDADERA
   imagenes: { url: string }[];
   colores: { nombre: string; hex: string; imagenUrl?: string }[];
   categoria: { nombre: string };
+}
+
+interface Product {
+  id: number;
+  name: string;
+  description?: string;
+  price: string;
+  image: string;
+  quantity: number;
+  colors?: {
+    name: string;
+    hex: string;
+    image: string;
+  }[];
 }
 
 function mapProductoAPIToProduct(producto: ProductoAPI): Product {
@@ -41,8 +54,8 @@ function mapProductoAPIToProduct(producto: ProductoAPI): Product {
 }
 
 export default function ProductosPage() {
-  // Guarda filtro como objeto
-  const [categoriaFiltro, setCategoriaFiltro] = useState({ categoria: "", tipo: "" });
+  // Nuevo filtro de categoría y tipo (camiseta/sudadera)
+  const [categoriaFiltro, setCategoriaFiltro] = useState({ categoria: "", tipo: "CAMISETA" });
   const [categorias, setCategorias] = useState<CategoriaConProductos[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState("");
@@ -70,8 +83,10 @@ export default function ProductosPage() {
         const res = await fetch("/api/categories-with-products");
         const data: CategoriaConProductos[] = await res.json();
         setCategorias(data);
+
+        // Por defecto selecciona la primera categoría y tipo "CAMISETA"
         if (data.length > 0) {
-          setCategoriaFiltro({ categoria: data[0].nombre, tipo: "Camiseta" });
+          setCategoriaFiltro({ categoria: data[0].nombre, tipo: "CAMISETA" });
         }
       } catch (error) {
         console.error("Error cargando categorías y productos:", error);
@@ -104,10 +119,12 @@ export default function ProductosPage() {
     setSelectedProduct(null);
   };
 
-  // -------- FILTRO POR CATEGORÍA Y TIPO --------
+  // Filtra por categoría y tipo (fíjate en mayúsculas)
   const categoriaSeleccionada = categorias.find((c) => categoriaFiltro.categoria === c.nombre);
   const productosFiltrados =
-    categoriaSeleccionada?.productos.filter((p) => p.tipo === categoriaFiltro.tipo) || [];
+    categoriaSeleccionada?.productos.filter(
+      (p) => p.tipo && p.tipo.toUpperCase() === categoriaFiltro.tipo.toUpperCase()
+    ) || [];
 
   return (
     <div className="flex pt-28 flex-1 w-full">

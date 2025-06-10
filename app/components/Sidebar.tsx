@@ -54,8 +54,8 @@ export default function Sidebar({
         <h2 className="text-lg font-bold mb-6">Categorías</h2>
         <ul className="space-y-4">
           {[
-            { label: "Cabras Rebeldes", sub: ["Camiseta", "Sudadera"] },
-            { label: "Cabras Traviesas", sub: ["Camiseta", "Sudadera"] },
+            { label: "Cabras Rebeldes", sub: ["CAMISETA", "SUDADERA"] },
+            { label: "Cabras Traviesas", sub: ["CAMISETA", "SUDADERA"] },
           ].map((section) => (
             <li key={section.label}>
               <button
@@ -82,7 +82,7 @@ export default function Sidebar({
                             : "text-gray-600"
                         }`}
                       >
-                        {item}
+                        {item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
                       </button>
                     </li>
                   ))}
