@@ -1,11 +1,10 @@
 "use client";
 
-
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
-  categoriaActiva: string;
-  setCategoriaActiva: (categoria: string) => void;
+  categoriaFiltro: { categoria: string; tipo: string };
+  setCategoriaFiltro: (filtro: { categoria: string; tipo: string }) => void;
   openSections: Record<string, boolean>;
   toggleSection: (section: string) => void;
   selectedMain: string | null;
@@ -18,18 +17,16 @@ const underlineClass =
 export default function Sidebar({
   sidebarOpen,
   setSidebarOpen,
-  categoriaActiva,
-  setCategoriaActiva,
+  categoriaFiltro,
+  setCategoriaFiltro,
   openSections,
   toggleSection,
   selectedMain,
   setSelectedMain,
 }: SidebarProps) {
-  const handleCategoryClick = (key: string) => {
-    setCategoriaActiva(key);
-    if (window.innerWidth < 768) {
-      setSidebarOpen(false);
-    }
+  const handleCategoryClick = (categoria: string, tipo: string) => {
+    setCategoriaFiltro({ categoria, tipo });
+    if (window.innerWidth < 768) setSidebarOpen(false);
   };
 
   return (
@@ -57,8 +54,8 @@ export default function Sidebar({
         <h2 className="text-lg font-bold mb-6">Categorías</h2>
         <ul className="space-y-4">
           {[
-            { label: "Cabras Rebeldes", sub: ["Camisetas", "Sudaderas"] },
-            { label: "Cabras Traviesas", sub: ["Camisetas", "Sudaderas"] },
+            { label: "Cabras Rebeldes", sub: ["Camiseta", "Sudadera"] },
+            { label: "Cabras Traviesas", sub: ["Camiseta", "Sudadera"] },
           ].map((section) => (
             <li key={section.label}>
               <button
@@ -74,23 +71,21 @@ export default function Sidebar({
               </button>
               {openSections[section.label] && (
                 <ul className="mt-2 space-y-2 text-center">
-                  {section.sub.map((item) => {
-                    const key = `${section.label}-${item}`;
-                    return (
-                      <li key={key}>
-                        <button
-                          onClick={() => handleCategoryClick(key)}
-                          className={`${underlineClass} text-sm ${
-                            categoriaActiva === key
-                              ? "after:w-full font-semibold text-black"
-                              : "text-gray-600"
-                          }`}
-                        >
-                          {item}
-                        </button>
-                      </li>
-                    );
-                  })}
+                  {section.sub.map((item) => (
+                    <li key={`${section.label}-${item}`}>
+                      <button
+                        onClick={() => handleCategoryClick(section.label, item)}
+                        className={`${underlineClass} text-sm ${
+                          categoriaFiltro.categoria === section.label &&
+                          categoriaFiltro.tipo === item
+                            ? "after:w-full font-semibold text-black"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               )}
             </li>

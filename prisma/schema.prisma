@@ -54,6 +54,7 @@ model Producto {
   categoria   Categoria          @relation(fields: [categoriaId], references: [id])
 
   tipoFrase   TipoFrase          @default(SIN_FRASE)
+  tipo        String
 
   imagenes    Imagen[]
   colores     Color[]
