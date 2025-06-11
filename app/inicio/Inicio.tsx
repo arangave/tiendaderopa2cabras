@@ -134,16 +134,38 @@ export default function Inicio() {
     setSelectedProduct(null);
     setZoom(false);
   };
-  const addToCart = (product: Product) => {
-    if (!selectedSize) {
+  const addToCart = (params: {
+    frase: string;
+    tipoFrase: string;
+    color: string;
+    colorHex: string;
+    colorImage: string;
+    image: string;
+    size: string;
+    quantity: number;
+  }) => {
+    if (!params.size) {
       alert("Por favor, selecciona una talla.");
       return;
     }
-    const productWithQuantity = { ...product, quantity, size: selectedSize };
-    const updatedCart = [...cart, productWithQuantity];
+
+    const productoFinal = {
+      ...selectedProduct!,
+      quantity: params.quantity,
+      size: params.size,
+      phrase: params.frase || "Sin frase",
+      tipoFrase: params.tipoFrase,
+      color: params.color,
+      colorHex: params.colorHex,
+      colorImage: params.colorImage,
+      image: params.image,
+    };
+
+    const updatedCart = [...cart, productoFinal];
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     showToast("Producto añadido a la cesta 🛒");
+    setSelectedProduct(null);
   };
   useEffect(() => {
     const handleClick = (event: Event) => {
@@ -525,24 +547,25 @@ export default function Inicio() {
           <NewsletterForm />
         </section>
 
-        {selectedProduct && (
-          <Modal
-            product={selectedProduct}
-            selectedSize={selectedSize}
-            quantity={quantity}
-            zoom={zoom}
-            zoomPosition={zoomPosition}
-            isDarkMode={isDarkMode}
-            isLiked={isProductLiked(selectedProduct.id)}
-            onClose={closeModal}
-            onAddToCart={() => addToCart(selectedProduct)}
-            onSelectSize={setSelectedSize}
-            onZoomMove={handleMouseMove}
-            onToggleLike={() => toggleLike(selectedProduct)}
-            onShowSizeGuide={() => setShowSizeGuideModal(true)}
-            onQuantityChange={handleQuantityChange}
-          />
-        )}
+          {selectedProduct && (
+            <Modal
+              product={selectedProduct}
+              selectedSize={selectedSize}
+              quantity={quantity}
+              zoom={zoom}
+              zoomPosition={zoomPosition}
+              isDarkMode={isDarkMode}
+              isLiked={isProductLiked(selectedProduct.id)}
+              onClose={closeModal}
+              onAddToCart={addToCart}  // <<< SOLO PASA addToCart, ya espera el objeto
+              onSelectSize={setSelectedSize}
+              onZoomMove={handleMouseMove}
+              onToggleLike={() => toggleLike(selectedProduct)}
+              onShowSizeGuide={() => setShowSizeGuideModal(true)}
+              onQuantityChange={handleQuantityChange}
+            />
+          )}
+
 
         {showSizeGuideModal && (
           <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />

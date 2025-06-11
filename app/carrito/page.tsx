@@ -15,6 +15,7 @@ interface Product {
   size?: string;
   color?: string;
   phrase?: string;
+  phraseType?: "random" | "personal" | "ia" | "ninguna";
 }
 
 export default function Carrito() {
@@ -93,6 +94,15 @@ export default function Carrito() {
     (fav) => !cart.some((item) => item.id === fav.id && item.size === fav.size)
   );
 
+  // === NUEVO: texto del tipo de frase ===
+  function getPhraseTypeText(type: string | undefined): string {
+    if (!type || type === "ninguna") return "";
+    if (type === "random") return "Frase random 🤪";
+    if (type === "personal") return "Frase personalizada ✍️";
+    if (type === "ia") return "Frase IA 🤖";
+    return "";
+  }
+
   return (
     <main className="pt-16 pb-8">
       {toastMessage && (
@@ -149,8 +159,19 @@ export default function Carrito() {
                         {item.color && (
                           <p className="text-sm text-gray-600">Color: {item.color}</p>
                         )}
+                        {/* Frase + tipo */}
                         {item.phrase && (
-                          <p className="text-sm text-gray-600">Frase: {item.phrase}</p>
+                          <p className="text-sm text-gray-600">
+                            Frase: {item.phrase}
+                            {item.phraseType && item.phraseType !== "ninguna" && (
+                              <span className="block text-xs text-gray-400">
+                                {getPhraseTypeText(item.phraseType)}
+                              </span>
+                            )}
+                          </p>
+                        )}
+                        {!item.phrase && item.phraseType === "ninguna" && (
+                          <p className="text-sm text-gray-400 italic">Sin frase</p>
                         )}
                       </td>
                       <td className="py-4 text-right text-black">{item.price}</td>
@@ -224,8 +245,19 @@ export default function Carrito() {
                     {item.color && (
                       <p className="text-sm text-gray-600">Color: {item.color}</p>
                     )}
+                    {/* Frase + tipo */}
                     {item.phrase && (
-                      <p className="text-sm text-gray-600">Frase: {item.phrase}</p>
+                      <p className="text-sm text-gray-600">
+                        Frase: {item.phrase}
+                        {item.phraseType && item.phraseType !== "ninguna" && (
+                          <span className="block text-xs text-gray-400">
+                            {getPhraseTypeText(item.phraseType)}
+                          </span>
+                        )}
+                      </p>
+                    )}
+                    {!item.phrase && item.phraseType === "ninguna" && (
+                      <p className="text-sm text-gray-400 italic">Sin frase</p>
                     )}
                   </div>
                 </div>
@@ -304,7 +336,19 @@ export default function Carrito() {
                       <p className="text-sm text-gray-500 mb-1">{fav.price}</p>
                       {fav.size && <p className="text-sm text-gray-600">Talla: {fav.size}</p>}
                       {fav.color && <p className="text-sm text-gray-600">Color: {fav.color}</p>}
-                      {fav.phrase && <p className="text-sm text-gray-600">Frase: {fav.phrase}</p>}
+                      {fav.phrase && (
+                        <p className="text-sm text-gray-600">
+                          Frase: {fav.phrase}
+                          {fav.phraseType && fav.phraseType !== "ninguna" && (
+                            <span className="block text-xs text-gray-400">
+                              {getPhraseTypeText(fav.phraseType)}
+                            </span>
+                          )}
+                        </p>
+                      )}
+                      {!fav.phrase && fav.phraseType === "ninguna" && (
+                        <p className="text-sm text-gray-400 italic">Sin frase</p>
+                      )}
 
                       <div className="mb-2">
                         <label className="block text-sm font-medium mb-1">Talla:</label>

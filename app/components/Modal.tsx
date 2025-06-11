@@ -1,6 +1,4 @@
-// app/components/Modal.tsx
 "use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import { HeartIcon } from "@heroicons/react/24/outline";
@@ -19,7 +17,17 @@ interface ModalProps {
   isDarkMode: boolean;
   isLiked: boolean;
   onClose: () => void;
-  onAddToCart: (fraseSeleccionada?: string, colorSeleccionado?: string) => void;
+  onAddToCart: (params: {
+    frase: string;
+    tipoFrase: string;
+    color: string;
+    colorHex: string;
+    colorImage: string;
+    image: string;
+    size: string;
+    quantity: number;
+  }) => void;
+
   onSelectSize: (size: string) => void;
   onZoomMove: (e: React.MouseEvent<HTMLDivElement>) => void;
   onToggleLike: () => void;
@@ -68,10 +76,10 @@ const Modal: React.FC<ModalProps> = ({
   onQuantityChange,
 }) => {
   const sizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
-  const [selectedImage, setSelectedImage] = useState(product.image);
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const defaultColorObj = product.colors?.[0];
+  const [selectedColor, setSelectedColor] = useState<string>(defaultColorObj?.name ?? "");
+  const [selectedImage, setSelectedImage] = useState(defaultColorObj?.image ?? product.image);
   const [showZoomModal, setShowZoomModal] = useState(false);
-  const handleZoomToggle = () => setShowZoomModal((prev) => !prev);
 
   const [tipoFrase, setTipoFrase] = useState<"random" | "personal" | "ia" | "ninguna">("ninguna");
   const [frasePersonal, setFrasePersonal] = useState("");
@@ -105,16 +113,37 @@ const Modal: React.FC<ModalProps> = ({
     setLoadingIA(false);
   };
 
-  let fraseSeleccionada = "";
-  if (tipoFrase === "random" && fraseRandom) fraseSeleccionada = fraseRandom;
-  if (tipoFrase === "personal" && frasePersonal) fraseSeleccionada = frasePersonal;
-  if (tipoFrase === "ia" && fraseIA) fraseSeleccionada = fraseIA;
+  let fraseSeleccionada =
+    (tipoFrase === "random" && fraseRandom) ? fraseRandom :
+    (tipoFrase === "personal" && frasePersonal) ? frasePersonal :
+    (tipoFrase === "ia" && fraseIA) ? fraseIA :
+    "Sin frase";
+
+
+  const colorObj =
+  Array.isArray(product.colors) && product.colors.length > 0
+    ? product.colors.find((c) => c.name === selectedColor)
+    : undefined;
+
+    const handleAddToCart = () => {
+      onAddToCart({
+        frase: fraseSeleccionada,
+        tipoFrase,
+        color: selectedColor,
+        colorHex: colorObj?.hex || "",
+        colorImage: colorObj?.image || selectedImage,
+        image: selectedImage,
+        size: selectedSize,
+        quantity,
+      });
+    };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-none bg-opacity-50 z-[9999]">
       <div
         className="modal-glow bg-white py-4 px-3 md:py-8 md:px-6 rounded-lg shadow-lg w-[95%] max-w-xs sm:max-w-sm md:max-w-3xl relative z-10 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4"
       >
+        {/* Botón cerrar */}
         <button
           onClick={onClose}
           className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
@@ -126,6 +155,7 @@ const Modal: React.FC<ModalProps> = ({
           </div>
         </button>
 
+        {/* Imagen y bloque de frases */}
         <div className="flex flex-col items-center w-full md:w-auto">
           <div className="relative w-[150px] h-[130px] md:w-[260px] md:h-[300px] overflow-hidden rounded-md">
             <Image
@@ -136,11 +166,12 @@ const Modal: React.FC<ModalProps> = ({
                 zoom ? "scale-[2]" : "scale-100"
               }`}
               onMouseMove={onZoomMove}
-              onClick={handleZoomToggle}
+              onClick={() => setShowZoomModal((prev) => !prev)}
               style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
             />
           </div>
 
+          {/* BLOQUE DE PERSONALIZACIÓN DE FRASE */}
           <div className="flex flex-col items-center w-full my-2">
             <div
               className="bg-gray-100 rounded-lg p-3 flex flex-col gap-2 items-center"
@@ -214,11 +245,13 @@ const Modal: React.FC<ModalProps> = ({
           </div>
         </div>
 
+        {/* Info del producto + GUÍA DE TALLAS */}
         <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black max-h-[80vh] overflow-y-auto mt-2 md:mt-0">
           <h2 className="text-sm md:text-2xl font-bold text-center md:text-left">{product.name}</h2>
           <p className="text-xs md:text-base text-gray-600 text-center md:text-left">{product.description}</p>
           <p className="text-sm md:text-xl font-bold text-center md:text-left">{product.price}</p>
 
+          {/* Cantidad */}
           <div className="flex items-center justify-center md:justify-start space-x-3">
             <label htmlFor="quantity" className="text-xs md:text-lg">Cantidad:</label>
             <input
@@ -231,6 +264,7 @@ const Modal: React.FC<ModalProps> = ({
             />
           </div>
 
+          {/* Talla */}
           <div className="flex flex-col space-y-1 md:space-y-2 w-full">
             <label className="text-xs md:text-lg text-left ml-4 md:ml-0">Talla:</label>
             <div className="flex flex-wrap gap-2 justify-center md:justify-start">
@@ -250,6 +284,7 @@ const Modal: React.FC<ModalProps> = ({
             </div>
           </div>
 
+          {/* BOTÓN GUÍA DE TALLAS */}
           <div className="w-full flex justify-center md:justify-center mt-1">
             <button
               onClick={onShowSizeGuide}
@@ -259,6 +294,7 @@ const Modal: React.FC<ModalProps> = ({
             </button>
           </div>
 
+          {/* Colores */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
             <div className="mt-2">
               <label className="text-xs md:text-lg block mb-1">Color:</label>
@@ -270,7 +306,7 @@ const Modal: React.FC<ModalProps> = ({
                     style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", background: "none" }}
                     aria-label={colorObj.name}
                     onClick={() => {
-                      setSelectedImage(colorObj.image);
+                      setSelectedImage(colorObj.image || colorObj.image || product.image);
                       setSelectedColor(colorObj.name);
                     }}
                   >
@@ -285,9 +321,10 @@ const Modal: React.FC<ModalProps> = ({
             </div>
           )}
 
+          {/* Acciones: AÑADIR A LA CESTA y CORAZÓN */}
           <div className="w-full flex justify-center items-center gap-3 md:gap-4 md:justify-center mt-3">
             <button
-              onClick={() => onAddToCart(fraseSeleccionada, selectedColor)}
+              onClick={handleAddToCart}
               className="w-[140px] ml-9 md:ml-14 md:w-[180px] px-3 py-1.5 md:px-6 md:py-2 bg-black text-white text-xs md:text-base font-semibold rounded-md transition-all duration-300 hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b]"
             >
               Añadir a la cesta
@@ -310,11 +347,12 @@ const Modal: React.FC<ModalProps> = ({
         </div>
       </div>
 
+      {/* Zoom alternativo */}
       {showZoomModal && (
         <ZoomableImageModal
           imageSrc={selectedImage}
           alt={product.name}
-          onClose={handleZoomToggle}
+          onClose={() => setShowZoomModal(false)}
         />
       )}
     </div>

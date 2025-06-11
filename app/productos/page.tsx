@@ -103,18 +103,42 @@ export default function ProductosPage() {
     );
   };
 
-  const addToCart = (product: Product, frase?: string, color?: string) => {
-    if (!selectedSize) return alert("Selecciona una talla");
+  // ACTUALIZADA: Ahora espera un objeto con todos los datos
+  const addToCart = ({
+    product,
+    frase,
+    tipoFrase,
+    color,
+    colorHex,
+    colorImage,
+    size,
+    quantity,
+  }: {
+    product: Product;
+    frase: string;
+    tipoFrase: string;
+    color: string;
+    colorHex: string;
+    colorImage: string;
+    size: string;
+    quantity: number;
+  }) => {
+    if (!size) return alert("Selecciona una talla");
     const productoFinal = {
       ...product,
       quantity,
-      size: selectedSize,
+      size,
       phrase: frase,
-      color: color,
+      tipoFrase,
+      color,
+      colorHex,
+      colorImage,
     };
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     localStorage.setItem("cart", JSON.stringify([...currentCart, productoFinal]));
     setSelectedProduct(null);
+    setSelectedSize(""); // Limpia talla seleccionada para siguiente modal
+    setQuantity(1);      // Limpia cantidad para siguiente modal
   };
 
   const categoriaSeleccionada = categorias.find((c) => categoriaFiltro.categoria === c.nombre);
@@ -168,7 +192,19 @@ export default function ProductosPage() {
           isDarkMode={isDarkMode}
           isLiked={isLiked(selectedProduct.id)}
           onClose={() => setSelectedProduct(null)}
-          onAddToCart={(frase, color) => addToCart(selectedProduct, frase, color)}
+          // Recibe un objeto con todos los datos del producto y la personalización
+          onAddToCart={({ frase, tipoFrase, color, colorHex, colorImage, size, quantity }) =>
+            addToCart({
+              product: selectedProduct,
+              frase,
+              tipoFrase,
+              color,
+              colorHex,
+              colorImage,
+              size,
+              quantity,
+            })
+          }
           onSelectSize={setSelectedSize}
           onZoomMove={(e) => {
             const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
