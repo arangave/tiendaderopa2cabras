@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 // PASOS DEL CHECKOUT
 const steps = ["Datos", "Pedido", "Pago"];
@@ -62,6 +63,12 @@ export default function CheckoutPage() {
     }));
   };
 
+  // Navegación de pasos haciendo click en el punto
+  const goToStep = (i: number) => {
+    // Si se quieren restricciones para no saltar pasos, aquí
+    setStep(i);
+  };
+
   // Siguiente paso con validación
   const handleNext = () => {
     if (step === 0) {
@@ -108,12 +115,20 @@ export default function CheckoutPage() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/60" /> {/* Opacidad negra encima del video */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+        {/* Puntos de pasos SIEMPRE visibles y clicables */}
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
           {steps.map((s, i) => (
-            <span
+            <button
+              type="button"
               key={s}
-              className={`w-3 h-3 rounded-full border border-white/80 ${step === i ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]" : "bg-white/30"} transition`}
-            />
+              className={`w-4 h-4 rounded-full border-2 border-white/80 flex items-center justify-center transition
+                ${step === i ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] scale-110 border-white" : "bg-white/30 hover:border-white/80"}
+              `}
+              onClick={() => goToStep(i)}
+              aria-label={s}
+            >
+              {/* Punto visual */}
+            </button>
           ))}
         </div>
         <motion.div
@@ -148,13 +163,20 @@ export default function CheckoutPage() {
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-black/60" />
-      {/* Puntos de pasos SIEMPRE visibles */}
+      {/* Puntos de pasos SIEMPRE visibles y clicables */}
       <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         {steps.map((s, i) => (
-          <span
+          <button
+            type="button"
             key={s}
-            className={`w-3 h-3 rounded-full border border-white/80 ${step === i ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]" : "bg-white/30"} transition`}
-          />
+            className={`w-4 h-4 rounded-full border-2 border-white/80 flex items-center justify-center transition
+              ${step === i ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] scale-110 border-white" : "bg-white/30 hover:border-white/80"}
+            `}
+            onClick={() => goToStep(i)}
+            aria-label={s}
+          >
+            {/* Punto visual */}
+          </button>
         ))}
       </div>
       {/* TARJETA PRINCIPAL */}
@@ -189,7 +211,7 @@ export default function CheckoutPage() {
                 <div className="relative mb-4">
                   <select
                     name="provincia"
-                    className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-3 text-white outline-none transition appearance-none"
+                    className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-0 text-white outline-none transition appearance-none"
                     value={form.provincia}
                     onChange={handleInput}
                     required
@@ -204,8 +226,8 @@ export default function CheckoutPage() {
                     <label
                       htmlFor="provincia"
                       className={`
-                        absolute left-4 pointer-events-none text-white/80 transition-all duration-200 bg-transparent
-                        text-xs -top-3 px-1 bg-black/60
+                        absolute left-0 pointer-events-none text-white/80 transition-all duration-200 bg-transparent
+                        text-xs -top-3 px-0 bg-black/60
                       `}
                       style={{ zIndex: 2 }}
                     >
@@ -224,7 +246,7 @@ export default function CheckoutPage() {
                 <label className="text-white/80 mb-1 block">Notas del pedido (opcional)</label>
                 <textarea
                   name="notas"
-                  className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-3 text-white placeholder-white/70 outline-none transition"
+                  className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-0 text-white placeholder-white/70 outline-none transition"
                   placeholder="Notas sobre tu pedido..."
                   value={form.notas}
                   onChange={handleInput}
@@ -234,34 +256,119 @@ export default function CheckoutPage() {
             </div>
           )}
 
-          {/* PASO 2 y PASO 3 igual que ya tienes... */}
-          {/* ... copia igual que en tu código anterior ... */}
+          {/* PASO 2: RESUMEN DE PEDIDO */}
+          {step === 1 && (
+            <div className="flex-1">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center">Tu Pedido</h2>
+              <div className="space-y-3">
+                <div className="font-semibold text-lg text-white/90 grid grid-cols-4">
+                  <span className="col-span-2">Producto</span>
+                  <span className="col-span-1 text-center">Talla</span>
+                  <span className="col-span-1 text-right">Subtotal</span>
+                </div>
+                <div className="border-b border-white/20 mb-2" />
+                {cart.length === 0 ? (
+                  <p className="text-white/70 text-center">Tu carrito está vacío</p>
+                ) : (
+                  cart.map((item, i) => (
+                    <div key={i} className="grid grid-cols-4 gap-1 py-2 items-center text-white/90">
+                      <div className="col-span-2 flex items-center gap-3">
+                        <Image src={item.image} alt={item.name} width={48} height={48} className="rounded-lg object-cover border border-white/20" />
+                        <div>
+                          <div className="font-semibold">{item.name}</div>
+                          <div className="text-xs">{item.color ? `Color: ${item.color}` : ""}</div>
+                          <div className="text-xs">{item.phrase ? `Frase: ${item.phrase}` : "Frase: Sin frase"}</div>
+                        </div>
+                      </div>
+                      <div className="col-span-1 text-center">{item.size || "-"}</div>
+                      <div className="col-span-1 text-right">{parseFloat(item.price).toFixed(2)}€</div>
+                    </div>
+                  ))
+                )}
+                <div className="border-b border-white/20 mt-2" />
+                <div className="flex flex-col gap-2 mt-2">
+                  <div className="flex justify-between text-white/90">
+                    <span>Subtotal</span>
+                    <span>{subtotal.toFixed(2)}€</span>
+                  </div>
+                  <div className="flex justify-between items-center text-white/90">
+                    <span>
+                      Envío
+                      <span className="block text-xs mt-1">
+                        <label>
+                          <input type="radio" checked={envio === "normal"} onChange={() => setEnvio("normal")} className="accent-[#67b2c1] mr-1" />
+                          GLS EconomyParcel (48/72h) <span className="font-bold">{envio === "normal" ? "(Gratis)" : ""}</span>
+                        </label>
+                        <br />
+                        <label>
+                          <input type="radio" checked={envio === "express"} onChange={() => setEnvio("express")} className="accent-[#ff8eaa] mr-1" />
+                          GLS Express (24h) <span className="font-bold">(+4.95€)</span>
+                        </label>
+                      </span>
+                    </span>
+                    <span>{envioPrecio === 0 ? "Gratis" : envioPrecio.toFixed(2) + "€"}</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-xl text-white mt-3">
+                    <span>Total</span>
+                    <span>{total.toFixed(2)}€</span>
+                  </div>
+                  <div className="text-xs text-white/60 text-right">
+                    Incluye {IVA}€ IVA (21%)
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
-          {/* BOTONES DE NAVEGACIÓN */}
-          <div className="absolute bottom-7 right-7 flex gap-4 z-10">
+          {/* PASO 3: MÉTODO DE PAGO */}
+          {step === 2 && (
+            <div className="flex-1 flex flex-col justify-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white text-center">Método de Pago</h2>
+              <div className="flex flex-col gap-4 mb-6">
+                <PaymentOption label="Tarjeta" value="tarjeta" checked={pago === "tarjeta"} onChange={() => setPago("tarjeta")} />
+                <PaymentOption label="Bizum" value="bizum" checked={pago === "bizum"} onChange={() => setPago("bizum")} />
+                <PaymentOption label="PayPal" value="paypal" checked={pago === "paypal"} onChange={() => setPago("paypal")} icon={
+                  <Image src="/images/paypal.svg" alt="PayPal" width={36} height={20} className="inline-block ml-1" />
+                } />
+              </div>
+              <div className="text-xs text-white/70 mb-4">
+                Tus datos personales se utilizarán para procesar tu pedido y mejorar tu experiencia en 2CabrasConTraje, conforme a la política de privacidad.
+              </div>
+              <div className="flex items-center mb-5">
+                <input type="checkbox" checked={acepto} onChange={() => setAcepto(!acepto)} className="accent-[#ff8eaa] mr-2" />
+                <span className="text-white/90 text-sm">
+                  He leído y acepto los{" "}
+                  <a href="/legal" target="_blank" className="underline hover:text-[#67b2c1] transition">términos y condiciones de la web *</a>
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* BOTONES DE NAVEGACIÓN CON FLECHAS */}
+          <div className="w-full flex justify-end gap-4 mt-6">
             {step > 0 && (
               <button
                 type="button"
                 onClick={handlePrev}
-                className="rounded-full px-6 py-2 font-semibold bg-white/30 text-white text-lg shadow hover:scale-105 hover:shadow-lg border border-white/40 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-black transition-all"
+                className="flex items-center justify-center rounded-full w-12 h-12 bg-white/20 hover:bg-[#67b2c1]/80 text-white shadow hover:scale-105 transition-all"
               >
-                Atrás
+                <ArrowLeft size={28} />
               </button>
             )}
             {step < 2 ? (
               <button
                 type="button"
                 onClick={handleNext}
-                className="rounded-full px-8 py-2 font-bold text-lg bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 hover:shadow-lg hover:bg-gradient-to-l hover:from-[#ff8eaa] hover:to-[#67b2c1] transition-all"
+                className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
               >
-                Siguiente
+                <ArrowRight size={28} />
               </button>
             ) : (
               <button
                 type="submit"
-                className="rounded-full px-8 py-2 font-bold text-lg bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 hover:shadow-lg hover:bg-gradient-to-l hover:from-[#ff8eaa] hover:to-[#67b2c1] transition-all"
+                className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
               >
-                Realizar Pedido
+                <ArrowRight size={28} />
               </button>
             )}
           </div>
@@ -271,7 +378,7 @@ export default function CheckoutPage() {
   );
 }
 
-// INPUT CON FLOATING LABEL Y SOLO LÍNEA INFERIOR
+// INPUT CON FLOATING LABEL, SIEMPRE ALINEADA CON LA LÍNEA
 function InputField({ label, name, value, onChange, type = "text", className = "" }: any) {
   const [focused, setFocused] = useState(false);
   return (
@@ -287,7 +394,7 @@ function InputField({ label, name, value, onChange, type = "text", className = "
         autoComplete="off"
         className={`
           peer w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1]
-          rounded-none text-white placeholder-transparent py-2 px-3
+          rounded-none text-white placeholder-transparent py-2 px-0
           outline-none transition-all text-base
         `}
         placeholder={label}
@@ -296,8 +403,8 @@ function InputField({ label, name, value, onChange, type = "text", className = "
       <label
         htmlFor={name}
         className={`
-          absolute left-3 pointer-events-none text-white/80 transition-all duration-200 bg-transparent
-          ${focused || value ? "text-xs -top-3 px-1 bg-black/60" : "text-base top-4"}
+          absolute left-0 pointer-events-none text-white/80 transition-all duration-200 bg-transparent
+          ${focused || value ? "text-xs -top-3 px-0 bg-black/60" : "text-base top-2"}
         `}
         style={{ zIndex: 2 }}
       >
