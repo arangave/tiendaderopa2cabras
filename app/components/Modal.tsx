@@ -8,6 +8,7 @@ import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import "../styles/globals.css";
 import ZoomableImageModal from "./ZoomableImageModal";
 import type { Product } from "../data/products";
+import ColorCircle from "./ColorCircle";
 
 interface ModalProps {
   product: Product;
@@ -274,14 +275,20 @@ const Modal: React.FC<ModalProps> = ({
                 {product.colors.map((colorObj, index) => (
                   <button
                     key={index}
-                    className="w-6 h-6 rounded-full border border-gray-300 hover:scale-110 transition"
-                    style={{ backgroundColor: colorObj.hex }}
+                    className="rounded-full border border-gray-300 hover:scale-110 transition p-0"
+                    style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", background: "none" }}
                     aria-label={colorObj.name}
                     onClick={() => {
                       setSelectedImage(colorObj.image);
                       setSelectedColor(colorObj.name);
                     }}
-                  />
+                  >
+                    <ColorCircle
+                      hex={colorObj.hex}
+                      size={28}
+                      selected={selectedColor === colorObj.name}
+                    />
+                  </button>
                 ))}
               </div>
             </div>
