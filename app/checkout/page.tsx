@@ -6,8 +6,6 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 
 // PASOS DEL CHECKOUT
 const steps = ["Datos", "Pedido", "Pago"];
-
-// Provincias de España
 const provincias = [
   "Álava", "Albacete", "Alicante", "Almería", "Asturias", "Ávila", "Badajoz", "Barcelona",
   "Burgos", "Cáceres", "Cádiz", "Cantabria", "Castellón", "Ciudad Real", "Córdoba", "Cuenca",
@@ -35,6 +33,14 @@ export default function CheckoutPage() {
     notas: ""
   });
 
+  // Campos de pago
+  const [tarjeta, setTarjeta] = useState({
+    numero: "",
+    caducidad: "",
+    cvc: ""
+  });
+  const [bizum, setBizum] = useState({ telefono: "" });
+
   // Cart desde localStorage (simulado)
   const [cart, setCart] = useState<any[]>([]);
   const [envio, setEnvio] = useState("normal"); // normal o express
@@ -54,7 +60,7 @@ export default function CheckoutPage() {
   const total = subtotal + envioPrecio;
   const IVA = +(total * 0.21).toFixed(2);
 
-  // Cambios en inputs
+  // Cambios en inputs generales
   const handleInput = (e: any) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -62,12 +68,24 @@ export default function CheckoutPage() {
       [name]: type === "checkbox" ? checked : value
     }));
   };
-
-  // Navegación de pasos haciendo click en el punto
-  const goToStep = (i: number) => {
-    // Si se quieren restricciones para no saltar pasos, aquí
-    setStep(i);
+  // Inputs de tarjeta y bizum
+  const handleTarjetaInput = (e: any) => {
+    const { name, value } = e.target;
+    setTarjeta((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
+  const handleBizumInput = (e: any) => {
+    const { name, value } = e.target;
+    setBizum((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Ir a paso clicando el punto
+  const goToStep = (i: number) => setStep(i);
 
   // Siguiente paso con validación
   const handleNext = () => {
@@ -84,6 +102,17 @@ export default function CheckoutPage() {
       alert("Debes aceptar los términos y condiciones.");
       return;
     }
+    // Validaciones condicionales de pago
+    if (step === 2) {
+      if (pago === "tarjeta" && (!tarjeta.numero || !tarjeta.caducidad || !tarjeta.cvc)) {
+        alert("Rellena todos los campos de la tarjeta.");
+        return;
+      }
+      if (pago === "bizum" && !bizum.telefono) {
+        alert("Introduce tu teléfono Bizum.");
+        return;
+      }
+    }
     setStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
@@ -94,6 +123,14 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (!acepto) {
       alert("Debes aceptar los términos y condiciones.");
+      return;
+    }
+    if (pago === "tarjeta" && (!tarjeta.numero || !tarjeta.caducidad || !tarjeta.cvc)) {
+      alert("Rellena todos los campos de la tarjeta.");
+      return;
+    }
+    if (pago === "bizum" && !bizum.telefono) {
+      alert("Introduce tu teléfono Bizum.");
       return;
     }
     setPedidoConfirmado(true);
@@ -114,8 +151,7 @@ export default function CheckoutPage() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/60" /> {/* Opacidad negra encima del video */}
-        {/* Puntos de pasos SIEMPRE visibles y clicables */}
+        <div className="absolute inset-0 bg-black/60" />
         <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
           {steps.map((s, i) => (
             <button
@@ -126,9 +162,7 @@ export default function CheckoutPage() {
               `}
               onClick={() => goToStep(i)}
               aria-label={s}
-            >
-              {/* Punto visual */}
-            </button>
+            />
           ))}
         </div>
         <motion.div
@@ -153,7 +187,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="relative min-h-screen flex items-center justify-center pt-40 pb-16 px-6 overflow-hidden">
+    <main className="relative min-h-screen flex items-center justify-center pt-40 pb-16 px-4 md:px-8 overflow-hidden">
       <video
         src="/videos/Proyecto de vídeo 5.mp4"
         autoPlay
@@ -174,9 +208,7 @@ export default function CheckoutPage() {
             `}
             onClick={() => goToStep(i)}
             aria-label={s}
-          >
-            {/* Punto visual */}
-          </button>
+          />
         ))}
       </div>
       {/* TARJETA PRINCIPAL */}
@@ -189,18 +221,17 @@ export default function CheckoutPage() {
           transition={{ duration: 0.4 }}
           onSubmit={handleSubmit}
           className="
-            relative z-10 w-full max-w-xl mx-auto
+            relative z-10 w-full max-w-lg mx-auto
             rounded-2xl p-6 md:p-10
             bg-white/10 backdrop-blur-md
             border border-white/30 shadow-2xl
-            flex flex-col md:flex-row gap-8
-            hover:shadow-[0_0_40px_4px_rgba(255,168,105,0.18)]
+            flex flex-col gap-8
             transition
           "
         >
           {/* PASO 1: DATOS */}
           {step === 0 && (
-            <div className="flex-1 flex flex-col justify-center">
+            <div className="flex flex-col justify-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center">Facturación y Envío</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputField label="Nombre *" name="nombre" value={form.nombre} onChange={handleInput} />
@@ -258,7 +289,7 @@ export default function CheckoutPage() {
 
           {/* PASO 2: RESUMEN DE PEDIDO */}
           {step === 1 && (
-            <div className="flex-1">
+            <div className="flex flex-col">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center">Tu Pedido</h2>
               <div className="space-y-3">
                 <div className="font-semibold text-lg text-white/90 grid grid-cols-4">
@@ -322,7 +353,7 @@ export default function CheckoutPage() {
 
           {/* PASO 3: MÉTODO DE PAGO */}
           {step === 2 && (
-            <div className="flex-1 flex flex-col justify-center">
+            <div className="flex flex-col">
               <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white text-center">Método de Pago</h2>
               <div className="flex flex-col gap-4 mb-6">
                 <PaymentOption label="Tarjeta" value="tarjeta" checked={pago === "tarjeta"} onChange={() => setPago("tarjeta")} />
@@ -331,6 +362,34 @@ export default function CheckoutPage() {
                   <Image src="/images/paypal.svg" alt="PayPal" width={36} height={20} className="inline-block ml-1" />
                 } />
               </div>
+              {/* Campos condicionales */}
+              {pago === "tarjeta" && (
+                <div className="space-y-3 mb-4">
+                  <InputField label="Número de tarjeta *" name="numero" value={tarjeta.numero} onChange={handleTarjetaInput} className="mb-2" />
+                  <div className="flex gap-4">
+                    <InputField label="Caducidad (MM/AA) *" name="caducidad" value={tarjeta.caducidad} onChange={handleTarjetaInput} className="flex-1 mb-2" />
+                    <InputField label="CVC *" name="cvc" value={tarjeta.cvc} onChange={handleTarjetaInput} className="flex-1 mb-2" />
+                  </div>
+                </div>
+              )}
+              {pago === "bizum" && (
+                <div className="space-y-3 mb-4">
+                  <InputField label="Teléfono Bizum *" name="telefono" value={bizum.telefono} onChange={handleBizumInput} />
+                </div>
+              )}
+              {pago === "paypal" && (
+                <div className="mb-4 flex flex-col items-center">
+                  <button
+                    type="button"
+                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#0070ba] to-[#003087] text-white font-bold flex items-center gap-2 shadow hover:scale-105 transition"
+                    onClick={() => alert("Redirigiendo a PayPal... (fake)")}
+                  >
+                    <Image src="/images/paypal.svg" alt="PayPal" width={28} height={16} className="inline-block" />
+                    Pagar con PayPal
+                  </button>
+                  <span className="text-xs text-white/60 mt-2">(Demo: este botón es solo visual)</span>
+                </div>
+              )}
               <div className="text-xs text-white/70 mb-4">
                 Tus datos personales se utilizarán para procesar tu pedido y mejorar tu experiencia en 2CabrasConTraje, conforme a la política de privacidad.
               </div>
