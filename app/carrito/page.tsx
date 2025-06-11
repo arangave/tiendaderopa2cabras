@@ -4,6 +4,7 @@ import Image from "next/image";
 import "../styles/globals.css";
 import Header from "../components/Header";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 interface Product {
   id: number;
@@ -282,12 +283,13 @@ export default function Carrito() {
               <span>{totalPrice}€</span>
             </div>
           </div>
-          <button
-            onClick={() => alert("Ir a tramitar pedido")}
-            className="mt-6 py-3 rounded-full text-white font-bold bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] hover:opacity-90 transition-opacity duration-300 w-full"
-          >
-            Finalizar Compra
-          </button>
+            <Link href="/checkout">
+              <button
+                className="mt-6 py-3 rounded-full text-white font-bold bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] hover:opacity-90 transition-opacity duration-300 w-full"
+              >
+                Finalizar Compra
+              </button>
+            </Link>
         </aside>
       </section>
 
