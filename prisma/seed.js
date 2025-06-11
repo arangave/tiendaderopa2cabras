@@ -33,9 +33,9 @@ async function main() {
         "/images/prendas/camisetas/camiseta-4colores-verde-naranja-amarillo-y-azul-oversize.png"
       ],
       colores: [
-        { nombre: "Amarillo/Azul/Verde/Naranja Coral", hex: "#ffe23d/#58c3fa/#a7ff83/#ffb085", imagenUrl: "/images/prendas/camisetas/camiseta-4colores-amarillo-azul-verde-y-naranja-coral-oversize.png" },
-        { nombre: "Blanco/Morado/Azul/Amarillo", hex: "#fff/#b384ff/#ffe23d/#38a1db", imagenUrl: "/images/prendas/camisetas/camiseta-4colores-blanco-morado-azul-y-amarillo-oversize.png" },
-        { nombre: "Verde/Naranja/Amarillo/Azul", hex: "#a7ff83/#ffb085/#ffe23d/#58c3fa", imagenUrl: "/images/prendas/camisetas/camiseta-4colores-verde-naranja-amarillo-y-azul-oversize.png" }
+        { nombre: "Amarillo/Azul/Verde/Naranja Coral", hex: "#ffe23d/#58c3fa/#ffb085/#a7ff83", imagenUrl: "/images/prendas/camisetas/camiseta-4colores-amarillo-azul-verde-y-naranja-coral-oversize.png" },
+        { nombre: "Blanco/Morado/Amarillo/Azul", hex: "#fff/#b384ff/#ffe23d/#38a1db", imagenUrl: "/images/prendas/camisetas/camiseta-4colores-blanco-morado-azul-y-amarillo-oversize.png" },
+        { nombre: "Verde/Naranja/Azul/Amarillo", hex: "#a7ff83/#ffb085/#58c3fa/#ffe23d", imagenUrl: "/images/prendas/camisetas/camiseta-4colores-verde-naranja-amarillo-y-azul-oversize.png" }
       ]
     },
        

@@ -5,7 +5,12 @@ import Image from "next/image";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 
 // PASOS DEL CHECKOUT
-const steps = ["Datos", "Pedido", "Pago"];
+const steps = [
+  { name: "Datos" },
+  { name: "Pedido" },
+  { name: "Pago" }
+];
+
 const provincias = [
   "Álava", "Albacete", "Alicante", "Almería", "Asturias", "Ávila", "Badajoz", "Barcelona",
   "Burgos", "Cáceres", "Cádiz", "Cantabria", "Castellón", "Ciudad Real", "Córdoba", "Cuenca",
@@ -84,7 +89,7 @@ export default function CheckoutPage() {
     }));
   };
 
-  // Ir a paso clicando el punto
+  // Stepper click
   const goToStep = (i: number) => setStep(i);
 
   // Siguiente paso con validación
@@ -139,7 +144,7 @@ export default function CheckoutPage() {
     }, 2000);
   };
 
-  // Pantalla de confirmación
+  // Confirmación final
   if (pedidoConfirmado) {
     return (
       <main className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-16 px-6 overflow-hidden">
@@ -152,18 +157,8 @@ export default function CheckoutPage() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-          {steps.map((s, i) => (
-            <button
-              type="button"
-              key={s}
-              className={`w-4 h-4 rounded-full border-2 border-white/80 flex items-center justify-center transition
-                ${step === i ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] scale-110 border-white" : "bg-white/30 hover:border-white/80"}
-              `}
-              onClick={() => goToStep(i)}
-              aria-label={s}
-            />
-          ))}
+        <div className="w-full flex justify-center">
+          <Stepper step={step} goToStep={goToStep} />
         </div>
         <motion.div
           initial={{ opacity: 0, y: 60 }}
@@ -187,7 +182,8 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="relative min-h-screen flex items-center justify-center pt-40 pb-16 px-4 md:px-8 overflow-hidden">
+    <main className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 px-2 md:px-8 bg-black overflow-x-hidden">
+      {/* Fondo video y overlay */}
       <video
         src="/videos/Proyecto de vídeo 5.mp4"
         autoPlay
@@ -197,21 +193,13 @@ export default function CheckoutPage() {
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-black/60" />
-      {/* Puntos de pasos SIEMPRE visibles y clicables */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-        {steps.map((s, i) => (
-          <button
-            type="button"
-            key={s}
-            className={`w-4 h-4 rounded-full border-2 border-white/80 flex items-center justify-center transition
-              ${step === i ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] scale-110 border-white" : "bg-white/30 hover:border-white/80"}
-            `}
-            onClick={() => goToStep(i)}
-            aria-label={s}
-          />
-        ))}
+
+      {/* STEPPER: SIEMPRE CENTRADO ARRIBA */}
+      <div className="w-full flex justify-center mt-2 mb-2 z-20">
+        <Stepper step={step} goToStep={goToStep} />
       </div>
-      {/* TARJETA PRINCIPAL */}
+
+      {/* CARD: RESPONSIVE, SIEMPRE CENTRADA, MAX-W CONCRETO */}
       <AnimatePresence mode="wait">
         <motion.form
           key={step}
@@ -220,196 +208,201 @@ export default function CheckoutPage() {
           exit={{ opacity: 0, y: -60 }}
           transition={{ duration: 0.4 }}
           onSubmit={handleSubmit}
-          className="
-            relative z-10 w-full max-w-lg mx-auto
-            rounded-2xl p-6 md:p-10
+          className={`
+            relative z-10 w-full
+            max-w-lg sm:max-w-2xl md:max-w-3xl
+            mx-auto rounded-2xl p-6 md:p-12
             bg-white/10 backdrop-blur-md
             border border-white/30 shadow-2xl
-            flex flex-col gap-8
+            flex flex-col
             transition
-          "
+          `}
         >
-          {/* PASO 1: DATOS */}
-          {step === 0 && (
-            <div className="flex flex-col justify-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center">Facturación y Envío</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputField label="Nombre *" name="nombre" value={form.nombre} onChange={handleInput} />
-                <InputField label="Apellidos *" name="apellidos" value={form.apellidos} onChange={handleInput} />
-                <InputField label="Dirección de la calle *" name="direccion" value={form.direccion} onChange={handleInput} className="md:col-span-2" />
-                <InputField label="Código postal *" name="cp" value={form.cp} onChange={handleInput} />
-                <InputField label="Población *" name="poblacion" value={form.poblacion} onChange={handleInput} />
-                <div className="relative mb-4">
-                  <select
-                    name="provincia"
-                    className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-0 text-white outline-none transition appearance-none"
-                    value={form.provincia}
-                    onChange={handleInput}
-                    required
-                  >
-                    <option value="" className="bg-black text-white">Provincia *</option>
-                    {provincias.map((prov) => (
-                      <option key={prov} value={prov} className="bg-black text-white">{prov}</option>
-                    ))}
-                  </select>
-                  {/* Solo muestra el label si hay una provincia seleccionada */}
-                  {form.provincia && (
-                    <label
-                      htmlFor="provincia"
-                      className={`
-                        absolute left-0 pointer-events-none text-white/80 transition-all duration-200 bg-transparent
-                        text-xs -top-3 px-0 bg-black/60
-                      `}
-                      style={{ zIndex: 2 }}
-                    >
-                      Provincia *
-                    </label>
-                  )}
-                </div>
-                <InputField label="Teléfono *" name="telefono" value={form.telefono} onChange={handleInput} />
-                <InputField label="Correo electrónico *" name="email" type="email" value={form.email} onChange={handleInput} />
-              </div>
-              <div className="flex items-center mt-3">
-                <input type="checkbox" name="crearCuenta" checked={form.crearCuenta} onChange={handleInput} className="accent-[#ff8eaa] mr-2" />
-                <label className="text-white/90 cursor-pointer select-none">¿Crear una cuenta?</label>
-              </div>
-              <div className="mt-4">
-                <label className="text-white/80 mb-1 block">Notas del pedido (opcional)</label>
-                <textarea
-                  name="notas"
-                  className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-0 text-white placeholder-white/70 outline-none transition"
-                  placeholder="Notas sobre tu pedido..."
-                  value={form.notas}
-                  onChange={handleInput}
-                  rows={2}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* PASO 2: RESUMEN DE PEDIDO */}
-          {step === 1 && (
-            <div className="flex flex-col">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center">Tu Pedido</h2>
-              <div className="space-y-3">
-                <div className="font-semibold text-lg text-white/90 grid grid-cols-4">
-                  <span className="col-span-2">Producto</span>
-                  <span className="col-span-1 text-center">Talla</span>
-                  <span className="col-span-1 text-right">Subtotal</span>
-                </div>
-                <div className="border-b border-white/20 mb-2" />
-                {cart.length === 0 ? (
-                  <p className="text-white/70 text-center">Tu carrito está vacío</p>
-                ) : (
-                  cart.map((item, i) => (
-                    <div key={i} className="grid grid-cols-4 gap-1 py-2 items-center text-white/90">
-                      <div className="col-span-2 flex items-center gap-3">
-                        <Image src={item.image} alt={item.name} width={48} height={48} className="rounded-lg object-cover border border-white/20" />
-                        <div>
-                          <div className="font-semibold">{item.name}</div>
-                          <div className="text-xs">{item.color ? `Color: ${item.color}` : ""}</div>
-                          <div className="text-xs">{item.phrase ? `Frase: ${item.phrase}` : "Frase: Sin frase"}</div>
-                        </div>
-                      </div>
-                      <div className="col-span-1 text-center">{item.size || "-"}</div>
-                      <div className="col-span-1 text-right">{parseFloat(item.price).toFixed(2)}€</div>
+          {/* CONTENIDO */}
+          <div className={`
+            flex flex-col md:flex-row gap-8
+            ${step === 1 ? "md:items-start" : "md:items-center"}
+          `}>
+            {/* Columna izquierda */}
+            <div className="flex-1 w-full">
+              {step === 0 && (
+                <>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center md:text-left">Facturación y Envío</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <InputField label="Nombre *" name="nombre" value={form.nombre} onChange={handleInput} />
+                    <InputField label="Apellidos *" name="apellidos" value={form.apellidos} onChange={handleInput} />
+                    <InputField label="Dirección de la calle *" name="direccion" value={form.direccion} onChange={handleInput} className="md:col-span-2" />
+                    <InputField label="Código postal *" name="cp" value={form.cp} onChange={handleInput} />
+                    <InputField label="Población *" name="poblacion" value={form.poblacion} onChange={handleInput} />
+                    <div className="relative mb-4">
+                      <select
+                        name="provincia"
+                        className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-0 text-white outline-none transition appearance-none"
+                        value={form.provincia}
+                        onChange={handleInput}
+                        required
+                      >
+                        <option value="" className="bg-black text-white">Provincia *</option>
+                        {provincias.map((prov) => (
+                          <option key={prov} value={prov} className="bg-black text-white">{prov}</option>
+                        ))}
+                      </select>
+                      {form.provincia && (
+                        <label
+                          htmlFor="provincia"
+                          className={`
+                            absolute left-0 pointer-events-none text-white/80 transition-all duration-200 bg-transparent
+                            text-xs -top-3 px-0 bg-black/60
+                          `}
+                          style={{ zIndex: 2 }}
+                        >
+                          Provincia *
+                        </label>
+                      )}
                     </div>
-                  ))
-                )}
-                <div className="border-b border-white/20 mt-2" />
-                <div className="flex flex-col gap-2 mt-2">
-                  <div className="flex justify-between text-white/90">
-                    <span>Subtotal</span>
-                    <span>{subtotal.toFixed(2)}€</span>
+                    <InputField label="Teléfono *" name="telefono" value={form.telefono} onChange={handleInput} />
+                    <InputField label="Correo electrónico *" name="email" type="email" value={form.email} onChange={handleInput} />
                   </div>
-                  <div className="flex justify-between items-center text-white/90">
-                    <span>
-                      Envío
-                      <span className="block text-xs mt-1">
-                        <label>
-                          <input type="radio" checked={envio === "normal"} onChange={() => setEnvio("normal")} className="accent-[#67b2c1] mr-1" />
-                          GLS EconomyParcel (48/72h) <span className="font-bold">{envio === "normal" ? "(Gratis)" : ""}</span>
-                        </label>
-                        <br />
-                        <label>
-                          <input type="radio" checked={envio === "express"} onChange={() => setEnvio("express")} className="accent-[#ff8eaa] mr-1" />
-                          GLS Express (24h) <span className="font-bold">(+4.95€)</span>
-                        </label>
-                      </span>
+                  <div className="flex items-center mt-3">
+                    <input type="checkbox" name="crearCuenta" checked={form.crearCuenta} onChange={handleInput} className="accent-[#ff8eaa] mr-2" />
+                    <label className="text-white/90 cursor-pointer select-none">¿Crear una cuenta?</label>
+                  </div>
+                  <div className="mt-4">
+                    <label className="text-white/80 mb-1 block">Notas del pedido (opcional)</label>
+                    <textarea
+                      name="notas"
+                      className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-0 text-white placeholder-white/70 outline-none transition"
+                      placeholder="Notas sobre tu pedido..."
+                      value={form.notas}
+                      onChange={handleInput}
+                      rows={2}
+                    />
+                  </div>
+                </>
+              )}
+              {step === 2 && (
+                <>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white text-center md:text-left">Método de Pago</h2>
+                  <div className="flex flex-col gap-4 mb-6">
+                    <PaymentOption label="Tarjeta" value="tarjeta" checked={pago === "tarjeta"} onChange={() => setPago("tarjeta")} />
+                    <PaymentOption label="Bizum" value="bizum" checked={pago === "bizum"} onChange={() => setPago("bizum")} />
+                    <PaymentOption label="PayPal" value="paypal" checked={pago === "paypal"} onChange={() => setPago("paypal")} icon={
+                      <Image src="/images/paypal.svg" alt="PayPal" width={36} height={20} className="inline-block ml-1" />
+                    } />
+                  </div>
+                  {pago === "tarjeta" && (
+                    <div className="space-y-3 mb-4">
+                      <InputField label="Número de tarjeta *" name="numero" value={tarjeta.numero} onChange={handleTarjetaInput} className="mb-2" />
+                      <div className="flex gap-4">
+                        <InputField label="Caducidad (MM/AA) *" name="caducidad" value={tarjeta.caducidad} onChange={handleTarjetaInput} className="flex-1 mb-2" />
+                        <InputField label="CVC *" name="cvc" value={tarjeta.cvc} onChange={handleTarjetaInput} className="flex-1 mb-2" />
+                      </div>
+                    </div>
+                  )}
+                  {pago === "bizum" && (
+                    <div className="space-y-3 mb-4">
+                      <InputField label="Teléfono Bizum *" name="telefono" value={bizum.telefono} onChange={handleBizumInput} />
+                    </div>
+                  )}
+                  {pago === "paypal" && (
+                    <div className="mb-4 flex flex-col items-center">
+                      <button
+                        type="button"
+                        className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#0070ba] to-[#003087] text-white font-bold flex items-center gap-2 shadow hover:scale-105 transition"
+                        onClick={() => alert("Redirigiendo a PayPal... (fake)")}
+                      >
+                        <Image src="/images/paypal.svg" alt="PayPal" width={28} height={16} className="inline-block" />
+                        Pagar con PayPal
+                      </button>
+                      <span className="text-xs text-white/60 mt-2">(Demo: este botón es solo visual)</span>
+                    </div>
+                  )}
+                  <div className="text-xs text-white/70 mb-4">
+                    Tus datos personales se utilizarán para procesar tu pedido y mejorar tu experiencia en 2CabrasConTraje, conforme a la política de privacidad.
+                  </div>
+                  <div className="flex items-center mb-5">
+                    <input type="checkbox" checked={acepto} onChange={() => setAcepto(!acepto)} className="accent-[#ff8eaa] mr-2" />
+                    <span className="text-white/90 text-sm">
+                      He leído y acepto los{" "}
+                      <a href="/legal" target="_blank" className="underline hover:text-[#67b2c1] transition">términos y condiciones de la web *</a>
                     </span>
-                    <span>{envioPrecio === 0 ? "Gratis" : envioPrecio.toFixed(2) + "€"}</span>
                   </div>
-                  <div className="flex justify-between font-bold text-xl text-white mt-3">
-                    <span>Total</span>
-                    <span>{total.toFixed(2)}€</span>
-                  </div>
-                  <div className="text-xs text-white/60 text-right">
-                    Incluye {IVA}€ IVA (21%)
-                  </div>
-                </div>
-              </div>
+                </>
+              )}
             </div>
-          )}
-
-          {/* PASO 3: MÉTODO DE PAGO */}
-          {step === 2 && (
-            <div className="flex flex-col">
-              <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white text-center">Método de Pago</h2>
-              <div className="flex flex-col gap-4 mb-6">
-                <PaymentOption label="Tarjeta" value="tarjeta" checked={pago === "tarjeta"} onChange={() => setPago("tarjeta")} />
-                <PaymentOption label="Bizum" value="bizum" checked={pago === "bizum"} onChange={() => setPago("bizum")} />
-                <PaymentOption label="PayPal" value="paypal" checked={pago === "paypal"} onChange={() => setPago("paypal")} icon={
-                  <Image src="/images/paypal.svg" alt="PayPal" width={36} height={20} className="inline-block ml-1" />
-                } />
-              </div>
-              {/* Campos condicionales */}
-              {pago === "tarjeta" && (
-                <div className="space-y-3 mb-4">
-                  <InputField label="Número de tarjeta *" name="numero" value={tarjeta.numero} onChange={handleTarjetaInput} className="mb-2" />
-                  <div className="flex gap-4">
-                    <InputField label="Caducidad (MM/AA) *" name="caducidad" value={tarjeta.caducidad} onChange={handleTarjetaInput} className="flex-1 mb-2" />
-                    <InputField label="CVC *" name="cvc" value={tarjeta.cvc} onChange={handleTarjetaInput} className="flex-1 mb-2" />
+            {/* Columna derecha SOLO en paso 1 */}
+            {step === 1 && (
+              <div className="flex-1 w-full">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center md:text-left">Tu Pedido</h2>
+                <div className="space-y-3">
+                  <div className="font-semibold text-lg text-white/90 grid grid-cols-4">
+                    <span className="col-span-2">Producto</span>
+                    <span className="col-span-1 text-center">Talla</span>
+                    <span className="col-span-1 text-right">Subtotal</span>
+                  </div>
+                  <div className="border-b border-white/20 mb-2" />
+                  {cart.length === 0 ? (
+                    <p className="text-white/70 text-center">Tu carrito está vacío</p>
+                  ) : (
+                    cart.map((item, i) => (
+                      <div key={i} className="grid grid-cols-4 gap-1 py-2 items-center text-white/90">
+                        <div className="col-span-2 flex items-center gap-3">
+                          <Image src={item.image} alt={item.name} width={48} height={48} className="rounded-lg object-cover border border-white/20" />
+                          <div>
+                            <div className="font-semibold">{item.name}</div>
+                            <div className="text-xs">{item.color ? `Color: ${item.color}` : ""}</div>
+                            <div className="text-xs">{item.phrase ? `Frase: ${item.phrase}` : "Frase: Sin frase"}</div>
+                          </div>
+                        </div>
+                        <div className="col-span-1 text-center">{item.size || "-"}</div>
+                        <div className="col-span-1 text-right">{parseFloat(item.price).toFixed(2)}€</div>
+                      </div>
+                    ))
+                  )}
+                  <div className="border-b border-white/20 mt-2" />
+                  <div className="flex flex-col gap-2 mt-2">
+                    <div className="flex justify-between text-white/90">
+                      <span>Subtotal</span>
+                      <span>{subtotal.toFixed(2)}€</span>
+                    </div>
+                    <div className="flex justify-between items-center text-white/90">
+                      <span>
+                        Envío
+                        <span className="block text-xs mt-1">
+                          <label>
+                            <input type="radio" checked={envio === "normal"} onChange={() => setEnvio("normal")} className="accent-[#67b2c1] mr-1" />
+                            GLS EconomyParcel (48/72h) <span className="font-bold">{envio === "normal" ? "(Gratis)" : ""}</span>
+                          </label>
+                          <br />
+                          <label>
+                            <input type="radio" checked={envio === "express"} onChange={() => setEnvio("express")} className="accent-[#ff8eaa] mr-1" />
+                            GLS Express (24h) <span className="font-bold">(+4.95€)</span>
+                          </label>
+                        </span>
+                      </span>
+                      <span>{envioPrecio === 0 ? "Gratis" : envioPrecio.toFixed(2) + "€"}</span>
+                    </div>
+                    <div className="flex justify-between font-bold text-xl text-white mt-3">
+                      <span>Total</span>
+                      <span>{total.toFixed(2)}€</span>
+                    </div>
+                    <div className="text-xs text-white/60 text-right">
+                      Incluye {IVA}€ IVA (21%)
+                    </div>
                   </div>
                 </div>
-              )}
-              {pago === "bizum" && (
-                <div className="space-y-3 mb-4">
-                  <InputField label="Teléfono Bizum *" name="telefono" value={bizum.telefono} onChange={handleBizumInput} />
-                </div>
-              )}
-              {pago === "paypal" && (
-                <div className="mb-4 flex flex-col items-center">
-                  <button
-                    type="button"
-                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#0070ba] to-[#003087] text-white font-bold flex items-center gap-2 shadow hover:scale-105 transition"
-                    onClick={() => alert("Redirigiendo a PayPal... (fake)")}
-                  >
-                    <Image src="/images/paypal.svg" alt="PayPal" width={28} height={16} className="inline-block" />
-                    Pagar con PayPal
-                  </button>
-                  <span className="text-xs text-white/60 mt-2">(Demo: este botón es solo visual)</span>
-                </div>
-              )}
-              <div className="text-xs text-white/70 mb-4">
-                Tus datos personales se utilizarán para procesar tu pedido y mejorar tu experiencia en 2CabrasConTraje, conforme a la política de privacidad.
               </div>
-              <div className="flex items-center mb-5">
-                <input type="checkbox" checked={acepto} onChange={() => setAcepto(!acepto)} className="accent-[#ff8eaa] mr-2" />
-                <span className="text-white/90 text-sm">
-                  He leído y acepto los{" "}
-                  <a href="/legal" target="_blank" className="underline hover:text-[#67b2c1] transition">términos y condiciones de la web *</a>
-                </span>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* BOTONES DE NAVEGACIÓN CON FLECHAS */}
-          <div className="w-full flex justify-end gap-4 mt-6">
+          {/* BOTONES DE NAVEGACIÓN CON FLECHAS, SIEMPRE ABAJO DERECHA */}
+          <div className="flex justify-end gap-4 mt-10 absolute right-6 bottom-6 z-20">
             {step > 0 && (
               <button
                 type="button"
                 onClick={handlePrev}
                 className="flex items-center justify-center rounded-full w-12 h-12 bg-white/20 hover:bg-[#67b2c1]/80 text-white shadow hover:scale-105 transition-all"
+                aria-label="Atrás"
               >
                 <ArrowLeft size={28} />
               </button>
@@ -419,6 +412,7 @@ export default function CheckoutPage() {
                 type="button"
                 onClick={handleNext}
                 className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
+                aria-label="Siguiente"
               >
                 <ArrowRight size={28} />
               </button>
@@ -426,6 +420,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
+                aria-label="Realizar Pedido"
               >
                 <ArrowRight size={28} />
               </button>
@@ -434,6 +429,42 @@ export default function CheckoutPage() {
         </motion.form>
       </AnimatePresence>
     </main>
+  );
+}
+
+// STEPPER COMPONENT
+function Stepper({ step, goToStep }: { step: number, goToStep: (i: number) => void }) {
+  return (
+    <div className="relative z-20 flex items-center justify-center gap-0 select-none">
+      {steps.map((s, i) => (
+        <div key={s.name} className="flex items-center">
+          <button
+            className={`
+              flex items-center justify-center w-10 h-10 rounded-full
+              transition-all border-2
+              ${step === i
+                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] border-white text-black scale-110"
+                : step > i
+                  ? "bg-[#67b2c1] border-[#67b2c1] text-white"
+                  : "bg-black/60 border-white/40 text-white"}
+              font-bold text-lg relative z-10
+            `}
+            onClick={() => goToStep(i)}
+            aria-label={`Ir al paso: ${s.name}`}
+            type="button"
+          >
+            {i + 1}
+          </button>
+          {i < steps.length - 1 && (
+            <div className={`w-12 h-1 mx-1 rounded-full transition-all
+              ${step > i
+                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
+                : "bg-white/30"}
+            `} />
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
 
