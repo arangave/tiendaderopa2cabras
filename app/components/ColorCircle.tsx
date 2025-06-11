@@ -28,7 +28,6 @@ const ColorCircle = ({ hex, size = 28, selected = false, onClick }: ColorCircleP
       const end = (i + 1) * degreeStep;
       return `${c} ${start}deg ${end}deg`;
     });
-    // 👇 SOLO ESTO CAMBIA
     style.background = `conic-gradient(from -90deg, ${stops.join(", ")})`;
   }
 

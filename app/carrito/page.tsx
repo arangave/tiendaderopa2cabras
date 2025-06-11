@@ -103,11 +103,9 @@ export default function Carrito() {
 
       <Header cartCount={cart.length} favoritesCount={favorites.length} />
 
-      {/* ────────────── LISTA DE PRODUCTOS Y RESUMEN ────────────── */}
       <section className="mt-8 px-4 py-8 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="col-span-1 lg:col-span-8 bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-6 overflow-x-auto">
 
-          {/* Desktop: tabla */}
           <div className="hidden lg:block">
             <table className="min-w-full table-auto">
               <thead>
@@ -178,22 +176,18 @@ export default function Carrito() {
               </tbody>
             </table>
           </div>
-
-          {/* Mobile: tarjetas */}
           <div className="block lg:hidden space-y-6">
             {cart.map((item, i) => {
               const price = parseFloat(item.price.replace(",", "."));
               const lineTotal = (price * item.quantity).toFixed(2);
               return (
                 <div key={i} className="flex flex-col bg-white rounded-xl shadow p-4 relative">
-                  {/* Botón eliminar arriba a la derecha */}
                   <button
                     onClick={() => removeFromCart(item.id, item.size)}
                     className="absolute top-2 right-2 text-red-600 hover:text-red-800 transition"
                   >
                     <TrashIcon className="w-5 h-5" />
                   </button>
-                  {/* Fila con imagen, precio y cantidad */}
                   <div className="flex items-center gap-4">
                     <Image
                       src={item.image}
@@ -222,7 +216,6 @@ export default function Carrito() {
                       <div className="text-right font-bold text-black">{lineTotal}€</div>
                     </div>
                   </div>
-                  {/* Debajo: nombre, talla, color, frase */}
                   <div className="mt-4">
                     <p className="font-semibold text-black">{item.name}</p>
                     {item.size && (
@@ -266,7 +259,6 @@ export default function Carrito() {
         </aside>
       </section>
 
-      {/* Productos favoritos sugeridos con carrusel */}
       {favoritesNotInCart.length > 0 && (
         <section className="mt-12 sugerencias px-4 py-8 max-w-6xl mx-auto text-black">
           <h3 className="text-lg sm:text-xl font-semibold mb-6 text-center">

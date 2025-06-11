@@ -10,9 +10,8 @@ import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outlin
 import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard from "../components/ProductoCard";
-import type { Product } from "../data/products"; // SOLO la interfaz si la usas en componentes
+import type { Product } from "../data/products";
 
-// --- MAPEO DE API ---
 type ProductoAPI = {
   id: number;
   nombre: string;
@@ -60,12 +59,10 @@ export default function Inicio() {
 
   const searchParams = useSearchParams();
 
-  // ------ FETCH productos de la API ------
   useEffect(() => {
     async function fetchProductos() {
       const res = await fetch("/api/categories-with-products");
       const data = await res.json();
-      // Junta todos los productos de todas las categorías
       const allProducts: Product[] = data.flatMap((cat: any) =>
         cat.productos.map(mapProductoAPIToProduct)
       );
@@ -74,8 +71,7 @@ export default function Inicio() {
     fetchProductos();
   }, []);
 
-  // ---- LÓGICA de destacados, sweaters, tshirts ----
-  const destacados = productos.slice(0, 4); // Los 4 primeros, puedes cambiar lógica
+  const destacados = productos.slice(0, 4);
   const sweaters = productos.filter((p) => p.name?.toLowerCase().includes("sudadera"));
   const tshirts = productos.filter((p) => p.name?.toLowerCase().includes("camiseta"));
 
@@ -199,13 +195,10 @@ export default function Inicio() {
           </defs>
         </svg>
 
-        {/* HEADER */}
         <header className="header flex justify-between items-center p-4 relative z-50">
-          {/* Logo */}
           <a href="/inicio">
             <Image src="/images/Logo_pasteles_1.png" alt="Logo" width={50} height={50} className="logo" priority />
           </a>
-          {/* Botón hamburguesa móvil */}
           <div
             className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
             onClick={(e) => {
@@ -239,7 +232,6 @@ export default function Inicio() {
               />
             </div>
           </div>
-          {/* Menú de navegación */}
           <ul
             className={`nav-links flex-col items-center justify-center text-center
               absolute top-20 right-0 bg-black/90 text-white p-6 rounded-lg shadow-md gap-6 z-40 w-[100vw] transition-all duration-300
@@ -287,7 +279,6 @@ export default function Inicio() {
           </ul>
         </header>
 
-        {/* HERO SECTION */}
         <section className="hero pt-4 sm:pt-17 pb-4 sm:pb-8">
           {/* BOTON DE NOCHE Y DIA */}
           <div className="absolute top-28 sm:top-36 right-4 z-50">
@@ -352,7 +343,6 @@ export default function Inicio() {
           </div>
         </section>
 
-        {/* DESTACADOS */}
         <section className="products mt-0">
           <div className="flex flex-col items-center justify-center my-6">
             <h2 className="text-center text-3xl font-bold text-black mb-2">Destacados</h2>
@@ -410,7 +400,6 @@ export default function Inicio() {
           </div>
         </section>
 
-        {/* CARRUSEL DE SUDADERAS */}
         <section className="products mt-0">
           <div className="flex flex-col items-center justify-center my-6">
             <h2 className="text-center text-3xl font-bold text-black mb-2">Sudaderas</h2>
@@ -468,7 +457,7 @@ export default function Inicio() {
           </div>
         </section>
 
-        {/* CARRUSEL DE CAMISETAS */}
+
         <section className="products mt-0">
           <div className="flex flex-col items-center justify-center my-6">
             <h2 className="text-center text-3xl font-bold text-black mb-2">Camisetas</h2>

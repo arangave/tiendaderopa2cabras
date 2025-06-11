@@ -7,11 +7,8 @@ export interface Product {
   image: string;
   quantity: number;
   size?: string;
-
-  // Propiedades nuevas:
-  color?: string;      // color “seleccionado” por el usuario
-  phrase?: string;     // frase de personalización, si hubiera
-
+  color?: string;
+  phrase?: string;
   colors?: {
     name: string;
     hex: string;
@@ -19,7 +16,6 @@ export interface Product {
   }[];
 }
 
-//  Camisetas Cabras Rebeldes
 export const rebelTshirts: Product[] = Array.from({ length: 10 }, (_, i) => ({
   id: i + 1,
   name: `Camiseta Rebelde ${i + 1}`,
@@ -41,7 +37,6 @@ export const rebelTshirts: Product[] = Array.from({ length: 10 }, (_, i) => ({
   image: "/images/Backside T-Shirt Mockup.png",
 }));
 
-//  Sudaderas Cabras Rebeldes
 export const rebelSweaters: Product[] = Array.from({ length: 10 }, (_, i) => ({
   id: i + 11,
   name: `Sudadera Rebelde ${i + 1}`,
@@ -63,7 +58,6 @@ export const rebelSweaters: Product[] = Array.from({ length: 10 }, (_, i) => ({
   image: "/images/Backside T-Shirt Mockup.png",
 }));
 
-//  Camisetas Cabras Traviesas
 export const naughtyTshirts: Product[] = Array.from({ length: 10 }, (_, i) => ({
   id: i + 21,
   name: `Camiseta Traviesa ${i + 1}`,
@@ -85,7 +79,6 @@ export const naughtyTshirts: Product[] = Array.from({ length: 10 }, (_, i) => ({
   image: "/images/Backside T-Shirt Mockup.png",
 }));
 
-//  Sudaderas Cabras Traviesas
 export const naughtySweaters: Product[] = Array.from({ length: 10 }, (_, i) => ({
   id: i + 31,
   name: `Sudadera Traviesa ${i + 1}`,
@@ -107,7 +100,6 @@ export const naughtySweaters: Product[] = Array.from({ length: 10 }, (_, i) => (
   image: "/images/Backside T-Shirt Mockup.png",
 }));
 
-//  Productos destacados (mezcla manual)
 export const destacados: Product[] = [
   rebelTshirts[0],
   rebelSweaters[1],

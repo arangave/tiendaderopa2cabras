@@ -1,11 +1,10 @@
-// components/Footer.tsx
+
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import CookiesModal from "./CookiesModal";
 
 export default function Footer() {
   return (
     <footer className="bg-white py-6 text-center border-t">
-      {/* Redes sociales con iconos Lucide */}
       <div className="flex justify-center gap-6 mb-3">
         <a
           href="https://facebook.com"
@@ -33,7 +32,6 @@ export default function Footer() {
         </a>
       </div>
 
-      {/* Enlaces legales */}
       <div className="flex justify-center flex-wrap gap-4 mb-2 text-xs text-gray-500">
         <a
           href="/terminos"

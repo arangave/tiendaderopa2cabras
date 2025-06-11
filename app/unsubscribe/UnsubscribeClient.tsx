@@ -13,10 +13,8 @@ export default function UnsubscribePage() {
       return;
     }
 
-    // Llama a la API
     fetch(`/api/auth/newsletter/unsubscribe?email=${encodeURIComponent(email)}`)
       .then(() => {
-        // Después de procesar, redirige al inicio con el mensaje
         router.replace("/inicio?unsubscribed=1");
       })
       .catch(() => {

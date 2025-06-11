@@ -17,7 +17,7 @@ interface ProductoAPI {
   nombre: string;
   descripcion?: string;
   precio: number;
-  tipo: string; // CAMISETA o SUDADERA
+  tipo: string;
   imagenes: { url: string }[];
   colores: { nombre: string; hex: string; imagenUrl?: string }[];
   categoria: { nombre: string };
@@ -54,7 +54,6 @@ function mapProductoAPIToProduct(producto: ProductoAPI): Product {
 }
 
 export default function ProductosPage() {
-  // Nuevo filtro de categoría y tipo (camiseta/sudadera)
   const [categoriaFiltro, setCategoriaFiltro] = useState({ categoria: "", tipo: "CAMISETA" });
   const [categorias, setCategorias] = useState<CategoriaConProductos[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -84,7 +83,6 @@ export default function ProductosPage() {
         const data: CategoriaConProductos[] = await res.json();
         setCategorias(data);
 
-        // Por defecto selecciona la primera categoría y tipo "CAMISETA"
         if (data.length > 0) {
           setCategoriaFiltro({ categoria: data[0].nombre, tipo: "CAMISETA" });
         }
@@ -119,7 +117,6 @@ export default function ProductosPage() {
     setSelectedProduct(null);
   };
 
-  // Filtra por categoría y tipo (fíjate en mayúsculas)
   const categoriaSeleccionada = categorias.find((c) => categoriaFiltro.categoria === c.nombre);
   const productosFiltrados =
     categoriaSeleccionada?.productos.filter(

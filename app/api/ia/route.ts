@@ -1,4 +1,4 @@
-// /app/api/ia/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 export const runtime = 'nodejs';
 
@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Pregunta requerida" }, { status: 400 });
     }
 
-    // Usa la clave de Groq desde la variable de entorno
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
       return NextResponse.json({ error: "No API Key (Groq)" }, { status: 500 });
@@ -39,7 +38,7 @@ Dilema del usuario: ${pregunta}
         "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192", // Puedes poner mixtral-8x7b-32768 si quieres variar el modelo
+        model: "llama3-8b-8192",
         messages: [
           { role: "system", content: "Responde siempre como una cabra creativa, original, en español, y nunca expliques, solo la frase." },
           { role: "user", content: prompt },
@@ -50,7 +49,6 @@ Dilema del usuario: ${pregunta}
     });
 
     const data = await res.json();
-    // Si hay error de la API, repórtalo
     if (data.error) {
       console.error("Groq response:", data);
       return NextResponse.json({ error: data.error.message || "Error generando la frase." }, { status: 500 });

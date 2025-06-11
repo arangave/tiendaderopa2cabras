@@ -1,4 +1,3 @@
-// app/pedido/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -16,7 +15,6 @@ export default function PedidoPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí enviarías los datos a tu API…
     localStorage.removeItem("cart");
     setMensaje("✅ ¡Tu pedido ha sido enviado con éxito!");
     setTimeout(() => {
@@ -35,7 +33,6 @@ export default function PedidoPage() {
 
   return (
     <main className="relative min-h-screen flex items-start justify-center pt-40 pb-16 px-6 overflow-hidden">
-      {/* Vídeo de fondo */}
       <video
         src="/videos/Proyecto de vídeo 5.mp4"
         autoPlay
@@ -44,8 +41,6 @@ export default function PedidoPage() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       />
-
-      {/* Tarjeta central semitransparente con blur */}
       <div className="relative w-full max-w-md mx-auto p-8 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md">
         <h1
           className="text-4xl font-bold mb-6 text-center bg-clip-text text-transparent

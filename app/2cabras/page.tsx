@@ -5,13 +5,11 @@ import "../styles/globals.css";
 import Header from "../components/Header";
 
 export default function Page() {
-  // --- Estados para el input personalizado ---
   const [userInput, setUserInput] = useState("");
   const [response, setResponse] = useState<string | null>(null);
   const [loadingIA, setLoadingIA] = useState(false);
   const [errorIA, setErrorIA] = useState<string | null>(null);
 
-  // --- Estados y lógica para la frase random ---
   const [fraseRandom, setFraseRandom] = useState("");
   const [loadingRandom, setLoadingRandom] = useState(false);
 
@@ -50,7 +48,6 @@ export default function Page() {
     }, 800);
   };
 
-  // --- Efecto para tachar la palabra norma ---
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -68,7 +65,6 @@ export default function Page() {
     setUserInput(e.target.value);
   };
 
-  // NUEVO: Usa la IA con Groq para frase personalizada
   const handleSubmission = async () => {
     setResponse(null);
     setErrorIA(null);
@@ -99,7 +95,6 @@ export default function Page() {
 
   return (
     <main className="px-4 py-8 mt-16 sm:mt-8 max-w-6xl mx-auto">
-      {/* Menú de navegación */}
       <Header />
 
       <section className="mission-vision-values py-12 px-4 sm:px-8 max-w-7xl mx-auto">
@@ -162,8 +157,6 @@ export default function Page() {
               <div className="mt-2 bg-red-100 p-2 rounded text-center text-red-700 text-xs">{errorIA}</div>
             )}
           </div>
-
-          {/* --- Bloque de frase random --- */}
           <div className="mt-8 flex flex-col items-center">
             <button
               onClick={generarFraseRandom}

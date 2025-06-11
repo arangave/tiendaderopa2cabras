@@ -1,4 +1,3 @@
-// app/api/auth/newsletter/subscribe/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
@@ -10,7 +9,6 @@ export async function POST(req: NextRequest) {
     const { email } = await req.json();
     if (!email) return NextResponse.json({ error: "Email requerido" }, { status: 400 });
 
-    // ¿Es usuario registrado?
     const user = await prisma.user.findUnique({ where: { email } });
     if (user) {
       if (user.newsletter) {
@@ -24,13 +22,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "¡Te has suscrito correctamente!" });
     }
 
-    // ¿Existe como suscriptor independiente?
     const sub = await prisma.subscriber.findUnique({ where: { email } });
     if (sub) {
       return NextResponse.json({ message: "Ya estás suscrito a la newsletter." });
     }
 
-    // Nuevo suscriptor
     await prisma.subscriber.create({ data: { email } });
     await sendWelcomeEmail(email);
 
@@ -41,26 +37,24 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Envía el email de bienvenida (edita SMTP según tu proveedor)
 async function sendWelcomeEmail(email: string) {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT) || 465,
-      secure: true, // 465 requiere esto en Zoho
+      secure: true,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
 
-    // Usa solo NEXT_PUBLIC_URL (no NEXT_PUBLIC_SITE_URL)
     const baseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
     const urlUnsubscribe = `${baseUrl}/unsubscribe?email=${encodeURIComponent(email)}`;
 
 
     await transporter.sendMail({
-      from: `"2CabrasConTraje" <${process.env.SMTP_USER}>`, // ¡El from debe ser igual al SMTP_USER!
+      from: `"2CabrasConTraje" <${process.env.SMTP_USER}>`,
       replyTo: process.env.SMTP_USER,
       to: email,
       subject: "¡Bienvenido a la newsletter de 2CabrasConTraje! 🐐",

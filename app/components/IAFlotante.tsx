@@ -4,7 +4,6 @@ import { X } from "lucide-react";
 export default function IAFlotante() {
   const [open, setOpen] = useState(false);
 
-  // Frase random
   const [fraseRandom, setFraseRandom] = useState("");
   const [loadingRandom, setLoadingRandom] = useState(false);
   const frases = [
@@ -41,14 +40,12 @@ export default function IAFlotante() {
     }, 1000);
   };
 
-  // Frase IA personalizada
   const [pregunta, setPregunta] = useState("");
   const [fraseIA, setFraseIA] = useState("");
   const [loadingIA, setLoadingIA] = useState(false);
   const [errorIA, setErrorIA] = useState("");
 
-  // Cambia esto por el endpoint real de tu API
-  const ENDPOINT_IA = "/api/ia"; // Cambia si usas otro nombre
+  const ENDPOINT_IA = "/api/ia";
 
 const generarFraseIA = async () => {
   setFraseIA("");
@@ -69,13 +66,10 @@ const generarFraseIA = async () => {
   }
 };
 
-
-  // Modal align (solo desktop)
   const buttonRef = useRef<HTMLDivElement>(null);
   const [panelPos, setPanelPos] = useState<{ right: number; bottom: number }>({ right: 24, bottom: 24 });
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detecta si es móvil (tailwind breakpoint sm: 640px)
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth < 640);
@@ -95,16 +89,13 @@ const generarFraseIA = async () => {
     }
   }, [open, isMobile]);
 
-  // Click fuera cierra modal
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === e.currentTarget) setOpen(false);
   }
 
   return (
     <>
-      {/* BOTÓN FLOTANTE */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group" ref={buttonRef}>
-        {/* Tooltip solo en desktop */}
         <div className="hidden sm:flex
           absolute right-full bottom-1/2 translate-y-1/2 mr-4 items-center w-max z-50 pointer-events-none
           opacity-0 group-hover:opacity-100
@@ -134,15 +125,12 @@ const generarFraseIA = async () => {
         </button>
       </div>
 
-      {/* MODAL y fondo backdrop clicable */}
       {open && (
         <>
-          {/* Fondo transparente clickable */}
           <div
             className="fixed inset-0 z-[1000] bg-black/20 backdrop-blur-[2px]"
             onClick={handleBackdropClick}
           />
-          {/* MODAL: BottomSheet en móvil, flotante en desktop */}
           <div
             style={
               isMobile
@@ -172,7 +160,6 @@ const generarFraseIA = async () => {
               <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-black transition-colors duration-300" aria-label="Cerrar IA"><X /></button>
             </div>
 
-            {/* GENERADOR RANDOM */}
             <div>
               <button
                 onClick={generarFraseRandom}
@@ -198,14 +185,13 @@ const generarFraseIA = async () => {
               )}
             </div>
 
-            {/* Separador visual */}
+
             <div className="my-6 flex items-center gap-2">
               <div className="flex-1 h-px bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]" />
               <span className="text-xs text-gray-400 font-semibold">o crea tu propia frase</span>
               <div className="flex-1 h-px bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]" />
             </div>
 
-            {/* GENERADOR PERSONALIZADO */}
             <div>
               <input
                 type="text"

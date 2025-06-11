@@ -12,7 +12,6 @@ interface HeaderProps {
 export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Cierra menú al hacer clic fuera
   useEffect(() => {
     const closeMenu = () => setMenuOpen(false);
     if (menuOpen) {
@@ -34,7 +33,6 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
         />
       </Link>
 
-      {/* Botón hamburguesa */}
       <div
         className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
         onClick={(e) => {
@@ -59,8 +57,6 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
           />
         </div>
       </div>
-
-      {/* Menú navegación */}
       <ul
         className={`nav-links flex-col items-center justify-center text-center
         absolute top-20 right-0 bg-black/90 text-white p-6 rounded-lg shadow-md gap-6 z-40 w-[100vw] transition-all duration-300

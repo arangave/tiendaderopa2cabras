@@ -47,7 +47,6 @@ const ZoomableImageModal: React.FC<ZoomableImageModalProps> = ({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      {/* Botón ❌ para cerrar */}
       <button
         onClick={onClose}
         className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
@@ -59,7 +58,6 @@ const ZoomableImageModal: React.FC<ZoomableImageModalProps> = ({
         </div>
       </button>
 
-      {/* Botones de zoom y reset */}
       <div className="absolute top-4 left-4 z-50 flex flex-col gap-2">
         <button
           onClick={() => setScale((s) => s + 0.5)}
@@ -86,7 +84,6 @@ const ZoomableImageModal: React.FC<ZoomableImageModalProps> = ({
 
       </div>
 
-      {/* Imagen con zoom y drag */}
       <div
         className="relative w-full h-full overflow-hidden cursor-grab active:cursor-grabbing"
         onWheel={handleWheel}

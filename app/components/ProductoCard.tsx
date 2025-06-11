@@ -1,4 +1,3 @@
-// app/components/ProductoCard.tsx
 "use client";
 
 import Image from "next/image";

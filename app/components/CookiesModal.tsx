@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 export default function CookiesModal() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Opcional: si quieres que el modal se muestre solo si no ha aceptado o rechazado antes
   useEffect(() => {
     const preference = localStorage.getItem("cookie-preference");
     if (!preference) {
-      setIsOpen(false); // ábrelo automáticamente si quieres
+      setIsOpen(false);
     }
   }, []);
 

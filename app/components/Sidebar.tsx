@@ -31,7 +31,6 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Botón abrir sidebar: común para móvil y escritorio */}
       {!sidebarOpen && (
         <div className="fixed top-[115px] left-4 z-50 pt-4 mt-5rem">
           <button
@@ -92,7 +91,6 @@ export default function Sidebar({
           ))}
         </ul>
 
-        {/* Botón cerrar */}
         <button
           onClick={() => setSidebarOpen(false)}
           className="absolute top-4 right-4 p-2 rounded-full bg-black text-white "

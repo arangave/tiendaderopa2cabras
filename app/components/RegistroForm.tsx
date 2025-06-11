@@ -170,7 +170,6 @@ useEffect(() => {
                 />
               </div>
 
-              {/* CONTRASEÑA */}
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700">Contraseña</label>
                 <input type={passwordInputType} required minLength={6}
@@ -203,7 +202,6 @@ useEffect(() => {
                 )}
               </div>
 
-              {/* REPETIR CONTRASEÑA */}
               {!isLogin && (
                 <>
                   <div className="relative">

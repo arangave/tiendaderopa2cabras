@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
     const token = generateToken({ id: newUser.id });
 
-    await sendVerificationEmail(email, firstName, token); // ✅ solo el token, la URL se genera en mailer
+    await sendVerificationEmail(email, firstName, token);
 
     return NextResponse.json({
       message: 'Usuario registrado correctamente. Por favor, revisa tu bandeja de entrada para confirmar tu cuenta.',

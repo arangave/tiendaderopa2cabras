@@ -1,10 +1,8 @@
-// pages/contacto.tsx
 import Image from "next/image";
 
 export default function ContactoPage() {
   return (
     <main className="relative min-h-screen flex items-start justify-center pt-40 pb-16 px-6 overflow-hidden">
-      {/* Vídeo de fondo */}
       <video
         src="/videos/Proyecto de vídeo 5.mp4"
         autoPlay
@@ -14,7 +12,6 @@ export default function ContactoPage() {
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* Contenedor transparente con blur */}
       <div className="relative w-full max-w-md mx-auto p-8 rounded-xl border border-white/30 backdrop-blur-md">
         <h1
           className="text-4xl font-bold mb-4 text-center bg-clip-text text-white bg-cover bg-center"
