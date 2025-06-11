@@ -74,29 +74,43 @@ export default function LikesPage() {
     setTimeout(() => setToastMessage(null), 2500);
   };
 
-  const addToCart = (product: Product) => {
-    if (!selectedSize) {
+  const addToCart = (params: {
+    frase: string;
+    tipoFrase: string;
+    color: string;
+    colorHex: string;
+    colorImage: string;
+    image: string;
+    size: string;
+    quantity: number;
+  }) => {
+    if (!params.size) {
       alert("Por favor, selecciona una talla.");
       return;
     }
-    const productWithOptions: Product = {
-      ...product,
-      quantity,
-      size: selectedSize,
-      color: selectedColor,
-      phrase: fraseSeleccionada,
+    const productoFinal = {
+      ...selectedProduct!,
+      quantity: params.quantity,
+      size: params.size,
+      phrase: params.frase || "Sin frase",
+      tipoFrase: params.tipoFrase,
+      color: params.color,
+      colorHex: params.colorHex,
+      colorImage: params.colorImage,
+      image: params.image,
     };
     const alreadyInCart = cart.some(
-      (p) => p.id === product.id && p.size === selectedSize
+      (p) => p.id === selectedProduct!.id && p.size === params.size
     );
     if (alreadyInCart) {
       showToast("Este producto ya está en la cesta");
       return;
     }
-    setCart((prev) => [...prev, productWithOptions]);
+    setCart((prev) => [...prev, productoFinal]);
     showToast("Producto añadido a la cesta 🛒");
     closeModal();
   };
+
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
@@ -150,7 +164,7 @@ export default function LikesPage() {
           isDarkMode={false}
           isLiked={isProductLiked(selectedProduct.id)}
           onClose={closeModal}
-          onAddToCart={() => addToCart(selectedProduct)}
+          onAddToCart={addToCart}
           onSelectSize={setSelectedSize}
           onZoomMove={handleMouseMove}
           onToggleLike={() => {
@@ -165,9 +179,9 @@ export default function LikesPage() {
           }}
           onShowSizeGuide={() => setShowSizeGuideModal(true)}
           onQuantityChange={handleQuantityChange}
-
         />
       )}
+
 
       {showSizeGuideModal && <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />}
     </main>
