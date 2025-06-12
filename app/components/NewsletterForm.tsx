@@ -43,7 +43,7 @@ export default function NewsletterForm() {
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition text-black"
+        className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition text-black dark:text-white placeholder-black dark:placeholder-white"
       />
       <button
         type="submit"

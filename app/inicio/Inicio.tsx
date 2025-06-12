@@ -411,7 +411,7 @@ export default function Inicio() {
           <h2 className="text-3xl font-bold mb-4 text-black dark:text-white">
             Únete al mundo de <span className="bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] bg-clip-text text-transparent">2CabrasConTraje</span>
           </h2>
-          <p className="text-gray-700 dark:text-gray-300 max-w-xl mx-auto mb-6">
+          <p className="text-black dark:text-white max-w-xl mx-auto mb-6">
             Recibe ideas, filosofía de marca y alguna que otra forma de<br /> &quot;poner los cuernos&quot;... al sistema. ✨
           </p>
           <NewsletterForm />

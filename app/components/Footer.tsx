@@ -1,10 +1,9 @@
-
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import CookiesModal from "./CookiesModal";
 
 export default function Footer() {
   return (
-    <footer className="bg-white py-6 text-center border-t">
+    <footer className="bg-white dark:bg-[#181818] py-6 text-center border-t border-gray-200 dark:border-gray-700 transition-colors">
       <div className="flex justify-center gap-6 mb-3">
         <a
           href="https://facebook.com"
@@ -12,7 +11,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           aria-label="Facebook"
         >
-          <Facebook className="w-5 h-5 text-gray-600 hover:text-[#1877F2] transition" />
+          <Facebook className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-[#1877F2] transition" />
         </a>
         <a
           href="https://instagram.com"
@@ -20,7 +19,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           aria-label="Instagram"
         >
-          <Instagram className="w-5 h-5 text-gray-600 hover:text-[#E4405F] transition" />
+          <Instagram className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-[#E4405F] transition" />
         </a>
         <a
           href="https://twitter.com"
@@ -28,11 +27,11 @@ export default function Footer() {
           rel="noopener noreferrer"
           aria-label="Twitter"
         >
-          <Twitter className="w-5 h-5 text-gray-600 hover:text-[#1DA1F2] transition" />
+          <Twitter className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-[#1DA1F2] transition" />
         </a>
       </div>
 
-      <div className="flex justify-center flex-wrap gap-4 mb-2 text-xs text-gray-500">
+      <div className="flex justify-center flex-wrap gap-4 mb-2 text-xs text-gray-500 dark:text-gray-400">
         <a
           href="/terminos"
           target="_blank"
@@ -56,11 +55,11 @@ export default function Footer() {
           rel="noopener noreferrer"
           className="hover:text-[#67b2c1] underline transition"
         >
-          Contactanos
+          Contáctanos
         </a>
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-gray-500 dark:text-gray-400">
         © 2025 2CabrasConTraje. Todos los derechos reservados.
       </p>
     </footer>

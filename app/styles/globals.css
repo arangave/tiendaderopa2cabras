@@ -321,13 +321,12 @@ body {
 }
 
 footer {
-  background-color: #ffffff;
-  color: white;
+
   text-align: center;
   padding: 20px;
 }
 footer .social-links a {
-  color: gray;
+
   text-decoration: none;
   margin: 0 10px;
 }
@@ -430,4 +429,10 @@ footer .social-links a:hover {
 }
 .dark .products h2 {
   color: #fff !important;      /* blanco para modo oscuro */
+}
+
+.mobile-menu-open a,
+.mobile-menu-open svg {
+  color: #fff !important;
+  fill: #fff !important;
 }

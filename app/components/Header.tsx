@@ -33,9 +33,13 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
     return () => window.removeEventListener("click", closeMenu);
   }, [menuOpen]);
 
+  // Helper para forzar color blanco en overlay móvil
+  const mobileMenuClass = menuOpen
+    ? "text-white"
+    : "md:text-black md:dark:text-white";
+
   return (
-    // ATENCIÓN: SOLO usa la clase "header", NO pongas clases Tailwind de fondo aquí
-    <header className="header flex justify-between items-center p-4 relative z-50">
+    <header className="header flex justify-between items-center p-4 relative z-50 bg-white dark:bg-[#181818]">
       <Link href="/inicio">
         <Image
           src="/images/Logo_pasteles_1.png"
@@ -47,40 +51,35 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
         />
       </Link>
 
-      {/* Botón hamburguesa */}
-      <div
-        className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
-        onClick={(e) => {
-          e.stopPropagation();
-          setMenuOpen((prev) => !prev);
-        }}
-      >
-        <div className="relative w-6 h-6">
-          <span
-            className={`block h-[3px] w-5 ${
-              menuOpen
-                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                : "bg-white dark:bg-white"
-            } rounded transition-transform duration-300 ease-in-out absolute ${
-              menuOpen ? "rotate-45 top-3 left-0" : "top-1"
-            }`}
-          />
-          <span
-            className={`block h-[3px] w-5 ${
-              menuOpen ? "opacity-0" : "opacity-100"
-            } bg-white dark:bg-white rounded transition-opacity duration-300 absolute top-3 left-0`}
-          />
-          <span
-            className={`block h-[3px] w-5 ${
-              menuOpen
-                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                : "bg-white dark:bg-white"
-            } rounded transition-transform duration-300 ease-in-out absolute ${
-              menuOpen ? "-rotate-45 top-3 left-0" : "top-5"
-            }`}
-          />
-        </div>
-      </div>
+{/* Botón hamburguesa */}
+<div
+  className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
+  onClick={(e) => {
+    e.stopPropagation();
+    setMenuOpen((prev) => !prev);
+  }}
+>
+  <div className="relative w-6 h-6">
+    {/* Primera barra */}
+    <span
+      className={`block h-[3px] w-5 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded transition-transform duration-300 ease-in-out absolute ${
+        menuOpen ? "rotate-45 top-3 left-0" : "top-1"
+      }`}
+    />
+    {/* Segunda barra (oculta si abierto) */}
+    <span
+      className={`block h-[3px] w-5 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded transition-opacity duration-300 absolute top-3 left-0 ${
+        menuOpen ? "opacity-0" : "opacity-100"
+      }`}
+    />
+    {/* Tercera barra */}
+    <span
+      className={`block h-[3px] w-5 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded transition-transform duration-300 ease-in-out absolute ${
+        menuOpen ? "-rotate-45 top-3 left-0" : "top-5"
+      }`}
+    />
+  </div>
+</div>
 
       {/* Menú navegación móvil */}
       <ul
@@ -88,23 +87,22 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
           nav-links
           flex-col items-center justify-center text-center
           fixed left-0 top-0 w-screen h-screen
-          bg-black/90 text-white z-40
+          bg-black/90 z-40
           transition-transform duration-500 ease-in-out
-          ${menuOpen ? "translate-y-0 flex" : "-translate-y-full pointer-events-none"}
-          md:static md:flex md:flex-row md:bg-transparent
-          md:text-black md:dark:text-white md:shadow-none
-          md:p-0 md:gap-6 md:w-auto md:h-auto md:translate-y-0 md:pointer-events-auto
+          ${menuOpen ? "translate-y-0 flex mobile-menu-open" : "-translate-y-full pointer-events-none"}
+          md:static md:flex md:flex-row md:bg-transparent md:shadow-none md:p-0 md:gap-6 md:w-auto md:h-auto md:translate-y-0 md:pointer-events-auto
         `}
         style={{
           padding: menuOpen ? "90px 24px 24px 24px" : "0px", // espacio arriba (header)
         }}
         onClick={(e) => e.stopPropagation()}
       >
+
         <li className="mb-6 md:mb-0">
           <Link
             href="/inicio"
             onClick={() => setMenuOpen(false)}
-            className="text-lg md:text-base font-semibold mb-2 md:mb-0 block md:inline"
+            className={`text-lg md:text-base font-semibold mb-2 md:mb-0 block md:inline ${mobileMenuClass}`}
           >
             Inicio
           </Link>
@@ -113,7 +111,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
           <Link
             href="/2cabras"
             onClick={() => setMenuOpen(false)}
-            className="text-lg md:text-base font-semibold mb-2 md:mb-0 block md:inline"
+            className={`text-lg md:text-base font-semibold mb-2 md:mb-0 block md:inline ${mobileMenuClass}`}
           >
             2Cabras
           </Link>
@@ -122,7 +120,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
           <Link
             href="/productos"
             onClick={() => setMenuOpen(false)}
-            className="text-lg md:text-base font-semibold mb-2 md:mb-0 block md:inline"
+            className={`text-lg md:text-base font-semibold mb-2 md:mb-0 block md:inline ${mobileMenuClass}`}
           >
             Productos
           </Link>
@@ -133,8 +131,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
             onClick={() => setMenuOpen(false)}
             className="flex items-center justify-center"
           >
-            <UserIcon className="w-7 h-7 md:w-6 md:h-6" />
-
+            <UserIcon className={`w-7 h-7 md:w-6 md:h-6 ${mobileMenuClass}`} />
           </Link>
         </li>
         <li className="mb-6 md:mb-0 relative">
@@ -143,8 +140,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
             className="flex items-center justify-center"
             onClick={() => setMenuOpen(false)}
           >
-            <HeartIcon className="w-7 h-7 md:w-6 md:h-6" />
-
+            <HeartIcon className={`w-7 h-7 md:w-6 md:h-6 ${mobileMenuClass}`} />
             {favoritesCount > 0 && (
               <span className="absolute -top-1 -right-2 bg-white text-black text-base md:text-xs font-bold px-3 py-1 md:px-2 md:py-[1px] rounded-full border">
                 {favoritesCount}
@@ -158,8 +154,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
             className="flex items-center justify-center no-underline group"
             onClick={() => setMenuOpen(false)}
           >
-            <ShoppingBagIcon className="w-7 h-7 md:w-6 md:h-6" />
-
+            <ShoppingBagIcon className={`w-7 h-7 md:w-6 md:h-6 ${mobileMenuClass}`} />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-2 bg-white text-black text-base md:text-[10px] font-semibold px-3 md:px-1.5 py-1 md:py-[1px] rounded-full border leading-none">
                 {cartCount}
