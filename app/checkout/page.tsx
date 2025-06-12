@@ -208,15 +208,18 @@ export default function CheckoutPage() {
           exit={{ opacity: 0, y: -60 }}
           transition={{ duration: 0.4 }}
           onSubmit={handleSubmit}
-          className={`
+            className={`
             relative z-10 w-full
-            max-w-lg sm:max-w-2xl md:max-w-5xl xl:max-w-6xl
-            mx-auto rounded-2xl p-6 md:p-12
+            ${step === 1
+                ? "max-w-lg sm:max-w-2xl md:max-w-5xl xl:max-w-6xl px-4 md:px-8 py-4 md:py-6"
+                : "max-w-lg sm:max-w-xl md:max-w-2xl px-4 md:px-6 py-4 md:py-5"}
+            mx-auto rounded-2xl
             bg-white/10 backdrop-blur-md
             border border-white/30 shadow-2xl
             flex flex-col
             transition
-          `}
+            overflow-auto
+            `}
         >
           {/* CONTENIDO */}
             <div className={`flex flex-col md:flex-row gap-8 items-center`}>
@@ -266,7 +269,7 @@ export default function CheckoutPage() {
                     <label className="text-white/90 cursor-pointer select-none">¿Crear una cuenta?</label>
                   </div>
                   <div className="mt-4">
-                    <label className="text-white/80 mb-1 block">Notas del pedido (opcional)</label>
+
                     <textarea
                       name="notas"
                       className="w-full bg-transparent border-0 border-b border-white/60 focus:border-[#67b2c1] rounded-none py-2 px-0 text-white placeholder-white/70 outline-none transition"
