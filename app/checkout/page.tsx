@@ -210,7 +210,7 @@ export default function CheckoutPage() {
           onSubmit={handleSubmit}
           className={`
             relative z-10 w-full
-            max-w-lg sm:max-w-2xl md:max-w-3xl
+            max-w-lg sm:max-w-2xl md:max-w-5xl xl:max-w-6xl
             mx-auto rounded-2xl p-6 md:p-12
             bg-white/10 backdrop-blur-md
             border border-white/30 shadow-2xl
@@ -219,10 +219,8 @@ export default function CheckoutPage() {
           `}
         >
           {/* CONTENIDO */}
-          <div className={`
-            flex flex-col md:flex-row gap-8
-            ${step === 1 ? "md:items-start" : "md:items-center"}
-          `}>
+            <div className={`flex flex-col md:flex-row gap-8 items-center`}>
+
             {/* Columna izquierda */}
             <div className="flex-1 w-full">
               {step === 0 && (
@@ -330,102 +328,149 @@ export default function CheckoutPage() {
                 </>
               )}
             </div>
-            {/* Columna derecha SOLO en paso 1 */}
-            {step === 1 && (
-              <div className="flex-1 w-full">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center md:text-left">Tu Pedido</h2>
-                <div className="space-y-3">
-                  <div className="font-semibold text-lg text-white/90 grid grid-cols-4">
-                    <span className="col-span-2">Producto</span>
-                    <span className="col-span-1 text-center">Talla</span>
-                    <span className="col-span-1 text-right">Subtotal</span>
+{step === 1 && (
+  <div className="w-full">
+    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white text-center md:text-left">
+      Tu Pedido
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 md:gap-24 items-center">
+      {/* Productos (izquierda) */}
+      <div className="md:max-w-2xl w-full">
+        <div className="font-semibold text-lg text-white/90 grid grid-cols-7">
+          <span className="col-span-4">Producto</span>
+          <span className="col-span-1 text-center">Talla</span>
+          <span className="col-span-2 text-right">Precio</span>
+        </div>
+        <div className="border-b border-white/20 mb-2" />
+        {cart.length === 0 ? (
+          <p className="text-white/70 text-center">Tu carrito está vacío</p>
+        ) : (
+          cart.map((item, i) => (
+            <div
+              key={i}
+              className="grid grid-cols-7 gap-1 py-3 items-center text-white/90"
+            >
+              {/* Producto info */}
+              <div className="col-span-4 flex items-center gap-3 min-w-0">
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={48}
+                  height={48}
+                  className="rounded-lg object-cover border border-white/20 flex-shrink-0"
+                />
+                <div className="min-w-0">
+                  <div className="font-semibold truncate">{item.name}</div>
+                  <div className="text-xs truncate">
+                    {item.color ? `Color: ${item.color}` : ""}
                   </div>
-                  <div className="border-b border-white/20 mb-2" />
-                  {cart.length === 0 ? (
-                    <p className="text-white/70 text-center">Tu carrito está vacío</p>
-                  ) : (
-                    cart.map((item, i) => (
-                      <div key={i} className="grid grid-cols-4 gap-1 py-2 items-center text-white/90">
-                        <div className="col-span-2 flex items-center gap-3">
-                          <Image src={item.image} alt={item.name} width={48} height={48} className="rounded-lg object-cover border border-white/20" />
-                          <div>
-                            <div className="font-semibold">{item.name}</div>
-                            <div className="text-xs">{item.color ? `Color: ${item.color}` : ""}</div>
-                            <div className="text-xs">{item.phrase ? `Frase: ${item.phrase}` : "Frase: Sin frase"}</div>
-                          </div>
-                        </div>
-                        <div className="col-span-1 text-center">{item.size || "-"}</div>
-                        <div className="col-span-1 text-right">{parseFloat(item.price).toFixed(2)}€</div>
-                      </div>
-                    ))
-                  )}
-                  <div className="border-b border-white/20 mt-2" />
-                  <div className="flex flex-col gap-2 mt-2">
-                    <div className="flex justify-between text-white/90">
-                      <span>Subtotal</span>
-                      <span>{subtotal.toFixed(2)}€</span>
-                    </div>
-                    <div className="flex justify-between items-center text-white/90">
-                      <span>
-                        Envío
-                        <span className="block text-xs mt-1">
-                          <label>
-                            <input type="radio" checked={envio === "normal"} onChange={() => setEnvio("normal")} className="accent-[#67b2c1] mr-1" />
-                            GLS EconomyParcel (48/72h) <span className="font-bold">{envio === "normal" ? "(Gratis)" : ""}</span>
-                          </label>
-                          <br />
-                          <label>
-                            <input type="radio" checked={envio === "express"} onChange={() => setEnvio("express")} className="accent-[#ff8eaa] mr-1" />
-                            GLS Express (24h) <span className="font-bold">(+4.95€)</span>
-                          </label>
-                        </span>
-                      </span>
-                      <span>{envioPrecio === 0 ? "Gratis" : envioPrecio.toFixed(2) + "€"}</span>
-                    </div>
-                    <div className="flex justify-between font-bold text-xl text-white mt-3">
-                      <span>Total</span>
-                      <span>{total.toFixed(2)}€</span>
-                    </div>
-                    <div className="text-xs text-white/60 text-right">
-                      Incluye {IVA}€ IVA (21%)
-                    </div>
+                  <div className="text-xs truncate">
+                    {item.phrase ? `Frase: ${item.phrase}` : "Frase: Sin frase"}
                   </div>
                 </div>
               </div>
-            )}
+              {/* Talla */}
+              <div className="col-span-1 text-center font-bold">
+                {item.size || "-"}
+              </div>
+              {/* Precio */}
+              <div className="col-span-2 text-right font-semibold">
+                {parseFloat(item.price).toFixed(2)}€
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+      {/* Resumen (derecha) */}
+      <div className="flex flex-col justify-start md:max-w-sm w-full md:ml-auto">
+        <div className="flex flex-col gap-8">
+          <div className="flex justify-between text-white/90">
+            <span>Subtotal</span>
+            <span>{subtotal.toFixed(2)}€</span>
+          </div>
+          <div className="flex justify-between items-center text-white/90">
+            <span>
+              Envío
+              <span className="block text-xs mt-1">
+                <label>
+                  <input
+                    type="radio"
+                    checked={envio === "normal"}
+                    onChange={() => setEnvio("normal")}
+                    className="accent-[#67b2c1] mr-1"
+                  />
+                  GLS EconomyParcel (48/72h){" "}
+                  <span className="font-bold">
+                    {envio === "normal" ? "(Gratis)" : ""}
+                  </span>
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="radio"
+                    checked={envio === "express"}
+                    onChange={() => setEnvio("express")}
+                    className="accent-[#ff8eaa] mr-1"
+                  />
+                  GLS Express (24h){" "}
+                  <span className="font-bold">(+4.95€)</span>
+                </label>
+              </span>
+            </span>
+            <span>
+              {envioPrecio === 0
+                ? "Gratis"
+                : envioPrecio.toFixed(2) + "€"}
+            </span>
+          </div>
+          <div className="flex justify-between font-bold text-xl text-white mt-3">
+            <span>Total</span>
+            <span>{total.toFixed(2)}€</span>
+          </div>
+          <div className="text-xs text-white/60 text-right">
+            Incluye {IVA}€ IVA (21%)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
           </div>
 
           {/* BOTONES DE NAVEGACIÓN CON FLECHAS, SIEMPRE ABAJO DERECHA */}
-          <div className="flex justify-end gap-4 mt-10 absolute right-6 bottom-6 z-20">
+            <div className="w-full flex justify-end gap-4 mt-6 md:mt-8 px-2 md:px-8 z-30">
             {step > 0 && (
-              <button
+                <button
                 type="button"
                 onClick={handlePrev}
                 className="flex items-center justify-center rounded-full w-12 h-12 bg-white/20 hover:bg-[#67b2c1]/80 text-white shadow hover:scale-105 transition-all"
                 aria-label="Atrás"
-              >
+                >
                 <ArrowLeft size={28} />
-              </button>
+                </button>
             )}
             {step < 2 ? (
-              <button
+                <button
                 type="button"
                 onClick={handleNext}
                 className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
                 aria-label="Siguiente"
-              >
+                >
                 <ArrowRight size={28} />
-              </button>
+                </button>
             ) : (
-              <button
+                <button
                 type="submit"
+                form="checkoutform" // OJO: pon id al form si usas esto (ver abajo)
                 className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
                 aria-label="Realizar Pedido"
-              >
+                >
                 <ArrowRight size={28} />
-              </button>
+                </button>
             )}
-          </div>
+            </div>
         </motion.form>
       </AnimatePresence>
     </main>
