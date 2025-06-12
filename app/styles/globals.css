@@ -49,7 +49,7 @@ body {
   text-decoration: none;
   font-weight: bold;
   transition: all 0.3s ease;
-  color: inherit; /* Hereda color según modo */
+
 }
 .nav-links a::after {
   content: "";
@@ -435,4 +435,10 @@ footer .social-links a:hover {
 .mobile-menu-open svg {
   color: #fff !important;
   fill: #fff !important;
+}
+.newsletter-text {
+  color: #181818;
+}
+.dark .newsletter-text {
+  color: #fff;
 }

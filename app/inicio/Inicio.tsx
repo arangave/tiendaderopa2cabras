@@ -213,10 +213,10 @@ export default function Inicio() {
               <h2 className="text-xs sm:text-sm font-bold mb-1 sm:mb-3 text-black dark:text-white">
                 Descubre el estilo de 2CabrasConTraje
               </h2>
-              <p className="text-[8px] sm:text-[10px] mb-1 sm:mb-2 text-black dark:text-white">
+              <p className="newsletter-text text-[8px] sm:text-[10px] mb-1 sm:mb-2 text-black">
                 Moda exclusiva para quienes buscan algo único.
               </p>
-              <p className="highlight text-[8px] sm:text-[10px] mb-3 text-black dark:text-white">
+              <p className="newsletter-text highlight text-[8px] sm:text-[10px] mb-3 text-black">
                 &quot;Rompe con la <span className="norma-hover">norma</span> o ponle los cuernos&quot;
               </p>
 
@@ -408,10 +408,10 @@ export default function Inicio() {
         </section>
 
         <section className="py-12 px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4 text-black dark:text-white">
+          <h2 className="newsletter-text max-w-xl mx-auto mb-6 text-3xl font-bold mb-4 text-black">
             Únete al mundo de <span className="bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] bg-clip-text text-transparent">2CabrasConTraje</span>
           </h2>
-          <p className="text-black dark:text-white max-w-xl mx-auto mb-6">
+          <p className="newsletter-text max-w-xl mx-auto mb-6 text-black max-w-xl mx-auto mb-6">
             Recibe ideas, filosofía de marca y alguna que otra forma de<br /> &quot;poner los cuernos&quot;... al sistema. ✨
           </p>
           <NewsletterForm />
