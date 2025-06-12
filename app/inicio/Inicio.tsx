@@ -11,6 +11,7 @@ import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard from "../components/ProductoCard";
 import type { Product } from "../data/products";
+import Header from "../components/Header";
 
 type ProductoAPI = {
   id: number;
@@ -217,89 +218,8 @@ export default function Inicio() {
           </defs>
         </svg>
 
-        <header className="header flex justify-between items-center p-4 relative z-50">
-          <a href="/inicio">
-            <Image src="/images/Logo_pasteles_1.png" alt="Logo" width={50} height={50} className="logo" priority />
-          </a>
-          <div
-            className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenuOpen((prev) => !prev);
-            }}
-          >
-            <div className="relative w-6 h-6">
-              <span
-                className={`block h-[3px] w-5 ${
-                  menuOpen
-                    ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                    : "bg-black"
-                } rounded transition-transform duration-300 ease-in-out absolute ${
-                  menuOpen ? "rotate-45 top-3 left-0" : "top-1"
-                }`}
-              />
-              <span
-                className={`block h-[3px] w-5 ${
-                  menuOpen ? "bg-black opacity-0" : "bg-black"
-                } rounded transition-opacity duration-300 ease-in-out absolute top-3 left-0`}
-              />
-              <span
-                className={`block h-[3px] w-5 ${
-                  menuOpen
-                    ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                    : "bg-black"
-                } rounded transition-transform duration-300 ease-in-out absolute ${
-                  menuOpen ? "-rotate-45 top-3 left-0" : "top-5"
-                }`}
-              />
-            </div>
-          </div>
-          <ul
-            className={`nav-links flex-col items-center justify-center text-center
-              absolute top-20 right-0 bg-black/90 text-white p-6 rounded-lg shadow-md gap-6 z-40 w-[100vw] transition-all duration-300
-              ${menuOpen ? "flex mobile-menu" : "hidden"}
-              md:static md:flex md:flex-row md:bg-transparent md:text-black md:shadow-none md:p-0 md:gap-6 md:w-auto`}
-          >
-            <li>
-              <a href="/inicio" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">Inicio</a>
-            </li>
-            <li>
-              <a href="/2cabras" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">2Cabras</a>
-            </li>
-            <li>
-              <a href="productos" onClick={() => setMenuOpen(false)} className="font-semibold hover:text-[#67b2c1]">Productos</a>
-            </li>
-            <li>
-              <a href="/registro" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
-                <UserIcon className="w-6 h-6 text-white md:text-black" />
-              </a>
-            </li>
-            <li className="relative text-center">
-              <a href="/likes" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
-                <HeartIcon className="w-6 h-6 text-white md:text-black" />
-                {likes.length > 0 && (
-                  <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
-                    {likes.length}
-                  </span>
-                )}
-              </a>
-            </li>
-            <li className="relative text-center no-underline-link">
-              <a
-                href="/carrito"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center group transition-all duration-300"
-              >
-                <ShoppingBagIcon className="w-6 h-6 text-white md:text-black group-hover:text-[#67b2c1]" />
-                {cart.length > 0 && (
-                  <span className="absolute -top-1 -right-2 bg-white text-black text-xs font-bold px-2 py-[1px] rounded-full shadow-md border border-gray-300">
-                    {cart.length}
-                  </span>
-                )}
-              </a>
-            </li>
-          </ul>
-        </header>
+        <Header cartCount={cart.length} favoritesCount={likes.length} />
+
 
         <section className="hero pt-4 sm:pt-17 pb-4 sm:pb-8">
           {/* BOTON DE NOCHE Y DIA */}
