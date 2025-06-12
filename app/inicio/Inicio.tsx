@@ -5,8 +5,6 @@ import "../styles/globals.css";
 import IAFlotante from "../components/IAFlotante";
 import NewsletterForm from "../components/NewsletterForm";
 import { useSearchParams } from "next/navigation";
-import { ShoppingBagIcon, HeartIcon, UserIcon } from "@heroicons/react/24/outline";
-
 import Modal from "../components/Modal";
 import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard from "../components/ProductoCard";
@@ -191,6 +189,7 @@ export default function Inicio() {
           {toastMessage}
         </div>
       )}
+      {/* El fondo ya se gestiona por el body en CSS */}
       <main>
         <svg width="0" height="0">
           <defs>
@@ -204,7 +203,6 @@ export default function Inicio() {
 
         <Header cartCount={cart.length} favoritesCount={likes.length} />
 
-
         <section className="hero pt-4 sm:pt-17 pb-4 sm:pb-8">
           {/* BOTON DE NOCHE Y DIA */}
           <div className="absolute top-28 sm:top-36 right-4 z-50">
@@ -212,11 +210,16 @@ export default function Inicio() {
           </div>
           <div className="hero-content px-2 sm:px-8 max-w-7xl mx-auto mt-[-50px] sm:mt-0">
             <div className="hero-text text-center sm:text-left">
-              <h2 className="text-xs sm:text-sm font-bold mb-1 sm:mb-3">Descubre el estilo de 2CabrasConTraje</h2>
-              <p className="text-[8px] sm:text-[10px] mb-1 sm:mb-2">Moda exclusiva para quienes buscan algo único.</p>
-              <p className="highlight text-[8px] sm:text-[10px] mb-3">
+              <h2 className="text-xs sm:text-sm font-bold mb-1 sm:mb-3 text-black dark:text-white">
+                Descubre el estilo de 2CabrasConTraje
+              </h2>
+              <p className="text-[8px] sm:text-[10px] mb-1 sm:mb-2 text-black dark:text-white">
+                Moda exclusiva para quienes buscan algo único.
+              </p>
+              <p className="highlight text-[8px] sm:text-[10px] mb-3 text-black dark:text-white">
                 &quot;Rompe con la <span className="norma-hover">norma</span> o ponle los cuernos&quot;
               </p>
+
               <a
                 href="/productos"
                 className="btn px-3 py-1 sm:px-5 sm:py-2 text-[8px] sm:text-[10px] shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
@@ -235,7 +238,7 @@ export default function Inicio() {
 
         <section className="products mt-0">
           <div className="flex flex-col items-center justify-center my-6">
-            <h2 className="text-center text-3xl font-bold text-black mb-2">Destacados</h2>
+            <h2 className="text-center text-3xl font-bold mb-2">Destacados</h2>
             <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4">
@@ -292,7 +295,7 @@ export default function Inicio() {
 
         <section className="products mt-0">
           <div className="flex flex-col items-center justify-center my-6">
-            <h2 className="text-center text-3xl font-bold text-black mb-2">Sudaderas</h2>
+            <h2 className="text-center text-3xl font-bold mb-2">Sudaderas</h2>
             <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4">
@@ -347,10 +350,9 @@ export default function Inicio() {
           </div>
         </section>
 
-
         <section className="products mt-0">
           <div className="flex flex-col items-center justify-center my-6">
-            <h2 className="text-center text-3xl font-bold text-black mb-2">Camisetas</h2>
+            <h2 className="text-center text-3xl font-bold mb-2">Camisetas</h2>
             <div className="w-[600px] max-w-full h-1 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] rounded" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4">
@@ -405,34 +407,33 @@ export default function Inicio() {
           </div>
         </section>
 
-        <section className="bg-white py-12 px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4 text-black">
+        <section className="py-12 px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4 text-black dark:text-white">
             Únete al mundo de <span className="bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] bg-clip-text text-transparent">2CabrasConTraje</span>
           </h2>
-          <p className="text-gray-700 max-w-xl mx-auto mb-6">
+          <p className="text-gray-700 dark:text-gray-300 max-w-xl mx-auto mb-6">
             Recibe ideas, filosofía de marca y alguna que otra forma de<br /> &quot;poner los cuernos&quot;... al sistema. ✨
           </p>
           <NewsletterForm />
         </section>
 
-          {selectedProduct && (
-            <Modal
-              product={selectedProduct}
-              selectedSize={selectedSize}
-              quantity={quantity}
-              zoom={zoom}
-              zoomPosition={zoomPosition}
-              isLiked={isProductLiked(selectedProduct.id)}
-              onClose={closeModal}
-              onAddToCart={addToCart}
-              onSelectSize={setSelectedSize}
-              onZoomMove={handleMouseMove}
-              onToggleLike={() => toggleLike(selectedProduct)}
-              onShowSizeGuide={() => setShowSizeGuideModal(true)}
-              onQuantityChange={handleQuantityChange}
-            />
-          )}
-
+        {selectedProduct && (
+          <Modal
+            product={selectedProduct}
+            selectedSize={selectedSize}
+            quantity={quantity}
+            zoom={zoom}
+            zoomPosition={zoomPosition}
+            isLiked={isProductLiked(selectedProduct.id)}
+            onClose={closeModal}
+            onAddToCart={addToCart}
+            onSelectSize={setSelectedSize}
+            onZoomMove={handleMouseMove}
+            onToggleLike={() => toggleLike(selectedProduct)}
+            onShowSizeGuide={() => setShowSizeGuideModal(true)}
+            onQuantityChange={handleQuantityChange}
+          />
+        )}
 
         {showSizeGuideModal && (
           <SizeGuideModal onClose={() => setShowSizeGuideModal(false)} />

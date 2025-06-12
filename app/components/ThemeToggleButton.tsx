@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 export default function ThemeToggleButton() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Lee el modo al montar
   useEffect(() => {
