@@ -29,7 +29,6 @@ body {
 .nav-links {
     
     list-style: none;
-    gap: 24px;
     margin: 0;
     padding: 0;
   }
@@ -37,7 +36,6 @@ body {
   .nav-links a {
     position: relative;
     display: inline-block;
-    color: #222222;
     text-decoration: none;
     font-weight: bold;
     transition: all 0.3s ease;
