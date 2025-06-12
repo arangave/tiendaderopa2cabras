@@ -14,7 +14,6 @@ interface ModalProps {
   quantity: number;
   zoom: boolean;
   zoomPosition: { x: number; y: number };
-  isDarkMode: boolean;
   isLiked: boolean;
   onClose: () => void;
   onAddToCart: (params: {

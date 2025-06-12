@@ -66,7 +66,6 @@ export default function ProductosPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const [selectedMain, setSelectedMain] = useState<string | null>(null);
-  const [isDarkMode] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -189,7 +188,6 @@ export default function ProductosPage() {
           quantity={quantity}
           zoom={zoom}
           zoomPosition={zoomPosition}
-          isDarkMode={isDarkMode}
           isLiked={isLiked(selectedProduct.id)}
           onClose={() => setSelectedProduct(null)}
           // Recibe un objeto con todos los datos del producto y la personalización

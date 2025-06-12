@@ -161,7 +161,6 @@ export default function LikesPage() {
           quantity={quantity}
           zoom={zoom}
           zoomPosition={zoomPosition}
-          isDarkMode={false}
           isLiked={isProductLiked(selectedProduct.id)}
           onClose={closeModal}
           onAddToCart={addToCart}

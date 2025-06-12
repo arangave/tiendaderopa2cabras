@@ -12,6 +12,7 @@ import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard from "../components/ProductoCard";
 import type { Product } from "../data/products";
 import Header from "../components/Header";
+import ThemeToggleButton from "../components/ThemeToggleButton"; // donde lo tengas
 
 type ProductoAPI = {
   id: number;
@@ -52,7 +53,6 @@ export default function Inicio() {
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [likes, setLikes] = useState<Product[]>([]);
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [windowWidth, setWindowWidth] = useState(0);
   const [unsubMsg, setUnsubMsg] = useState<string | null>(null);
@@ -98,23 +98,7 @@ export default function Inicio() {
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(likes));
   }, [likes]);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedMode = localStorage.getItem("theme");
-      if (savedMode === "dark") setIsDarkMode(true);
-      else if (savedMode === "light") setIsDarkMode(false);
-    }
-  }, []);
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDarkMode) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDarkMode]);
+
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
@@ -224,43 +208,7 @@ export default function Inicio() {
         <section className="hero pt-4 sm:pt-17 pb-4 sm:pb-8">
           {/* BOTON DE NOCHE Y DIA */}
           <div className="absolute top-28 sm:top-36 right-4 z-50">
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md"
-              aria-label="Cambiar modo"
-            >
-              <span
-                className={`transition-transform duration-500 ease-in-out transform ${
-                  isDarkMode ? "rotate-180" : "rotate-0"
-                }`}
-              >
-                {isDarkMode ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 sm:w-6 sm:h-6 text-black"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 3v1m0 16v1m8.485-8.485h1M3.515 12H2.5M19.071 4.929l-.707.707M5.636 18.364l-.707.707M19.071 19.071l-.707-.707M5.636 5.636l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    className="w-4 h-4 sm:w-6 sm:h-6 text-black transition-transform duration-500 ease-in-out"
-                  >
-                    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 0010.09 9.79z" />
-                  </svg>
-                )}
-              </span>
-            </button>
+            <ThemeToggleButton />
           </div>
           <div className="hero-content px-2 sm:px-8 max-w-7xl mx-auto mt-[-50px] sm:mt-0">
             <div className="hero-text text-center sm:text-left">
@@ -474,10 +422,9 @@ export default function Inicio() {
               quantity={quantity}
               zoom={zoom}
               zoomPosition={zoomPosition}
-              isDarkMode={isDarkMode}
               isLiked={isProductLiked(selectedProduct.id)}
               onClose={closeModal}
-              onAddToCart={addToCart}  // <<< SOLO PASA addToCart, ya espera el objeto
+              onAddToCart={addToCart}
               onSelectSize={setSelectedSize}
               onZoomMove={handleMouseMove}
               onToggleLike={() => toggleLike(selectedProduct)}
