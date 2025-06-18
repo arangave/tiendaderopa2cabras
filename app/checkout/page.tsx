@@ -253,7 +253,7 @@ export default function CheckoutPage() {
                           htmlFor="provincia"
                           className={`
                             absolute left-0 pointer-events-none text-white/80 transition-all duration-200 bg-transparent
-                            text-xs -top-3 px-0 bg-black/60
+                            text-xs -top-3 px-0
                           `}
                           style={{ zIndex: 2 }}
                         >
