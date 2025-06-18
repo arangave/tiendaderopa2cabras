@@ -481,40 +481,61 @@ export default function CheckoutPage() {
 }
 
 // STEPPER COMPONENT
-function Stepper({ step, goToStep }: { step: number, goToStep: (i: number) => void }) {
+function Stepper({ step, goToStep }: { step: number; goToStep: (i: number) => void }) {
+  const stepSpacing = 150;
+
   return (
-    <div className="relative z-20 flex items-center justify-center gap-0 select-none">
-      {steps.map((s, i) => (
-        <div key={s.name} className="flex items-center">
-          <button
-            className={`
-              flex items-center justify-center w-10 h-10 rounded-full
-              transition-all border-2
-              ${step === i
-                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] border-white text-black scale-110"
-                : step > i
+    <div className="relative z-20 flex items-center justify-center gap-0 select-none h-32">
+      {/* Cabra animada delante del paso activo */}
+      <motion.div
+        animate={{ x: step * stepSpacing }}
+        transition={{ type: "spring", stiffness: 120, damping: 14 }}
+        className="absolute top-2 left-4 z-20"
+      >
+        <Image
+          src="/images/Gemini_Generated_Image_axnreraxnreraxnr-removebg-preview.png"
+          alt="Cabrón elegante"
+          width={90}
+          height={90}
+          className="rounded-full shadow-xl scale-x-[-1]"
+        />
+      </motion.div>
+
+      {/* Círculos con números */}
+      {steps.map((_, i) => (
+        <div key={i} className="flex items-center">
+          <div className="relative z-10">
+            <button
+              className={`
+                w-10 h-10 rounded-full border-2 transition-all flex items-center justify-center font-bold text-sm
+                ${step === i
+                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] border-white text-black scale-110"
+                  : step > i
                   ? "bg-[#67b2c1] border-[#67b2c1] text-white"
-                  : "bg-black/60 border-white/40 text-white"}
-              font-bold text-lg relative z-10
-            `}
-            onClick={() => goToStep(i)}
-            aria-label={`Ir al paso: ${s.name}`}
-            type="button"
-          >
-            {i + 1}
-          </button>
+                  : "bg-black/60 border-white/40 text-white/80"}
+              `}
+              onClick={() => goToStep(i)}
+              type="button"
+              aria-label={`Paso ${i + 1}`}
+            >
+              {i + 1}
+            </button>
+          </div>
           {i < steps.length - 1 && (
-            <div className={`w-12 h-1 mx-1 rounded-full transition-all
-              ${step > i
-                ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
-                : "bg-white/30"}
-            `} />
+            <div
+              className={`w-25 h-1 mx-1 rounded-full transition-all
+                ${step > i
+                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
+                  : "bg-white/30"}
+              `}
+            />
           )}
         </div>
       ))}
     </div>
   );
 }
+
 
 // INPUT CON FLOATING LABEL, SIEMPRE ALINEADA CON LA LÍNEA
 function InputField({ label, name, value, onChange, type = "text", className = "" }: any) {
