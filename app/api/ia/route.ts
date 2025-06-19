@@ -26,7 +26,7 @@ Imita el estilo de estos ejemplos:
 “Rompe el molde, luce los cuernos.”
 “En un mundo de ovejas, sé cabra con corbata.”
 
-No expliques nada, no des consejos. SOLO responde con la frase original, graciosa, lista para una camiseta, y adaptada al dilema del usuario, siempre en español y con flow.
+No expliques nada, no des consejos. SOLO responde con la frase original, graciosa, lista para una camiseta, y adaptada al dilema del usuario que es la palabrao situación que nos proporciona, siempre en español y con flow.
 
 Dilema del usuario: ${pregunta}
 `;

@@ -1,4 +1,3 @@
-// app/likes/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -55,7 +54,6 @@ export default function LikesPage() {
     );
   };
 
-  // 5) Abrir y cerrar modal
   const openModal = (product: Product) => {
     setSelectedProduct(product);
     setZoom(false);

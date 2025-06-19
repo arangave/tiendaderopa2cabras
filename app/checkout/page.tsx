@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 
-// PASOS DEL CHECKOUT
 const steps = [
   { name: "Datos" },
   { name: "Pedido" },
@@ -38,7 +37,6 @@ export default function CheckoutPage() {
     notas: ""
   });
 
-  // Campos de pago
   const [tarjeta, setTarjeta] = useState({
     numero: "",
     caducidad: "",
@@ -46,9 +44,8 @@ export default function CheckoutPage() {
   });
   const [bizum, setBizum] = useState({ telefono: "" });
 
-  // Cart desde localStorage (simulado)
   const [cart, setCart] = useState<any[]>([]);
-  const [envio, setEnvio] = useState("normal"); // normal o express
+  const [envio, setEnvio] = useState("normal");
   const [pago, setPago] = useState("tarjeta");
   const [acepto, setAcepto] = useState(false);
 
@@ -59,13 +56,11 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  // Precios
   const envioPrecio = envio === "express" ? 4.95 : 0;
   const subtotal = cart.reduce((sum, p) => sum + (parseFloat(p.price) || 0) * (p.quantity || 1), 0);
   const total = subtotal + envioPrecio;
   const IVA = +(total * 0.21).toFixed(2);
 
-  // Cambios en inputs generales
   const handleInput = (e: any) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -73,7 +68,6 @@ export default function CheckoutPage() {
       [name]: type === "checkbox" ? checked : value
     }));
   };
-  // Inputs de tarjeta y bizum
   const handleTarjetaInput = (e: any) => {
     const { name, value } = e.target;
     setTarjeta((prev) => ({
@@ -89,10 +83,8 @@ export default function CheckoutPage() {
     }));
   };
 
-  // Stepper click
   const goToStep = (i: number) => setStep(i);
 
-  // Siguiente paso con validación
   const handleNext = () => {
     if (step === 0) {
       const required = ["nombre", "apellidos", "direccion", "cp", "poblacion", "provincia", "telefono", "email"];
@@ -107,7 +99,7 @@ export default function CheckoutPage() {
       alert("Debes aceptar los términos y condiciones.");
       return;
     }
-    // Validaciones condicionales de pago
+
     if (step === 2) {
       if (pago === "tarjeta" && (!tarjeta.numero || !tarjeta.caducidad || !tarjeta.cvc)) {
         alert("Rellena todos los campos de la tarjeta.");
@@ -123,7 +115,6 @@ export default function CheckoutPage() {
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 0));
 
-  // Enviar (simulado)
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (!acepto) {
@@ -144,7 +135,6 @@ export default function CheckoutPage() {
     }, 2000);
   };
 
-  // Confirmación final
   if (pedidoConfirmado) {
     return (
       <main className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-16 px-6 overflow-hidden">
@@ -183,7 +173,6 @@ export default function CheckoutPage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 px-2 md:px-8 bg-black overflow-x-hidden">
-      {/* Fondo video y overlay */}
       <video
         src="/videos/Proyecto de vídeo 5.mp4"
         autoPlay
@@ -194,12 +183,10 @@ export default function CheckoutPage() {
       />
       <div className="absolute inset-0 bg-black/60" />
 
-      {/* STEPPER: SIEMPRE CENTRADO ARRIBA */}
       <div className="w-full flex justify-center mt-2 mb-2 z-20">
         <Stepper step={step} goToStep={goToStep} />
       </div>
 
-      {/* CARD: RESPONSIVE, SIEMPRE CENTRADA, MAX-W CONCRETO */}
       <AnimatePresence mode="wait">
         <motion.form
           key={step}
@@ -221,10 +208,8 @@ export default function CheckoutPage() {
             overflow-auto
             `}
         >
-          {/* CONTENIDO */}
             <div className={`flex flex-col md:flex-row gap-8 items-center`}>
 
-            {/* Columna izquierda */}
             <div className="flex-1 w-full">
               {step === 0 && (
                 <>
@@ -337,7 +322,6 @@ export default function CheckoutPage() {
       Tu Pedido
     </h2>
     <div className="grid grid-cols-1 md:grid-cols-2 md:gap-24 items-center">
-      {/* Productos (izquierda) */}
       <div className="md:max-w-2xl w-full">
         <div className="font-semibold text-lg text-white/90 grid grid-cols-7">
           <span className="col-span-4">Producto</span>
@@ -353,7 +337,6 @@ export default function CheckoutPage() {
               key={i}
               className="grid grid-cols-7 gap-1 py-3 items-center text-white/90"
             >
-              {/* Producto info */}
               <div className="col-span-4 flex items-center gap-3 min-w-0">
                 <Image
                   src={item.image}
@@ -372,11 +355,9 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               </div>
-              {/* Talla */}
               <div className="col-span-1 text-center font-bold">
                 {item.size || "-"}
               </div>
-              {/* Precio */}
               <div className="col-span-2 text-right font-semibold">
                 {parseFloat(item.price).toFixed(2)}€
               </div>
@@ -384,7 +365,6 @@ export default function CheckoutPage() {
           ))
         )}
       </div>
-      {/* Resumen (derecha) */}
       <div className="flex flex-col justify-start md:max-w-sm w-full md:ml-auto">
         <div className="flex flex-col gap-8">
           <div className="flex justify-between text-white/90">
@@ -442,7 +422,6 @@ export default function CheckoutPage() {
 
           </div>
 
-          {/* BOTONES DE NAVEGACIÓN CON FLECHAS, SIEMPRE ABAJO DERECHA */}
             <div className="w-full flex justify-end gap-4 mt-6 md:mt-8 px-2 md:px-8 z-30">
             {step > 0 && (
                 <button
@@ -480,13 +459,11 @@ export default function CheckoutPage() {
   );
 }
 
-// STEPPER COMPONENT
 function Stepper({ step, goToStep }: { step: number; goToStep: (i: number) => void }) {
   const stepSpacing = 150;
 
   return (
     <div className="relative z-20 flex items-center justify-center gap-0 select-none h-32">
-      {/* Cabra animada delante del paso activo */}
       <motion.div
         animate={{ x: step * stepSpacing }}
         transition={{ type: "spring", stiffness: 120, damping: 14 }}
@@ -500,8 +477,6 @@ function Stepper({ step, goToStep }: { step: number; goToStep: (i: number) => vo
           className="rounded-full shadow-xl scale-x-[-1]"
         />
       </motion.div>
-
-      {/* Círculos con números */}
       {steps.map((_, i) => (
         <div key={i} className="flex items-center">
           <div className="relative z-10">
@@ -536,8 +511,6 @@ function Stepper({ step, goToStep }: { step: number; goToStep: (i: number) => vo
   );
 }
 
-
-// INPUT CON FLOATING LABEL, SIEMPRE ALINEADA CON LA LÍNEA
 function InputField({ label, name, value, onChange, type = "text", className = "" }: any) {
   const [focused, setFocused] = useState(false);
   return (
@@ -573,7 +546,6 @@ function InputField({ label, name, value, onChange, type = "text", className = "
   );
 }
 
-// OPCIÓN DE RADIO PARA PAGO
 function PaymentOption({ label, value, checked, onChange, icon }: any) {
   return (
     <label

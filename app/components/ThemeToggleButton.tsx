@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 export default function ThemeToggleButton() {
   const [isDarkMode, setIsDarkMode] = useState(true);
 
-  // Lee el modo al montar
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedMode = localStorage.getItem("theme");
@@ -13,7 +12,6 @@ export default function ThemeToggleButton() {
     }
   }, []);
 
-  // Aplica el modo cuando cambia
   useEffect(() => {
     const root = window.document.documentElement;
     if (isDarkMode) {

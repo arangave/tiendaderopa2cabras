@@ -95,7 +95,6 @@ export default function Carrito() {
     (fav) => !cart.some((item) => item.id === fav.id && item.size === fav.size)
   );
 
-  // === NUEVO: texto del tipo de frase ===
   function getPhraseTypeText(type: string | undefined): string {
     if (!type || type === "ninguna") return "";
     if (type === "random") return "Frase random 🤪";
@@ -160,7 +159,6 @@ export default function Carrito() {
                         {item.color && (
                           <p className="text-sm text-gray-600">Color: {item.color}</p>
                         )}
-                        {/* Frase + tipo */}
                         {item.phrase && (
                           <p className="text-sm text-gray-600">
                             Frase: {item.phrase}
@@ -246,7 +244,6 @@ export default function Carrito() {
                     {item.color && (
                       <p className="text-sm text-gray-600">Color: {item.color}</p>
                     )}
-                    {/* Frase + tipo */}
                     {item.phrase && (
                       <p className="text-sm text-gray-600">
                         Frase: {item.phrase}

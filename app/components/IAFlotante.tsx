@@ -112,7 +112,6 @@ const generarFraseIA = async () => {
         </div>
         
         <div className="relative w-max">
-          {/* Imagen fija encima del botón */}
           <div
             className="
               absolute -top-22 left-1/2 transform -translate-x-1/2
@@ -127,7 +126,6 @@ const generarFraseIA = async () => {
             />
           </div>
 
-        {/* Botón con texto IA y hover clean */}
         <button
           onClick={() => setOpen((prev) => !prev)}
           className="

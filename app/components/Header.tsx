@@ -12,7 +12,6 @@ interface HeaderProps {
 export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Evita scroll cuando el menú está abierto (en móvil)
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
@@ -24,7 +23,6 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
     };
   }, [menuOpen]);
 
-  // Cierra menú al hacer clic fuera
   useEffect(() => {
     const closeMenu = () => setMenuOpen(false);
     if (menuOpen) {
@@ -46,7 +44,6 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
         />
       </Link>
 
-      {/* Botón hamburguesa */}
       <div
         className="md:hidden flex flex-col justify-center items-end gap-1 w-10 h-10 cursor-pointer z-50"
         onClick={(e) => {
@@ -81,7 +78,6 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
         </div>
       </div>
 
-      {/* Menú navegación móvil */}
       <ul
         className={`
           nav-links
@@ -93,7 +89,7 @@ export default function Header({ cartCount = 0, favoritesCount = 0 }: HeaderProp
           md:static md:flex md:flex-row md:bg-transparent md:text-black md:shadow-none md:p-0 md:gap-6 md:w-auto md:h-auto md:translate-y-0 md:pointer-events-auto
         `}
         style={{
-          padding: menuOpen ? "90px 24px 24px 24px" : "0px", // espacio arriba (header)
+          padding: menuOpen ? "90px 24px 24px 24px" : "0px",
         }}
         onClick={(e) => e.stopPropagation()}
       >

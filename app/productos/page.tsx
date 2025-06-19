@@ -102,7 +102,6 @@ export default function ProductosPage() {
     );
   };
 
-  // ACTUALIZADA: Ahora espera un objeto con todos los datos
   const addToCart = ({
     product,
     frase,
@@ -136,8 +135,8 @@ export default function ProductosPage() {
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     localStorage.setItem("cart", JSON.stringify([...currentCart, productoFinal]));
     setSelectedProduct(null);
-    setSelectedSize(""); // Limpia talla seleccionada para siguiente modal
-    setQuantity(1);      // Limpia cantidad para siguiente modal
+    setSelectedSize("");
+    setQuantity(1);
   };
 
   const categoriaSeleccionada = categorias.find((c) => categoriaFiltro.categoria === c.nombre);
@@ -190,7 +189,6 @@ export default function ProductosPage() {
           zoomPosition={zoomPosition}
           isLiked={isLiked(selectedProduct.id)}
           onClose={() => setSelectedProduct(null)}
-          // Recibe un objeto con todos los datos del producto y la personalización
           onAddToCart={({ frase, tipoFrase, color, colorHex, colorImage, size, quantity }) =>
             addToCart({
               product: selectedProduct,

@@ -12,7 +12,7 @@ import SizeGuideModal from "../components/SizeGuideModal";
 import ProductoCard from "../components/ProductoCard";
 import type { Product } from "../data/products";
 import Header from "../components/Header";
-import ThemeToggleButton from "../components/ThemeToggleButton"; // donde lo tengas
+import ThemeToggleButton from "../components/ThemeToggleButton";
 
 type ProductoAPI = {
   id: number;
@@ -206,7 +206,6 @@ export default function Inicio() {
 
 
         <section className="hero pt-4 sm:pt-17 pb-4 sm:pb-8">
-          {/* BOTON DE NOCHE Y DIA */}
           <div className="absolute top-28 sm:top-36 right-4 z-50">
             <ThemeToggleButton />
           </div>
