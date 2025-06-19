@@ -28,7 +28,7 @@ export default function ThemeToggleButton() {
   return (
     <button
       onClick={() => setIsDarkMode((v) => !v)}
-      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md"
+      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-black/30 dark:border-black/30 flex items-center justify-center transition-all duration-500 hover:scale-110 bg-white dark:bg-white shadow-md  cursor-pointer"
       aria-label="Cambiar modo"
     >
       <span

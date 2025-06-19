@@ -35,7 +35,7 @@ export default function Sidebar({
         <div className="fixed top-[115px] left-4 z-50 pt-4 mt-5rem">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="absolute top-4 p-2 rounded-full bg-black text-white"
+            className="absolute top-4 p-2 rounded-full bg-black text-white cursor-pointer"
             aria-label="Abrir menú"
           >
             ☰
@@ -62,8 +62,8 @@ export default function Sidebar({
                   toggleSection(section.label);
                   setSelectedMain(section.label);
                 }}
-                className={`${underlineClass} font-bold ${
-                  selectedMain === section.label ? "after:w-full" : ""
+                className={`${underlineClass} font-bold  cursor-pointer${
+                  selectedMain === section.label ? "after:w-full cursor-pointer" : ""
                 }`}
               >
                 {section.label}
@@ -77,8 +77,8 @@ export default function Sidebar({
                         className={`${underlineClass} text-sm ${
                           categoriaFiltro.categoria === section.label &&
                           categoriaFiltro.tipo === item
-                            ? "after:w-full font-semibold text-black"
-                            : "text-gray-600"
+                            ? "after:w-full font-semibold text-black  cursor-pointer"
+                            : "text-gray-600  cursor-pointer"
                         }`}
                       >
                         {item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
@@ -93,7 +93,7 @@ export default function Sidebar({
 
         <button
           onClick={() => setSidebarOpen(false)}
-          className="absolute top-4 right-4 p-2 rounded-full bg-black text-white "
+          className="absolute top-4 right-4 p-2 rounded-full bg-black text-white cursor-pointer "
           aria-label="Cerrar menú"
         >
           ✕

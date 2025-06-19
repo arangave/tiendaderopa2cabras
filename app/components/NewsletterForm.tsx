@@ -43,17 +43,17 @@ export default function NewsletterForm() {
         required
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition text-black"
+        className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition text-black cursor-pointer"
       />
       <button
         type="submit"
         disabled={loading}
-        className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300"
+        className="btn shadow-md shadow-black/40 hover:shadow-lg hover:shadow-black/20 transition duration-300 cursor-pointer "
       >
         {loading ? "Enviando..." : "Unirme"}
       </button>
       {mensaje && (
-        <div className="mt-2 text-center text-black bg-gray-100 rounded px-2 py-1 text-sm">
+        <div className="mt-2 text-center text-black bg-gray-100 rounded px-2 py-1 text-sm ">
           {mensaje}
         </div>
       )}

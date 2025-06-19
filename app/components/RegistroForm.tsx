@@ -166,7 +166,7 @@ useEffect(() => {
                 <label className="block text-sm font-medium text-gray-700">Correo electrónico</label>
                 <input type="email" required placeholder="tu@correo.com"
                   value={email} onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 w-full text-black px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition"
+                  className="mt-1 w-full text-black px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67b2c1] transition cursor-pointer"
                 />
               </div>
 
@@ -175,24 +175,24 @@ useEffect(() => {
                 <input type={passwordInputType} required minLength={6}
                   value={password} onChange={(e) => handlePasswordChange(e.target.value)}
                   placeholder="••••••••"
-                  className="mt-1 w-full text-black px-4 py-2 pr-10 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff8eaa] transition"
+                  className="mt-1 w-full text-black px-4 py-2 pr-10 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff8eaa] transition cursor-pointer"
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-[38px] right-3 text-gray-600 hover:text-black" tabIndex={-1}
+                  className="absolute top-[38px] right-3 text-gray-600 hover:text-black cursor-pointer" tabIndex={-1}
                 >
                   {showPassword ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
                 </button>
 
                 {isLogin && (
                   <div className="mt-4 text-center">
-                    <a href="/recuperar" className="text-sm text-[#67b2c1] hover:text-[#ff8eaa] underline transition">
+                    <a href="/recuperar" className="text-sm text-[#67b2c1] hover:text-[#ff8eaa] underline transition cursor-pointer">
                       ¿Has olvidado tu contraseña?
                     </a>
                   </div>
                 )}
 
                 {!isLogin && (
-                  <ul className="text-sm mt-1 list-disc list-inside space-y-1">
+                  <ul className="text-sm mt-1 list-disc list-inside space-y-1 ">
                     {passwordChecks.map((rule, i) => (
                       <li key={i} className={rule.test ? "text-green-600" : "text-red-500"}>
                         {rule.label}
@@ -250,7 +250,7 @@ useEffect(() => {
               )}
 
               <button type="submit"
-                className="w-full py-2 px-4 mt-4 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white font-semibold rounded-xl shadow-md transition-all duration-400 ease-in-out hover:bg-white hover:text-black hover:border hover:border-black disabled:opacity-50"
+                className="w-full py-2 px-4 mt-4 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white font-semibold rounded-xl shadow-md transition-all duration-400 ease-in-out hover:bg-white hover:text-black hover:border hover:border-black disabled:opacity-50 cursor-pointer"
                 disabled={
                   !isLogin &&
                   (!isPasswordValid || !passwordsMatch || !acceptTerms || !nombre || !apellido1 || !email)
@@ -264,7 +264,7 @@ useEffect(() => {
               <p className="text-sm text-gray-600">
                 {isLogin ? "¿No formas parte aún?" : "¿Ya tienes cuenta?"}
                 <button type="button" onClick={toggleMode}
-                  className="ml-2 text-[#67b2c1] hover:text-[#ff8eaa] font-semibold transition"
+                  className="ml-2 text-[#67b2c1] hover:text-[#ff8eaa] font-semibold transition cursor-pointer"
                 >
                   {isLogin ? "Regístrate" : "Inicia sesión"}
                 </button>

@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
 
               <button
                 type="submit"
-                className="w-full py-2 px-4 mt-4 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white font-semibold rounded-xl shadow-md transition-all duration-400 ease-in-out hover:bg-white hover:text-black hover:border hover:border-black"
+                className="w-full py-2 px-4 mt-4 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white font-semibold rounded-xl shadow-md transition-all duration-400 ease-in-out hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer"
               >
                 Enviar enlace
               </button>

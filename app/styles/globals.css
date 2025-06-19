@@ -395,6 +395,7 @@ footer .social-links a:hover {
     color: #99ccff;
   }
   .norma-hover {
+    cursor: pointer;
     display: inline-block;
     position: relative;
     cursor: pointer;

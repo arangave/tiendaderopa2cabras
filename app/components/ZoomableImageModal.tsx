@@ -13,7 +13,7 @@ const ZoomableImageModal: React.FC<ZoomableImageModalProps> = ({
   alt,
   onClose,
 }) => {
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(1.8);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const lastPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -49,7 +49,7 @@ const ZoomableImageModal: React.FC<ZoomableImageModalProps> = ({
     >
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
+        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition  cursor-pointer"
         aria-label="Cerrar"
       >
         <div className="relative w-5 h-5">
@@ -61,23 +61,23 @@ const ZoomableImageModal: React.FC<ZoomableImageModalProps> = ({
       <div className="absolute top-4 left-4 z-50 flex flex-col gap-2">
         <button
           onClick={() => setScale((s) => s + 0.5)}
-          className="bg-white text-black font-bold px-2 py-1 rounded hover:scale-105 transition"
+          className="bg-white text-black font-bold px-2 py-1 rounded hover:scale-105 transition cursor-pointer"
         >
           +
         </button>
         <button
           onClick={() => setScale((s) => Math.max(1, s - 0.5))}
-          className="bg-white text-black font-bold px-2 py-1 rounded hover:scale-105 transition"
+          className="bg-white text-black font-bold px-2 py-1 rounded hover:scale-105 transition cursor-pointer"
         >
           –
         </button>
         <button
             onClick={() => {
                 const isMobile = window.innerWidth < 768;
-                setScale(isMobile ? 4 : 1.7);
+                setScale(isMobile ? 1.8 : 1.1);
                 setPosition({ x: 0, y: 0 });
             }}
-            className="bg-white text-black text-xs px-2 py-1 rounded hover:scale-105 transition"
+            className="bg-white text-black text-xs px-2 py-1 rounded hover:scale-105 transition cursor-pointer"
             >
             Reset
             </button>
@@ -91,7 +91,8 @@ const ZoomableImageModal: React.FC<ZoomableImageModalProps> = ({
         onMouseMove={handleMouseMove}
       >
         <div
-          className="absolute top-1/2 left-1/2 transition-transform duration-100"
+          className="absolute top-1/2 left-1/2 transition-transform duration-300 ease-out"
+
           style={{
             transform: `translate(-50%, -50%) translate(${position.x}px, ${position.y}px) scale(${scale})`,
           }}

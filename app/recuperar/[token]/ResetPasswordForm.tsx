@@ -74,7 +74,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 hover:text-black"
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 hover:text-black cursor-pointer"
                 >
                   {showPassword ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
                 </button>
@@ -92,7 +92,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
                 <button
                   type="button"
                   onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 hover:text-black"
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 hover:text-black cursor-pointer"
                 >
                   {showConfirm ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
                 </button>
@@ -100,7 +100,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
 
               <button
                 type="submit"
-                className="w-full py-2 px-4 mt-4 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white font-semibold rounded-xl shadow-md transition-all duration-400 ease-in-out hover:bg-white hover:text-black hover:border hover:border-black"
+                className="w-full py-2 px-4 mt-4 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white font-semibold rounded-xl shadow-md transition-all duration-400 ease-in-out hover:bg-white hover:text-black hover:border hover:border-black cursor-pointer"
               >
                 Cambiar contraseña
               </button>

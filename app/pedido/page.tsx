@@ -89,7 +89,7 @@ export default function PedidoPage() {
           <button
             type="submit"
             className="w-full py-2 rounded-full bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]
-                       text-white font-bold hover:opacity-90 transition-opacity duration-300"
+                       text-white font-bold hover:opacity-90 transition-opacity duration-300 cursor-pointer"
           >
             Confirmar Pedido
           </button>

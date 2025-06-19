@@ -34,10 +34,10 @@ export default function ProductoCard({
       <h3 className="mt-2 text-lg font-semibold text-black">{product.name}</h3>
       <p className="text-gray-600">{product.price}</p>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-4 ">
         <button
           onClick={() => onOpenModal(product)}
-          className="holo-btn"
+          className="holo-btn cursor-pointer"
         >
           Ver Producto
         </button>
@@ -50,12 +50,12 @@ export default function ProductoCard({
       >
         {isLiked ? (
           <HeartIconSolid
-            className="w-6 h-6 transition-colors duration-300 ease-in-out"
+            className="w-6 h-6 transition-colors duration-300 ease-in-out cursor-pointer"
             style={{ fill: "url(#grad)", transition: "fill 0.3s ease" }}
           />
         ) : (
           <HeartIcon
-            className="w-6 h-6 text-black stroke-[0.5] transition-colors duration-300 ease-in-out"
+            className="w-6 h-6 text-black stroke-[0.5] transition-colors duration-300 ease-in-out cursor-pointer"
             strokeWidth={1}
             fill="none"
           />

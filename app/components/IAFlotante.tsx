@@ -109,20 +109,26 @@ const generarFraseIA = async () => {
             </span>
           </span>
         </div>
-        <button
-          onClick={() => setOpen((prev) => !prev)}
-          className="
-            bg-black text-white p-3 sm:p-3 rounded-full shadow-xl
-            transition-colors duration-[1500ms] ease-in-out
-            group-hover:bg-gradient-to-r group-hover:from-[#67b2c1]/40 group-hover:via-[#ff8eaa]/40 group-hover:to-[#f6bd6b]/40
-            group-hover:text-white
-            focus:outline-none
-            text-2xl sm:text-2xl
-          "
-          aria-label="Abrir IA"
-        >
-          🐐
-        </button>
+          <button
+            onClick={() => setOpen((prev) => !prev)}
+            className="
+              relative bg-white text-white br-black p-3 sm:p-3 rounded-full
+              shadow-[0_8px_20px_rgba(0,0,0,0.4)] text-2xl sm:text-2xl cursor-pointer
+              focus:outline-none overflow-hidden
+              group
+            "
+            aria-label='Abrir IA'
+          >
+            <span className="relative z-10">🐐</span>
+            <span
+              className="
+                absolute inset-0 z-0 rounded-full
+                bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-700 ease-in-out
+              "
+            />
+          </button>
       </div>
 
       {open && (
@@ -157,7 +163,7 @@ const generarFraseIA = async () => {
           >
             <div className="flex justify-between items-center mb-4">
               <div className="text-lg font-bold">Frase estilo 2 Cabras</div>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-black transition-colors duration-300" aria-label="Cerrar IA"><X /></button>
+              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-black transition-colors duration-300 cursor-pointer" aria-label="Cerrar IA"><X /></button>
             </div>
 
             <div>
@@ -173,7 +179,7 @@ const generarFraseIA = async () => {
                   focus:outline-none
                   font-bold
                   shadow
-                  text-sm sm:text-base
+                  text-sm sm:text-base cursor-pointer
                 "
               >
                 {loadingRandom ? "Generando..." : "Generar frase random"}
@@ -213,7 +219,7 @@ const generarFraseIA = async () => {
                   font-bold
                   shadow
                   text-sm sm:text-base
-                  disabled:opacity-60
+                  disabled:opacity-60 cursor-pointer
                 "
               >
                 {loadingIA ? "Generando..." : "Generar frase personalizada"}

@@ -59,6 +59,7 @@ const frasesCabrunas = [
   "“Atrévete a desentonar, ahí está la magia.”"
 ];
 
+
 const Modal: React.FC<ModalProps> = ({
   product,
   selectedSize,
@@ -145,7 +146,7 @@ const Modal: React.FC<ModalProps> = ({
         {/* Botón cerrar */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
+          className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition cursor-pointer"
           aria-label="Cerrar modal"
         >
           <div className="relative w-5 h-5">
@@ -173,14 +174,14 @@ const Modal: React.FC<ModalProps> = ({
           {/* BLOQUE DE PERSONALIZACIÓN DE FRASE */}
           <div className="flex flex-col items-center w-full my-2">
             <div
-              className="bg-gray-100 rounded-lg p-3 flex flex-col gap-2 items-center"
+              className="bg-gray-100 rounded-lg p-3 flex flex-col gap-2 items-center "
               style={{ width: "200px", maxWidth: "100%" }}
             >
-              <label className="font-semibold text-sm mb-1 text-black w-full text-center">
+              <label className="font-semibold text-sm mb-1 text-black w-full text-center ">
                 Personaliza tu camiseta con una frase:
               </label>
               <select
-                className="p-2 rounded border text-xs font-semibold bg-white text-black w-full"
+                className="p-2 rounded border text-xs font-semibold bg-white text-black w-full cursor-pointer"
                 value={tipoFrase}
                 onChange={(e) => {
                   const val = e.target.value as "ninguna" | "random" | "personal" | "ia";
@@ -221,7 +222,7 @@ const Modal: React.FC<ModalProps> = ({
                   />
                   <button
                     onClick={handleFraseIA}
-                    className="bg-black text-white text-xs px-2 py-1 rounded hover:bg-gray-800 disabled:opacity-60 w-full"
+                    className="bg-black text-white text-xs px-2 py-1 rounded hover:bg-gray-800 disabled:opacity-60 w-full cursor-pointer"
                     disabled={!preguntaIA.trim() || loadingIA}
                   >
                     {loadingIA ? "Generando..." : "Generar frase IA"}
@@ -245,9 +246,9 @@ const Modal: React.FC<ModalProps> = ({
         </div>
 
         {/* Info del producto + GUÍA DE TALLAS */}
-        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black max-h-[80vh] overflow-y-auto mt-2 md:mt-0">
-          <h2 className="text-sm md:text-2xl font-bold text-center md:text-left">{product.name}</h2>
-          <p className="text-xs md:text-base text-gray-600 text-center md:text-left">{product.description}</p>
+        <div className="flex flex-col space-y-2 md:space-y-4 w-full md:w-1/2 text-black max-h-[80vh] overflow-y-auto mt-2 md:mt-0 ">
+          <h2 className="text-sm md:text-2xl font-bold text-center md:text-left ">{product.name}</h2>
+          <p className="text-xs md:text-base text-gray-600 text-center md:text-left ">{product.description}</p>
           <p className="text-sm md:text-xl font-bold text-center md:text-left">{product.price}</p>
 
           {/* Cantidad */}
@@ -271,7 +272,7 @@ const Modal: React.FC<ModalProps> = ({
                 <button
                   key={size}
                   onClick={() => onSelectSize(size)}
-                  className={`px-2 py-1 border rounded-md text-xs md:text-sm font-medium transition ${
+                  className={`px-2 py-1 border rounded-md text-xs md:text-sm font-medium transition cursor-pointer ${
                     selectedSize === size
                       ? "bg-black text-white border-black"
                       : "bg-white text-black border-gray-300 hover:bg-black hover:text-white"
@@ -287,7 +288,7 @@ const Modal: React.FC<ModalProps> = ({
           <div className="w-full flex justify-center md:justify-center mt-1">
             <button
               onClick={onShowSizeGuide}
-              className="text-xs md:text-base relative text-black font-semibold transition duration-300 hover:after:w-full after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#67b2c1] after:via-[#ff8eaa] after:to-[#f6bd6b] after:rounded after:transition-all"
+              className="text-xs md:text-base relative text-black font-semibold transition duration-300 hover:after:w-full after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#67b2c1] after:via-[#ff8eaa] after:to-[#f6bd6b] after:rounded after:transition-all cursor-pointer"
             >
               Guía de Tallas
             </button>
@@ -296,12 +297,12 @@ const Modal: React.FC<ModalProps> = ({
           {/* Colores */}
           {Array.isArray(product.colors) && product.colors.length > 0 && (
             <div className="mt-2">
-              <label className="text-xs md:text-lg block mb-1">Color:</label>
-              <div className="flex gap-2 justify-center md:justify-start">
+              <label className="text-xs md:text-lg block mb-1 ">Color:</label>
+              <div className="flex gap-2 justify-center md:justify-start ">
                 {product.colors.map((colorObj, index) => (
                   <button
                     key={index}
-                    className="rounded-full border border-gray-300 hover:scale-110 transition p-0"
+                    className="rounded-full border border-gray-300 hover:scale-110 transition p-0 cursor-pointer"
                     style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", background: "none" }}
                     aria-label={colorObj.name}
                     onClick={() => {
@@ -324,7 +325,7 @@ const Modal: React.FC<ModalProps> = ({
           <div className="w-full flex justify-center items-center gap-3 md:gap-4 md:justify-center mt-3">
             <button
               onClick={handleAddToCart}
-              className="w-[140px] ml-9 md:ml-14 md:w-[180px] px-3 py-1.5 md:px-6 md:py-2 bg-black text-white text-xs md:text-base font-semibold rounded-md transition-all duration-300 hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b]"
+              className="w-[140px] ml-9 md:ml-14 md:w-[180px] px-3 py-1.5 md:px-6 md:py-2 bg-black text-white text-xs md:text-base font-semibold rounded-md transition-all duration-300 hover:scale-95 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] cursor-pointer"
             >
               Añadir a la cesta
             </button>
@@ -335,11 +336,11 @@ const Modal: React.FC<ModalProps> = ({
             >
               {isLiked ? (
                 <HeartIconSolid
-                  className="w-4 h-4 md:w-5 md:h-5"
+                  className="w-4 h-4 md:w-5 md:h-5 "
                   style={{ fill: "url(#grad)", stroke: "none" }}
                 />
               ) : (
-                <HeartIcon className="w-4 h-4 md:w-5 md:h-5 text-black" />
+                <HeartIcon className="w-4 h-4 md:w-5 md:h-5 text-black cursor-pointer" />
               )}
             </button>
           </div>

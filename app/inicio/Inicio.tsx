@@ -246,7 +246,7 @@ export default function Inicio() {
                     prev === 0 ? destacados.length - itemsPerPage : prev - 1
                   )
                 }
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10  hover:bg-white hover:text-black border to-black cursor-pointer"
               >
                 ‹
               </button>
@@ -282,7 +282,7 @@ export default function Inicio() {
                     prev >= destacados.length - itemsPerPage ? 0 : prev + 1
                   )
                 }
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 transition"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10  hover:bg-white hover:text-black border to-black cursor-pointer"
               >
                 ›
               </button>
@@ -303,7 +303,7 @@ export default function Inicio() {
                     prev === 0 ? sweaters.length - itemsPerPage : prev - 1
                   )
                 }
-                className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+                className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10  hover:bg-white hover:text-black border to-black cursor-pointer"
               >
                 ‹
               </button>
@@ -339,7 +339,7 @@ export default function Inicio() {
                     prev >= sweaters.length - itemsPerPage ? 0 : prev + 1
                   )
                 }
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10  hover:bg-white hover:text-black border to-black cursor-pointer"
               >
                 ›
               </button>
@@ -361,7 +361,7 @@ export default function Inicio() {
                     prev === 0 ? tshirts.length - itemsPerPage : prev - 1
                   )
                 }
-                className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+                className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10  hover:bg-white hover:text-black border to-black cursor-pointer"
               >
                 ‹
               </button>
@@ -397,7 +397,7 @@ export default function Inicio() {
                     prev >= tshirts.length - itemsPerPage ? 0 : prev + 1
                   )
                 }
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-white hover:text-black border to-black cursor-pointer"
               >
                 ›
               </button>

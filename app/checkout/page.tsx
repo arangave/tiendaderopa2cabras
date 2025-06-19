@@ -171,7 +171,7 @@ export default function CheckoutPage() {
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-2">¡Pedido realizado!</h2>
           <p className="text-lg text-white/90 text-center">Gracias por tu compra. Te hemos enviado la confirmación por correo electrónico.</p>
           <button
-            className="mt-4 rounded-full px-8 py-2 font-bold text-lg bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 hover:shadow-lg hover:bg-gradient-to-l hover:from-[#ff8eaa] hover:to-[#67b2c1] transition-all"
+            className="mt-4 rounded-full px-8 py-2 font-bold text-lg bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 hover:shadow-lg hover:bg-gradient-to-l hover:from-[#ff8eaa] hover:to-[#67b2c1] transition-all cursor-pointer"
             onClick={() => window.location.href = "/inicio"}
           >
             Ir al inicio
@@ -309,7 +309,7 @@ export default function CheckoutPage() {
                     <div className="mb-4 flex flex-col items-center">
                       <button
                         type="button"
-                        className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#0070ba] to-[#003087] text-white font-bold flex items-center gap-2 shadow hover:scale-105 transition"
+                        className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#0070ba] to-[#003087] text-white font-bold flex items-center gap-2 shadow hover:scale-105 transition cursor-pointer"
                         onClick={() => alert("Redirigiendo a PayPal... (fake)")}
                       >
                         <Image src="/images/paypal.svg" alt="PayPal" width={28} height={16} className="inline-block" />
@@ -400,10 +400,10 @@ export default function CheckoutPage() {
                     type="radio"
                     checked={envio === "normal"}
                     onChange={() => setEnvio("normal")}
-                    className="accent-[#67b2c1] mr-1"
+                    className="accent-[#67b2c1] mr-1 cursor-pointer"
                   />
                   GLS EconomyParcel (48/72h){" "}
-                  <span className="font-bold">
+                  <span className="font-bold ">
                     {envio === "normal" ? "(Gratis)" : ""}
                   </span>
                 </label>
@@ -413,7 +413,7 @@ export default function CheckoutPage() {
                     type="radio"
                     checked={envio === "express"}
                     onChange={() => setEnvio("express")}
-                    className="accent-[#ff8eaa] mr-1"
+                    className="accent-[#ff8eaa] mr-1 cursor-pointer"
                   />
                   GLS Express (24h){" "}
                   <span className="font-bold">(+4.95€)</span>
@@ -448,7 +448,7 @@ export default function CheckoutPage() {
                 <button
                 type="button"
                 onClick={handlePrev}
-                className="flex items-center justify-center rounded-full w-12 h-12 bg-white/20 hover:bg-[#67b2c1]/80 text-white shadow hover:scale-105 transition-all"
+                className="flex items-center justify-center rounded-full w-12 h-12 bg-white/20 hover:bg-[#67b2c1]/80 text-white shadow hover:scale-105 transition-all cursor-pointer"
                 aria-label="Atrás"
                 >
                 <ArrowLeft size={28} />
@@ -458,7 +458,7 @@ export default function CheckoutPage() {
                 <button
                 type="button"
                 onClick={handleNext}
-                className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
+                className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all cursor-pointer"
                 aria-label="Siguiente"
                 >
                 <ArrowRight size={28} />
@@ -466,8 +466,8 @@ export default function CheckoutPage() {
             ) : (
                 <button
                 type="submit"
-                form="checkoutform" // OJO: pon id al form si usas esto (ver abajo)
-                className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all"
+                form="checkoutform"
+                className="flex items-center justify-center rounded-full w-12 h-12 bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] text-white shadow hover:scale-105 transition-all cursor-pointer"
                 aria-label="Realizar Pedido"
                 >
                 <ArrowRight size={28} />
@@ -507,9 +507,9 @@ function Stepper({ step, goToStep }: { step: number; goToStep: (i: number) => vo
           <div className="relative z-10">
             <button
               className={`
-                w-10 h-10 rounded-full border-2 transition-all flex items-center justify-center font-bold text-sm
+                w-10 h-10 rounded-full border-2 transition-all flex items-center justify-center font-bold text-sm cursor-pointer
                 ${step === i
-                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] border-white text-black scale-110"
+                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] border-white text-black scale-110 cursor-pointer"
                   : step > i
                   ? "bg-[#67b2c1] border-[#67b2c1] text-white"
                   : "bg-black/60 border-white/40 text-white/80"}
@@ -525,7 +525,7 @@ function Stepper({ step, goToStep }: { step: number; goToStep: (i: number) => vo
             <div
               className={`w-25 h-1 mx-1 rounded-full transition-all
                 ${step > i
-                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]"
+                  ? "bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] "
                   : "bg-white/30"}
               `}
             />

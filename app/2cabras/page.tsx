@@ -14,7 +14,6 @@ export default function Page() {
   const [loadingRandom, setLoadingRandom] = useState(false);
 
   const frases = [
-    "“A veces solo necesitas dos cabras con traje para conquistar el mundo.”",
     "“El éxito es cuestión de actitud... y de cuernos.”",
     "“No sigas el rebaño, vístete diferente.”",
     "“Cabras y trajes: combinación ganadora.”",
@@ -130,7 +129,7 @@ export default function Page() {
 
         <div className="mt-12 bg-gray-100 p-6 rounded-lg shadow-md">
           <h3 className="text-2xl font-medium text-center mb-4 text-black">¿Qué te quita el sueño?</h3>
-          <p className="text-center text-gray-600 mb-4 text-black">
+          <p className="text-center mb-4 text-black">
             Cuéntanos tu problema, dilema o incógnita, y nosotros lo convertimos en una idea única al estilo 2CabrasConTraje.
           </p>
           <div className="flex flex-col items-center gap-4">
@@ -144,7 +143,7 @@ export default function Page() {
             <button
               onClick={handleSubmission}
               disabled={loadingIA}
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
+              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition cursor-pointer"
             >
               {loadingIA ? "Generando frase..." : <>Romper la <span className="norma-hover">norma</span></>}
             </button>
@@ -161,7 +160,7 @@ export default function Page() {
             <button
               onClick={generarFraseRandom}
               disabled={loadingRandom}
-              className="bg-black text-white px-4 py-2 rounded font-bold shadow hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-white transition-all mb-2"
+              className="bg-black text-white px-4 py-2 rounded font-bold shadow hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-white transition-all mb-2 cursor-pointer"
             >
               {loadingRandom ? "Generando..." : "Generar frase random"}
             </button>

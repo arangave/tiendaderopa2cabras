@@ -25,7 +25,7 @@ export default function CookiesModal() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="hover:text-[#67b2c1] underline transition text-xs text-gray-500"
+        className="hover:text-[#67b2c1] underline transition text-xs text-gray-500 cursor-pointer"
       >
         Cookies
       </button>
@@ -52,13 +52,13 @@ export default function CookiesModal() {
             <div className="flex justify-between gap-4">
               <button
                 onClick={handleReject}
-                className="w-1/2 py-2 px-4 border border-gray-300 text-gray-700 rounded-xl hover:border-[#ff8eaa] transition"
+                className="w-1/2 py-2 px-4 border border-gray-300 text-gray-700 rounded-xl hover:border-[#ff8eaa] transition cursor-pointer"
               >
                 Rechazar
               </button>
               <button
                 onClick={handleAccept}
-                className="w-1/2 py-2 px-4 bg-[#67b2c1] text-white rounded-xl hover:bg-[#ff8eaa] transition"
+                className="w-1/2 py-2 px-4 bg-[#67b2c1] text-white rounded-xl hover:bg-[#ff8eaa] transition cursor-pointer"
               >
                 Aceptar
               </button>

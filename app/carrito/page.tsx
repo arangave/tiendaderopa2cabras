@@ -138,7 +138,7 @@ export default function Carrito() {
                       <td className="py-4">
                         <button
                           onClick={() => removeFromCart(item.id, item.size)}
-                          className="text-red-600 hover:text-red-800 transition"
+                          className="text-red-600 hover:text-red-800 transition cursor-pointer"
                         >
                           <TrashIcon className="w-5 h-5" />
                         </button>
@@ -175,7 +175,7 @@ export default function Carrito() {
                           <p className="text-sm text-gray-400 italic">Sin frase</p>
                         )}
                       </td>
-                      <td className="py-4 text-right text-black">{item.price}</td>
+                      <td className="py-4 text-right text-black cursor-pointer">{item.price}</td>
                       <td className="py-4 text-center">
                         <input
                           type="number"
@@ -188,10 +188,10 @@ export default function Carrito() {
                               item.size
                             )
                           }
-                          className="w-16 border rounded px-2 text-center text-black"
+                          className="w-16 border rounded px-2 text-center text-black cursor-pointer"
                         />
                       </td>
-                      <td className="py-4 text-right text-black">{lineTotal}€</td>
+                      <td className="py-4 text-right text-black cursor-pointer">{lineTotal}€</td>
                     </tr>
                   );
                 })}
@@ -206,7 +206,7 @@ export default function Carrito() {
                 <div key={i} className="flex flex-col bg-white rounded-xl shadow p-4 relative">
                   <button
                     onClick={() => removeFromCart(item.id, item.size)}
-                    className="absolute top-2 right-2 text-red-600 hover:text-red-800 transition"
+                    className="absolute top-2 right-2 text-red-600 hover:text-red-800 transition cursor-pointer"
                   >
                     <TrashIcon className="w-5 h-5" />
                   </button>
@@ -285,7 +285,7 @@ export default function Carrito() {
           </div>
             <Link href="/checkout">
               <button
-                className="mt-6 py-3 rounded-full text-white font-bold bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] hover:opacity-90 transition-opacity duration-300 w-full"
+                className="mt-6 py-3 rounded-full text-white font-bold bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] hover:opacity-90 transition-opacity duration-300 w-full cursor-pointer"
               >
                 Finalizar Compra
               </button>
@@ -303,7 +303,7 @@ export default function Carrito() {
             {favoritesNotInCart.length > itemsPerSlide && (
               <button
                 onClick={() => setFavoritesIndex((prev) => Math.max(0, prev - 1))}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 cursor-pointer"
               >
                 ‹
               </button>
@@ -358,10 +358,10 @@ export default function Carrito() {
                           {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
                             <button
                               key={`${fav.id}-${size}`}
-                              className={`px-2 py-1 border rounded-md text-sm ${
+                              className={`px-2 py-1 border rounded-md text-sm cursor-pointer ${
                                 selectedSizes[fav.id] === size ?
                                   'bg-black text-white' :
-                                  'bg-white text-black border-gray-300 hover:bg-black hover:text-white'
+                                  'bg-white text-black border-gray-300 hover:bg-black hover:text-white cursor-pointer'
                               }`}
                               onClick={() =>
                                 setSelectedSizes((prev) => ({
@@ -386,13 +386,13 @@ export default function Carrito() {
                             }
                             addToCart({ ...fav, quantity: 1, size: sel });
                           }}
-                          className="w-full bg-black text-white px-3 py-1 rounded hover:bg-green-800"
+                          className="w-full bg-black text-white px-3 py-1 rounded hover:bg-green-800 cursor-pointer"
                         >
                           Añadir a la cesta
                         </button>
                         <button
                           onClick={() => removeFromFavorites(fav.id)}
-                          className="w-full bg-white border border-black text-black px-3 py-1 rounded hover:bg-red-800 transition"
+                          className="w-full bg-white border border-black text-black px-3 py-1 rounded hover:bg-red-800 transition cursor-pointer"
                         >
                           Quitar de favoritos
                         </button>
@@ -408,7 +408,7 @@ export default function Carrito() {
                 onClick={() =>
                   setFavoritesIndex((prev) => Math.min(prev + 1, favoritesNotInCart.length - itemsPerSlide))
                 }
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-2 rounded-full z-10 hover:bg-gray-700 cursor-pointer"
               >
                 ›
               </button>

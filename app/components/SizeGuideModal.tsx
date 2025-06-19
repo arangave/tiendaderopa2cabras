@@ -10,7 +10,7 @@ const SizeGuideModal: React.FC<Props> = ({ onClose }) => (
     <div className="bg-white  max-w-2xl w-full p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition"
+        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center z-50 group hover:scale-110 transition cursor-pointer"
         aria-label="Cerrar guía de tallas"
       >
         <div className="relative w-5 h-5">
