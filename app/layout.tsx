@@ -2,6 +2,7 @@
 import "./styles/globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import IAFlotante from "./components/IAFlotante";
 
 export const metadata = {
   title: "2CabrasConTraje",
@@ -15,7 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <IAFlotante /> 
       </body>
     </html>
   );
 }
+
