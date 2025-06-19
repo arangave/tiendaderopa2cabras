@@ -31,7 +31,7 @@ export default function ContactoPage() {
             <span className="text-2xl">📧</span>
             <a
               href="mailto:hola@2cabrascontraje.com"
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-medium hover:underline"
+              className="text-white font-medium hover:underline"
             >
               hola@2cabrascontraje.com
             </a>
@@ -42,7 +42,7 @@ export default function ContactoPage() {
               href="https://wa.me/34611222333"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-medium hover:underline"
+              className="text-white font-medium hover:underline"
             >
               +34 611 222 333
             </a>

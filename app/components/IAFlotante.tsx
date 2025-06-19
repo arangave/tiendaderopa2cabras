@@ -1,35 +1,38 @@
 "use client";
+
 import { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
+import { ClipboardCopy, Check } from "lucide-react";
 
 export default function IAFlotante() {
   const [open, setOpen] = useState(false);
+  const [shouldLift, setShouldLift] = useState(false);
 
   const [fraseRandom, setFraseRandom] = useState("");
   const [loadingRandom, setLoadingRandom] = useState(false);
   const frases = [
-    "“A veces solo necesitas dos cabras con traje para conquistar el mundo.”",
-    "“El éxito es cuestión de actitud... y de cuernos.”",
-    "“No sigas el rebaño, vístete diferente.”",
-    "“Cabras y trajes: combinación ganadora.”",
-    "“El sistema teme a las cabras con estilo.”",
-    "“Si la vida te da un rebaño, sé la cabra con más flow.”",
-    "“Donde todos ven reglas, nosotros vemos cuernos.”",
-    "“Las cabras con traje saltan más alto.”",
-    "“Ponle traje a tus ideas y deja que las cabras las lleven lejos.”",
-    "“Rompe el molde, luce los cuernos.”",
-    "“No hace falta seguir al pastor si puedes liderar el rebaño.”",
-    "“La moda es pasajera, los cuernos son para siempre.”",
-    "“La rebeldía se lleva mejor en traje.”",
-    "“No temas destacar, teme ser normal.”",
-    "“En un mundo de ovejas, sé cabra con corbata.”",
-    "“A veces para escalar hay que tener cuernos… y un buen traje.”",
-    "“Lo imposible es solo lo que no ha intentado una cabra con traje.”",
-    "“Si nadie te entiende, es que ya vas por delante.”",
-    "“El éxito se mide en saltos, no en pasos.”",
-    "“Haz ruido, deja huella, lleva traje.”",
-    "“Los sueños grandes piden trajes a medida… y cuernos afilados.”",
-    "“Atrévete a desentonar, ahí está la magia.”"
+    "A veces solo necesitas dos cabras con traje para conquistar el mundo.",
+    "El éxito es cuestión de actitud... y de cuernos.",
+    "No sigas el rebaño, vístete diferente.",
+    "Cabras y trajes: combinación ganadora.",
+    "El sistema teme a las cabras con estilo.",
+    "Si la vida te da un rebaño, sé la cabra con más flow.",
+    "Donde todos ven reglas, nosotros vemos cuernos.",
+    "Las cabras con traje saltan más alto.",
+    "Ponle traje a tus ideas y deja que las cabras las lleven lejos.",
+    "Rompe el molde, luce los cuernos.",
+    "No hace falta seguir al pastor si puedes liderar el rebaño.",
+    "La moda es pasajera, los cuernos son para siempre.",
+    "La rebeldía se lleva mejor en traje.",
+    "No temas destacar, teme ser normal.",
+    "En un mundo de ovejas, sé cabra con corbata.”",
+    "A veces para escalar hay que tener cuernos… y un buen traje.",
+    "Lo imposible es solo lo que no ha intentado una cabra con traje.",
+    "Si nadie te entiende, es que ya vas por delante.",
+    "El éxito se mide en saltos, no en pasos.",
+    "Haz ruido, deja huella, lleva traje.",
+    "Los sueños grandes piden trajes a medida… y cuernos afilados.",
+    "Atrévete a desentonar, ahí está la magia."
   ];
   const generarFraseRandom = () => {
     setFraseRandom("");
@@ -41,31 +44,45 @@ export default function IAFlotante() {
     }, 1000);
   };
 
+  const [copiedRandom, setCopiedRandom] = useState(false);
+  const [copiedIA, setCopiedIA] = useState(false);
+
+  const copyFraseRandom = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedRandom(true);
+      setTimeout(() => setCopiedRandom(false), 2000);
+    });
+  };
+
+  const copyFraseIA = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedIA(true);
+      setTimeout(() => setCopiedIA(false), 2000);
+    });
+  };
+
   const [pregunta, setPregunta] = useState("");
   const [fraseIA, setFraseIA] = useState("");
   const [loadingIA, setLoadingIA] = useState(false);
   const [errorIA, setErrorIA] = useState("");
 
-  const ENDPOINT_IA = "/api/ia";
-
-const generarFraseIA = async () => {
-  setFraseIA("");
-  setLoadingIA(true);
-
-  try {
-    const res = await fetch("/api/ia", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pregunta }),
-    });
-    const data = await res.json();
-    setFraseIA(data.frase || "No se pudo generar la frase.");
-  } catch {
-    setFraseIA("Error generando la frase.");
-  } finally {
-    setLoadingIA(false);
-  }
-};
+  const generarFraseIA = async () => {
+    setFraseIA("");
+    setLoadingIA(true);
+    try {
+      const res = await fetch("/api/ia", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta }),
+      });
+      const data = await res.json();
+      setFraseIA(data.frase || "No se pudo generar la frase.");
+    } catch {
+      setFraseIA("Error generando la frase.");
+    } finally {
+      setLoadingIA(false);
+    }
+  };
 
   const buttonRef = useRef<HTMLDivElement>(null);
   const [panelPos, setPanelPos] = useState<{ right: number; bottom: number }>({ right: 24, bottom: 24 });
@@ -90,125 +107,88 @@ const generarFraseIA = async () => {
     }
   }, [open, isMobile]);
 
+  // 👇 Detecta si está cerca del footer
+  useEffect(() => {
+    const handleScroll = () => {
+      const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+      setShouldLift(nearBottom);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === e.currentTarget) setOpen(false);
   }
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group" ref={buttonRef}>
-        <div className="hidden sm:flex
-          absolute right-full bottom-1/2 translate-y-1/2 mr-4 items-center w-max z-50 pointer-events-none
-          opacity-0 group-hover:opacity-100
-          transition-all duration-1000
-          -translate-x-2 group-hover:translate-x-0
-          scale-95 group-hover:scale-100
-        ">
+      <div
+        ref={buttonRef}
+        className={`fixed right-4 sm:right-6 z-50 group transition-all duration-300 ${
+          shouldLift ? "bottom-24 sm:bottom-28" : "bottom-4 sm:bottom-6"
+        }`}
+      >
+        <div className="hidden sm:flex absolute right-full bottom-1/2 translate-y-1/2 mr-4 items-center w-max z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-1000 -translate-x-2 group-hover:translate-x-0 scale-95 group-hover:scale-100">
           <span className="bg-black rounded px-3 py-1 shadow-lg flex items-center">
             <span className="bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] bg-clip-text text-transparent font-semibold whitespace-nowrap text-sm drop-shadow">
               Genera tu frase al estilo 2 Cabras
             </span>
           </span>
         </div>
-        
+
         <div className="relative w-max">
-          <div
-            className="
-              absolute -top-22 left-1/2 transform -translate-x-1/2
-              z-20 pointer-events-none
-            "
-            style={{ width: "150px" }}
-          >
-            <img
-              src="/images/iasinbton.png"
-              alt="Cabras IA"
-              className="w-full h-auto object-contain"
-            />
+          <div className="absolute -top-22 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none" style={{ width: "150px" }}>
+            <img src="/images/iasinbton.png" alt="Cabras IA" className="w-full h-auto object-contain" />
           </div>
 
-        <button
-          onClick={() => setOpen((prev) => !prev)}
-          className="
-            relative bg-white text-black font-bold p-3 sm:p-3 rounded-full
-            shadow-[0_8px_20px_rgba(0,0,0,0.4)] text-sm sm:text-base cursor-pointer
-            focus:outline-none overflow-hidden w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center
-            transition-transform duration-300 hover:scale-110 group
-          "
-          aria-label="Abrir IA"
-        >
-          <span className="relative z-10">IA</span>
-          <span
-            className="
-              absolute inset-0 z-0 rounded-full
-              bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]
-              opacity-0 group-hover:opacity-100
-              transition-opacity duration-700 ease-in-out
-            "
-          />
-        </button>
-      </div>
+          <button
+            onClick={() => setOpen((prev) => !prev)}
+            className="relative bg-white text-black font-bold p-3 sm:p-3 rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.4)] text-sm sm:text-base cursor-pointer focus:outline-none overflow-hidden w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center transition-transform duration-300 hover:scale-110 group"
+            aria-label="Abrir IA"
+          >
+            <span className="relative z-10">IA</span>
+            <span className="absolute inset-0 z-0 rounded-full bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out" />
+          </button>
+        </div>
       </div>
 
       {open && (
         <>
-          <div
-            className="fixed inset-0 z-[1000] bg-black/20 backdrop-blur-[2px]"
-            onClick={handleBackdropClick}
-          />
+          <div className="fixed inset-0 z-[1000] bg-black/20 backdrop-blur-[2px]" onClick={handleBackdropClick} />
           <div
             style={
               isMobile
-                ? {
-                    position: "fixed",
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 1001,
-                  }
-                : {
-                    position: "fixed",
-                    right: panelPos.right + 64,
-                    bottom: panelPos.bottom,
-                    zIndex: 1001,
-                  }
+                ? { position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 1001 }
+                : { position: "fixed", right: panelPos.right + 64, bottom: panelPos.bottom, zIndex: 1001 }
             }
-            className={`
-              bg-white p-4 sm:p-6 rounded-t-xl sm:rounded-xl w-full
-              ${isMobile ? "max-w-full" : "max-w-lg"}
-              shadow-xl border border-gray-200 text-black
-              transition-all duration-300
-            `}
+            className={`bg-white p-4 sm:p-6 rounded-t-xl sm:rounded-xl w-full ${isMobile ? "max-w-full" : "max-w-lg"} shadow-xl border border-gray-200 text-black transition-all duration-300`}
           >
             <div className="flex justify-between items-center mb-4">
               <div className="text-lg font-bold">Frase estilo 2 Cabras</div>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-black transition-colors duration-300 cursor-pointer" aria-label="Cerrar IA"><X /></button>
+              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-black transition-colors duration-300 cursor-pointer" aria-label="Cerrar IA">
+                <X />
+              </button>
             </div>
 
             <div>
               <button
                 onClick={generarFraseRandom}
                 disabled={loadingRandom}
-                className="
-                  bg-black text-white px-4 py-2 rounded w-full
-                  transition-all duration-500
-                  hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b]
-                  hover:text-white
-                  active:scale-95
-                  focus:outline-none
-                  font-bold
-                  shadow
-                  text-sm sm:text-base cursor-pointer
-                "
+                className="bg-black text-white px-4 py-2 rounded w-full transition-all duration-500 hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b] hover:text-white active:scale-95 focus:outline-none font-bold shadow text-sm sm:text-base cursor-pointer"
               >
-                {loadingRandom ? "Generando..." : "Generar frase random"}
+                {loadingRandom ? "Generando..." : "Generar frase random al estilo 2 Cabras Con Traje"}
               </button>
+
               {fraseRandom && (
-                <div className="mt-4 p-3 bg-gray-100 rounded text-sm text-center italic text-black">
-                  {fraseRandom}
+                <div className="mt-4 p-3 bg-gray-100 rounded text-sm text-center italic text-black relative flex items-center justify-between gap-3">
+                  <span className="text-left w-full break-words">"{fraseRandom}"</span>
+                  <button onClick={() => copyFraseRandom(fraseRandom)} className="p-2 rounded hover:bg-black/10 transition" aria-label="Copiar frase random">
+                    {copiedRandom ? <Check className="w-5 h-5 text-green-600" /> : <ClipboardCopy className="w-5 h-5 text-black" />}
+                  </button>
                 </div>
               )}
             </div>
-
 
             <div className="my-6 flex items-center gap-2">
               <div className="flex-1 h-px bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]" />
@@ -217,40 +197,39 @@ const generarFraseIA = async () => {
             </div>
 
             <div>
+              <label className="block text-sm font-semibold mb-1 text-gray-700">
+                Escribe una idea y te devolvemos una frase personalizada al estilo <br />2 Cabras Con Traje
+              </label>
               <input
                 type="text"
                 className="w-full border rounded px-3 py-2 mb-3 text-black text-sm sm:text-base"
-                placeholder="¿Qué te quita el sueño?"
+                placeholder="¿Sobre qué tema quieres tu frase 2 Cabras?"
                 value={pregunta}
                 onChange={(e) => setPregunta(e.target.value)}
               />
               <button
                 onClick={generarFraseIA}
                 disabled={loadingIA || !pregunta.trim()}
-                className="
-                  bg-black text-white px-4 py-2 rounded w-full
-                  transition-all duration-500
-                  hover:bg-gradient-to-r hover:from-[#67b2c1] hover:via-[#ff8eaa] hover:to-[#f6bd6b]
-                  hover:text-white
-                  active:scale-95
-                  focus:outline-none
-                  font-bold
-                  shadow
-                  text-sm sm:text-base
-                  disabled:opacity-60 cursor-pointer
-                "
+                className={`px-4 py-2 rounded w-full transition-all duration-500 text-white font-bold shadow text-sm sm:text-base focus:outline-none active:scale-95 ${
+                  !pregunta.trim()
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-black enabled:hover:bg-gradient-to-r enabled:hover:from-[#67b2c1] enabled:hover:via-[#ff8eaa] enabled:hover:to-[#f6bd6b]"
+                }`}
               >
                 {loadingIA ? "Generando..." : "Generar frase personalizada"}
               </button>
+
               {fraseIA && (
-                <div className="mt-4 p-3 bg-gray-100 rounded text-sm text-center italic text-black">
-                  {fraseIA}
+                <div className="mt-4 p-3 bg-gray-100 rounded text-sm text-center italic text-black relative flex items-center justify-between gap-2">
+                  <span className="text-left w-full">"{fraseIA}"</span>
+                  <button onClick={() => copyFraseIA(fraseIA)} className="p-1 rounded hover:bg-black/10 transition" aria-label="Copiar frase IA">
+                    {copiedIA ? <Check className="w-5 h-5 md:w-6 md:h-6 text-green-600" /> : <ClipboardCopy className="w-5 h-5 md:w-6 md:h-6 text-black" />}
+                  </button>
                 </div>
               )}
+
               {errorIA && (
-                <div className="mt-2 p-2 rounded text-center bg-red-100 text-red-700 text-xs">
-                  {errorIA}
-                </div>
+                <div className="mt-2 p-2 rounded text-center bg-red-100 text-red-700 text-xs">{errorIA}</div>
               )}
             </div>
           </div>

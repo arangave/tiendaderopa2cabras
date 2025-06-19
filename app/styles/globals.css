@@ -52,6 +52,9 @@ body {
     transition: width 0.4s ease;
     border-radius: 2px;
 }
+.nav-links a.active::after {
+  width: 100%;
+}
 
   .nav-links.mobile-menu a,
   .nav-links.flex.mobile-menu a {
@@ -408,7 +411,6 @@ footer .social-links a:hover {
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
     height: 2px;
     background: linear-gradient(130deg, #67b2c1, #ff8eaa, #f6bd6b);
     animation: slideInGradient 0.4s forwards;
@@ -465,6 +467,27 @@ footer .social-links a:hover {
     opacity: 1;
     filter: blur(6px);
   }
+  .norma-hover {
+  position: relative;
+  display: inline-block;
+}
+
+.norma-hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 50%; /* debajo del texto */
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, #67b2c1, #ff8eaa, #f6bd6b);
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.norma-hover:hover::after,
+.norma-hover.active::after {
+  opacity: 1;
+}
   
   
   

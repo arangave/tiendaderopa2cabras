@@ -280,13 +280,14 @@ export default function Carrito() {
               <span>{totalPrice}€</span>
             </div>
           </div>
-            <Link href="/checkout">
+            <Link href={cart.length === 0 ? "/" : "/checkout"}>
               <button
                 className="mt-6 py-3 rounded-full text-white font-bold bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b] hover:opacity-90 transition-opacity duration-300 w-full cursor-pointer"
               >
-                Finalizar Compra
+                {cart.length === 0 ? "Ver productos" : "Finalizar Compra"}
               </button>
             </Link>
+
         </aside>
       </section>
 

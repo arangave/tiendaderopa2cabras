@@ -207,30 +207,40 @@ const Modal: React.FC<ModalProps> = ({
                   onChange={(e) => setFrasePersonal(e.target.value)}
                 />
               )}
-              {tipoFrase === "ia" && (
-                <div className="flex flex-col gap-1 mt-1 w-full">
-                  <input
-                    className="border rounded px-2 py-1 text-xs w-full text-black"
-                    type="text"
-                    maxLength={80}
-                    placeholder="¿Qué te quita el sueño?"
-                    value={preguntaIA}
-                    onChange={(e) => setPreguntaIA(e.target.value)}
-                  />
-                  <button
-                    onClick={handleFraseIA}
-                    className="bg-black text-white text-xs px-2 py-1 rounded hover:bg-gray-800 disabled:opacity-60 w-full cursor-pointer"
-                    disabled={!preguntaIA.trim() || loadingIA}
-                  >
-                    {loadingIA ? "Generando..." : "Generar frase IA"}
-                  </button>
-                  {fraseIA && (
-                    <div className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black">
-                      "{fraseIA}"
-                    </div>
-                  )}
-                </div>
-              )}
+{tipoFrase === "ia" && (
+  <div className="flex flex-col gap-1 mt-1 w-full">
+    <label className="text-[11px] text-gray-600 font-semibold">
+      Escribe una idea o tema y generaremos una frase al estilo <br className="hidden sm:inline" /> <span className="text-black">2 Cabras Con Traje</span>
+    </label>
+    <input
+      className="border rounded px-2 py-1 text-xs w-full text-black mt-1"
+      type="text"
+      maxLength={80}
+      placeholder="¿Squé te quita el sueño?"
+      value={preguntaIA}
+      onChange={(e) => setPreguntaIA(e.target.value)}
+    />
+    <button
+      onClick={handleFraseIA}
+      disabled={!preguntaIA.trim() || loadingIA}
+      className={`
+        text-white text-xs px-2 py-1 rounded w-full font-semibold transition-all duration-300
+        ${!preguntaIA.trim() || loadingIA
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-black enabled:hover:bg-gradient-to-r enabled:hover:from-[#67b2c1] enabled:hover:via-[#ff8eaa] enabled:hover:to-[#f6bd6b] cursor-pointer"}
+      `}
+    >
+      {loadingIA ? "Generando..." : "Generar frase IA"}
+    </button>
+
+    {fraseIA && (
+      <div className="mt-1 text-xs text-center font-semibold italic bg-white rounded px-2 py-2 shadow w-full text-black">
+        "{fraseIA}"
+      </div>
+    )}
+  </div>
+)}
+
             </div>
             <style jsx>{`
               @media (min-width: 768px) {
@@ -281,10 +291,11 @@ const Modal: React.FC<ModalProps> = ({
           <div className="w-full flex justify-center md:justify-center mt-1">
             <button
               onClick={onShowSizeGuide}
-              className="text-xs md:text-base relative text-black font-semibold transition duration-300 hover:after:w-full after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#67b2c1] after:via-[#ff8eaa] after:to-[#f6bd6b] after:rounded after:transition-all cursor-pointer"
+              className="text-xs md:text-base relative text-black font-semibold transition duration-300 after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-full after:bg-black after:transition-all hover:after:bg-gradient-to-r hover:after:from-[#67b2c1] hover:after:via-[#ff8eaa] hover:after:to-[#f6bd6b] after:rounded cursor-pointer"
             >
               Guía de Tallas
             </button>
+
           </div>
 
           {Array.isArray(product.colors) && product.colors.length > 0 && (

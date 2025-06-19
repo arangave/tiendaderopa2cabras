@@ -105,21 +105,21 @@ export default function Page() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-          <div className="p-6 bg-pastel-blue rounded-lg shadow-md hover:shadow-2xl hover:scale-105 transition-transform duration-300">
+          <div className="p-6 bg-pastel-blue rounded-lg shadow-md">
             <h4 className="text-2xl font-medium text-center mb-4">🌀 Filosofía</h4>
             <p className="text-gray-800 text-center">
               No te conformes. El camino fácil es aburrido. Ponte un traje, pero hazlo a tu manera. Cambia el mundo siendo tú mismo, pero con un toque de irreverencia.
             </p>
           </div>
 
-          <div className="p-6 bg-pastel-pink rounded-lg shadow-md hover:shadow-2xl hover:scale-105 transition-transform duration-300">
+          <div className="p-6 bg-pastel-pink rounded-lg shadow-md">
             <h4 className="text-2xl font-medium text-center mb-4">⚡ Manifiesto</h4>
             <p className="text-gray-800 text-center">
               La moda no es solo estética, es actitud. Si los demás dicen que no puedes, demuestra que puedes, pero a tu estilo. No hay límites cuando llevas traje... ¡y cuernos!
             </p>
           </div>
 
-          <div className="p-6 bg-pastel-yellow rounded-lg shadow-md hover:shadow-2xl hover:scale-105 transition-transform duration-300">
+          <div className="p-6 bg-pastel-yellow rounded-lg shadow-md">
             <h4 className="text-2xl font-medium text-center mb-4">🔥 Actitud</h4>
             <p className="text-gray-800 text-center">
               No sigas el rebaño. Haz ruido, haz preguntas y no te conformes. Lo fácil no va contigo. Lo clásico y lo rebelde pueden coexistir... en tu camiseta.

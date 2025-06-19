@@ -9,7 +9,7 @@ import Sidebar from "../components/Sidebar";
 interface CategoriaConProductos {
   id: number;
   nombre: string;
-  productos: ProductoAPI[];
+  productos: ProductoAPI[]; 
 }
 
 interface ProductoAPI {
@@ -63,7 +63,7 @@ export default function ProductosPage() {
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [showSizeGuideModal, setShowSizeGuideModal] = useState(false);
   const [likes, setLikes] = useState<Product[]>([]);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const [selectedMain, setSelectedMain] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -81,7 +81,6 @@ export default function ProductosPage() {
         const res = await fetch("/api/categories-with-products");
         const data: CategoriaConProductos[] = await res.json();
         setCategorias(data);
-
         if (data.length > 0) {
           setCategoriaFiltro({ categoria: data[0].nombre, tipo: "CAMISETA" });
         }
@@ -161,9 +160,8 @@ export default function ProductosPage() {
       <main
         className={
           "transition-all duration-300 px-4 py-2 grid gap-6 pl-10 w-full " +
-          "grid-cols-1 sm:grid-cols-2 " +
-          (sidebarOpen ? "md:grid-cols-3 lg:grid-cols-4 md:ml-64 " : "md:grid-cols-3 lg:grid-cols-4 ") +
-          (sidebarOpen && isMobile ? "hidden" : "")
+          "grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 " +
+          (sidebarOpen ? "md:ml-64 " : "")
         }
       >
         {productosFiltrados.map((productoAPI) => {
