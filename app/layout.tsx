@@ -11,13 +11,15 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className="bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
-        <IAFlotante /> 
+        <IAFlotante />
       </body>
     </html>
   );
 }
-
