@@ -110,26 +110,45 @@ const generarFraseIA = async () => {
             </span>
           </span>
         </div>
-          <button
-            onClick={() => setOpen((prev) => !prev)}
+        
+        <div className="relative w-max">
+          {/* Imagen fija encima del botón */}
+          <div
             className="
-              relative bg-white text-white br-black p-3 sm:p-3 rounded-full
-              shadow-[0_8px_20px_rgba(0,0,0,0.4)] text-2xl sm:text-2xl cursor-pointer
-              focus:outline-none overflow-hidden
-              group
+              absolute -top-22 left-1/2 transform -translate-x-1/2
+              z-20 pointer-events-none
             "
-            aria-label='Abrir IA'
+            style={{ width: "150px" }}
           >
-            <span className="relative z-10">🐐</span>
-            <span
-              className="
-                absolute inset-0 z-0 rounded-full
-                bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]
-                opacity-0 group-hover:opacity-100
-                transition-opacity duration-700 ease-in-out
-              "
+            <img
+              src="/images/iasinbton.png"
+              alt="Cabras IA"
+              className="w-full h-auto object-contain"
             />
-          </button>
+          </div>
+
+        {/* Botón con texto IA y hover clean */}
+        <button
+          onClick={() => setOpen((prev) => !prev)}
+          className="
+            relative bg-white text-black font-bold p-3 sm:p-3 rounded-full
+            shadow-[0_8px_20px_rgba(0,0,0,0.4)] text-sm sm:text-base cursor-pointer
+            focus:outline-none overflow-hidden w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center
+            transition-transform duration-300 hover:scale-110 group
+          "
+          aria-label="Abrir IA"
+        >
+          <span className="relative z-10">IA</span>
+          <span
+            className="
+              absolute inset-0 z-0 rounded-full
+              bg-gradient-to-r from-[#67b2c1] via-[#ff8eaa] to-[#f6bd6b]
+              opacity-0 group-hover:opacity-100
+              transition-opacity duration-700 ease-in-out
+            "
+          />
+        </button>
+      </div>
       </div>
 
       {open && (
