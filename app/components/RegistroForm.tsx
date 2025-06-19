@@ -105,7 +105,7 @@ useEffect(() => {
         console.error(err);
       }
     } else {
-      alert("Inicio de sesión simulado 🐐");
+      alert("Has iniciado sesión, disfruta de tu días como cabra con traje.");
     }
   };
 
