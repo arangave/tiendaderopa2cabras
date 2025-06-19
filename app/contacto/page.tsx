@@ -51,10 +51,10 @@ export default function ContactoPage() {
 
         <div className="flex justify-center mt-6">
           <Image
-            src="/images/nuevo-logo.png"
+            src="/images/Logo_pasteles_1.png"
             alt="Logo"
-            width={120}
-            height={120}
+            width={50}
+            height={50}
             className="rounded-lg"
             priority
           />
