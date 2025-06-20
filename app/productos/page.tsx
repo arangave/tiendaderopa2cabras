@@ -145,6 +145,7 @@ export default function ProductosPage() {
     ) || [];
 
   return (
+    
     <div className="flex pt-28 flex-1 w-full">
       <Sidebar
         sidebarOpen={sidebarOpen}

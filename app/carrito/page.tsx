@@ -27,6 +27,16 @@ export default function Carrito() {
   const [favoritesIndex, setFavoritesIndex] = useState(0);
   const [itemsPerSlide, setItemsPerSlide] = useState(3);
 
+  function isSameProduct(a: Product, b: Product) {
+    return (
+      a.id === b.id &&
+      a.size === b.size &&
+      a.color === b.color &&
+      a.phrase === b.phrase &&
+      a.phraseType === b.phraseType
+    );
+  }
+
   useEffect(() => {
     const handleResize = () => {
       setItemsPerSlide(window.innerWidth < 768 ? 1 : 3);
@@ -36,12 +46,39 @@ export default function Carrito() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    const storedFavorites = localStorage.getItem("favorites");
-    if (storedCart) setCart(JSON.parse(storedCart));
-    if (storedFavorites) setFavorites(JSON.parse(storedFavorites));
-  }, []);
+useEffect(() => {
+  const storedCart = localStorage.getItem("cart");
+  const storedFavorites = localStorage.getItem("favorites");
+
+  if (storedCart) {
+    const parsedCart: Product[] = JSON.parse(storedCart);
+    const mergedCart: Product[] = [];
+
+    parsedCart.forEach((product) => {
+      const existing = mergedCart.find(
+        (p) =>
+          p.id === product.id &&
+          p.size === product.size &&
+          p.color === product.color &&
+          p.phrase === product.phrase &&
+          p.phraseType === product.phraseType
+      );
+
+      if (existing) {
+        existing.quantity += product.quantity;
+      } else {
+        mergedCart.push({ ...product });
+      }
+    });
+
+    setCart(mergedCart);
+    localStorage.setItem("cart", JSON.stringify(mergedCart));
+  }
+
+  if (storedFavorites) {
+    setFavorites(JSON.parse(storedFavorites));
+  }
+}, []);
 
   const updateCartAndStorage = (updatedCart: Product[]) => {
     setCart(updatedCart);
@@ -53,13 +90,14 @@ export default function Carrito() {
     setTimeout(() => setToastMessage(null), 2500);
   };
 
-  const removeFromCart = (id: number, size?: string) => {
+  const removeFromCart = (productToRemove: Product) => {
     const updatedCart = cart.filter(
-      (product) => !(product.id === id && product.size === size)
+      (product) => !isSameProduct(product, productToRemove)
     );
     updateCartAndStorage(updatedCart);
     showToast("Producto eliminado ❌");
   };
+
 
   const updateQuantity = (id: number, quantity: number, size?: string) => {
     const updatedCart = cart.map((product) =>
@@ -76,11 +114,24 @@ export default function Carrito() {
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
-  const addToCart = (product: Product) => {
-    const updatedCart = [...cart, { ...product, quantity: 1 }];
-    updateCartAndStorage(updatedCart);
-    showToast("Producto añadido desde favoritos 🛒");
-  };
+const addToCart = (product: Product) => {
+  const existingIndex = cart.findIndex(
+    (item) => item.id === product.id && item.size === product.size
+  );
+
+  let updatedCart;
+
+  if (existingIndex !== -1) {
+    updatedCart = [...cart];
+    updatedCart[existingIndex].quantity += product.quantity || 1;
+  } else {
+    updatedCart = [...cart, { ...product, quantity: product.quantity || 1 }];
+  }
+
+  updateCartAndStorage(updatedCart);
+  showToast("Producto añadido desde favoritos 🛒");
+};
+
 
   const totalPrice = cart
     .reduce((acc, product) => {
@@ -136,7 +187,8 @@ export default function Carrito() {
                     <tr key={i} className="border-t">
                       <td className="py-4">
                         <button
-                          onClick={() => removeFromCart(item.id, item.size)}
+                          onClick={() => removeFromCart(item)}
+
                           className="text-red-600 hover:text-red-800 transition cursor-pointer"
                         >
                           <TrashIcon className="w-5 h-5" />
@@ -203,7 +255,8 @@ export default function Carrito() {
               return (
                 <div key={i} className="flex flex-col bg-white rounded-xl shadow p-4 relative">
                   <button
-                    onClick={() => removeFromCart(item.id, item.size)}
+                    onClick={() => removeFromCart(item)}
+
                     className="absolute top-2 right-2 text-red-600 hover:text-red-800 transition cursor-pointer"
                   >
                     <TrashIcon className="w-5 h-5" />
