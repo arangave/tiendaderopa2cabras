@@ -206,9 +206,6 @@ export default function Inicio() {
 
 
         <section className="hero pt-4 sm:pt-17 pb-4 sm:pb-8">
-          <div className="absolute top-28 sm:top-36 right-4 z-50">
-            <ThemeToggleButton />
-          </div>
           <div className="hero-content px-2 sm:px-8 max-w-7xl mx-auto mt-[-50px] sm:mt-0">
             <div className="hero-text text-center sm:text-left">
               <h2 className="text-xs sm:text-sm font-bold mb-1 sm:mb-3">Descubre el estilo de 2CabrasConTraje</h2>
