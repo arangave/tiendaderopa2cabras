@@ -80,7 +80,6 @@ export default function RegistroForm() {
     if (!isLogin && password !== confirmPassword) return;
 
     if (!isLogin) {
-      // REGISTRO
       try {
         const res = await fetch("/api/auth/register", {
           method: "POST",
@@ -110,7 +109,6 @@ export default function RegistroForm() {
         setStatus({ type: "error", message: "❌ Error del servidor o red." });
       }
     } else {
-      // INICIO DE SESIÓN
       const res = await signIn("credentials", {
         redirect: false,
         email,
@@ -187,40 +185,46 @@ export default function RegistroForm() {
               )}
 
               {isLogin && (
-                <input type="email" placeholder="Correo electrónico" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full text-black px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg" />
+                <>
+                  <input type="email" placeholder="Correo electrónico" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full text-black px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg" />
+                  <div className="relative">
+                    <input type={passwordInputType} required minLength={6} placeholder="Contraseña" value={password} onChange={(e) => handlePasswordChange(e.target.value)} className="w-full text-black px-4 py-2 pr-10 bg-gray-100 border border-gray-300 rounded-lg" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute top-[10px] right-3 text-gray-600 hover:text-black" tabIndex={-1}>
+                      {showPassword ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </>
               )}
 
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="relative">
-                  <input type={passwordInputType} required minLength={6} placeholder="Contraseña" value={password} onChange={(e) => handlePasswordChange(e.target.value)} className="w-full text-black px-4 py-2 pr-10 bg-gray-100 border border-gray-300 rounded-lg" />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute top-[10px] right-3 text-gray-600 hover:text-black" tabIndex={-1}>
-                    {showPassword ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
-                  </button>
-                  {!isLogin && (
+              {!isLogin && (
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="relative">
+                    <input type={passwordInputType} required minLength={6} placeholder="Contraseña" value={password} onChange={(e) => handlePasswordChange(e.target.value)} className="w-full text-black px-4 py-2 pr-10 bg-gray-100 border border-gray-300 rounded-lg" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute top-[10px] right-3 text-gray-600 hover:text-black" tabIndex={-1}>
+                      {showPassword ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
+                    </button>
                     <button type="button" onClick={() => setShowRequirements(!showRequirements)} className="text-xs text-[#67b2c1] hover:text-[#ff8eaa] underline mt-2 block">
                       {showRequirements ? "Ocultar requisitos" : "Mostrar requisitos"}
                     </button>
-                  )}
-                  {showRequirements && (
-                    <ul className="text-sm mt-1 list-disc list-inside bg-gray-50 p-3 rounded-lg border border-gray-200">
-                      {passwordChecks.map((rule, i) => (
-                        <li key={i} className={rule.test ? "text-green-600" : "text-red-500"}>
-                          {rule.label}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                    {showRequirements && (
+                      <ul className="text-sm mt-1 list-disc list-inside bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        {passwordChecks.map((rule, i) => (
+                          <li key={i} className={rule.test ? "text-green-600" : "text-red-500"}>
+                            {rule.label}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
 
-                {!isLogin && (
                   <div className="relative">
                     <input type={confirmInputType} required minLength={6} placeholder="Repetir contraseña" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={`w-full text-black px-4 py-2 pr-10 bg-gray-100 border ${confirmPassword.length === 0 ? "border-gray-300" : passwordsMatch ? "border-green-500" : "border-red-500"} rounded-lg`} />
                     <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute top-[10px] right-3 text-gray-600 hover:text-black" tabIndex={-1}>
                       {showConfirmPassword ? <EyeIcon className="w-5 h-5" /> : <EyeSlashIcon className="w-5 h-5" />}
                     </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {!isLogin && (
                 <div className="flex items-center mt-4">
