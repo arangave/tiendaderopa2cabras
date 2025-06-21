@@ -216,7 +216,7 @@ const Modal: React.FC<ModalProps> = ({
       className="border rounded px-2 py-1 text-xs w-full text-black mt-1"
       type="text"
       maxLength={80}
-      placeholder="¿Squé te quita el sueño?"
+      placeholder="¿Qué te quita el sueño?"
       value={preguntaIA}
       onChange={(e) => setPreguntaIA(e.target.value)}
     />
